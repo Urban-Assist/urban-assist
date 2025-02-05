@@ -1,0 +1,76 @@
+package org.example.userauth.model;
+
+
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
+@Entity
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true) // Ensure email is unique
+    private String email;
+
+    private String password;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(); // Return user roles or permissions if applicable
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // Return the email as the username
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Implement logic if needed
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Implement logic if needed
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Implement logic if needed
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Implement logic if needed
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
