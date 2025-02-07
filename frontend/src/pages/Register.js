@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { redirect } from "react-router-dom";
+ 
+
+import { useNavigate } from "react-router-dom";
+
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -10,7 +13,7 @@ const Register = () => {
   });
 
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -32,7 +35,7 @@ const Register = () => {
 
     if (response.status === 200) {
         alert("Registration successful");
-        redirect("/login");
+        navigate("/login");
     }
 } catch (error) {
     if (error.response) {
