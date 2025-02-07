@@ -1,5 +1,10 @@
 package org.example.userauth.controller;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.example.userauth.model.User;
+import org.example.userauth.repository.UserRepository;
 import org.example.userauth.security.CustomUserDetailService;
 import org.example.userauth.security.JwtUtil;
 import org.example.userauth.service.UserService;
@@ -10,10 +15,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Validated
 public class AuthController {
 
     @Autowired
@@ -28,14 +37,27 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
+
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegistrationRequest request) {
-        User user = userService.registerUser(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok("User registered successfully with email: " + user.getEmail());
+    public ResponseEntity<?> registerUser( @Valid @RequestBody User user) {
+       try {
+        if(userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with email already exists, try logging in");
+        }
+        User response = userService.registerUser(user);
+        return ResponseEntity.ok("User registered successfully with email: " + response.getEmail());
+       } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
+       }
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request) throws Exception {
         // Authenticate the user
         try {
             authenticationManager.authenticate(
@@ -49,9 +71,12 @@ public class AuthController {
         // Load user details
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
+        User existingUser = userRepository.findByEmail(userDetails.getUsername());
+        
         // Generate JWT token
         final String jwt = jwtUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(jwt);
+        
+        
+         return ResponseEntity.ok(jwt);
     }
 }

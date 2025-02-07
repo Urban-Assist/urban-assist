@@ -2,14 +2,30 @@ package org.example.userauth.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-
 @Entity
-public class User implements UserDetails {
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@ToString
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,60 +33,31 @@ public class User implements UserDetails {
     @Column(unique = true) // Ensure email is unique
     private String email;
 
+    @NotBlank(message = "Password is required")
     private String password;
 
-    public Long getId() {
-        return id;
-    }
+    private String role = "user"; // Default role is user
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @NotBlank(message = "First name is required")
+    private String firstName;
 
-    public String getEmail() {
-        return email;
-    }
+    @NotBlank(message = "Last name is required")
+    private String lastName;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private Boolean varified = false;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(); // Return user roles or permissions if applicable
-    }
+ 
+ 
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+    
+ 
 
-    @Override
-    public String getUsername() {
-        return email; // Return the email as the username
-    }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; // Implement logic if needed
-    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; // Implement logic if needed
-    }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; // Implement logic if needed
-    }
 
-    @Override
-    public boolean isEnabled() {
-        return true; // Implement logic if needed
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
+
+ 
 }

@@ -42,7 +42,7 @@ public class ServiceConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF using the new lambda DSL
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/authenticate").permitAll() // Allow public access to these endpoints
+                        .requestMatchers("/auth/**").permitAll() // Allow public access to these endpoints
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

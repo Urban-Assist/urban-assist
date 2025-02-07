@@ -3,9 +3,10 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/quiz_platform
+    url: jdbc:mysql://localhost:3306/demo
     username: root
-    password: Alita@9558
+    #password: Alita@9558
+    password: vaibhav@admin
   jpa:
     hibernate:
       ddl-auto: update
