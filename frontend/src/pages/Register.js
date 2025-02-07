@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { redirect } from "react-router-dom";
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -21,22 +22,35 @@ const Register = () => {
       return;
     }
     try {
-        const AUTH_URL = process.env.REACT_APP_AUTH_URL;
-        console.log(AUTH_URL);
-        const response = await axios.post(AUTH_URL +"/auth/register", formData, {
-          headers: {
+    const AUTH_URL = process.env.REACT_APP_AUTH_URL;
+    console.log(AUTH_URL);
+    const response = await axios.post(AUTH_URL + "/auth/register", formData, {
+        headers: {
             "Content-Type": "application/json",
-          },
-        });
-  
-        if (response.status === 200) {
-          alert("Registration successful");
+        },
+    });
+
+    if (response.status === 200) {
+        alert("Registration successful");
+        redirect("/login");
+    }
+} catch (error) {
+    if (error.response) {
+        // Handle specific status codes
+        if (error.response.status === 409) {
+            setError(error.response.data  );
+            console.log(error.response.data);
         } else {
-          throw new Error("Registration failed");
+            setError(error.response.data || "Registration failed");
         }
-      } catch (error) {
-        setError(error.message);
-      }
+    } else if (error.request) {
+        // Network error
+        setError("Network error. Please try again later.");
+    } else {
+        // Other errors
+        setError("An error occurred. Please try again.");
+    }
+}
     };
   
   return (

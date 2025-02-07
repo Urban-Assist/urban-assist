@@ -10,7 +10,7 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Register/>} />
-        <Route path="/login" element={<ProtectedRoute><Login/></ProtectedRoute>} />
+        <Route path="/login" element={ <Login/>} />
         </Routes>
     </AuthProvider>
   )

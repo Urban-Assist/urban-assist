@@ -46,10 +46,10 @@ public class AuthController {
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with email already exists, try logging in");
+            return ResponseEntity.status(409).body("User with email already exists, try logging in");
         }
         User response = userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully with email: " + response.getEmail());
+        return ResponseEntity.status(200).body(response.getEmail() + " registered successfully");
        } catch (Exception e) {
         e.printStackTrace();
         return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
