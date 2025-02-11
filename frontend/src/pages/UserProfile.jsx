@@ -109,30 +109,7 @@ export const UserProfile = () => {
 							</div>
 						</div>
 						<div className="mb-6 flex flex-col gap-4 md:flex-row">
-							<div className="w-full">
-								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
-									I'm
-								</p>
-								<div className="relative h-10 min-w-full w-full">
-									<select
-										value={userType}
-										onChange={(e) => {
-											setUserType(e.target.value);
-											if (e.target.value === "student") {
-												setGraduationMonth("");
-												setGraduationYear("");
-											}
-										}}
-										className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal text-left outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 transition-all border text-sm px-2 py-2 rounded-[7px] border-blue-gray-200  "
-									>
-										<option disabled selected={!userType} value="">
-											Select User type
-										</option>
-										<option value="alumni">Alumni</option>
-										<option value="student">Student</option>
-									</select>
-								</div>
-							</div>
+							 
 							<div className="w-full">
 								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
 									Role
@@ -171,54 +148,9 @@ export const UserProfile = () => {
 									</select>
 								</div>
 							</div>
-							<div className="w-full">
-								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
-									Graduation Month
-								</p>
-								<div className="relative h-10 min-w-full w-full">
-									<select
-										value={graduationMonth}
-										onChange={(e) => setGraduationMonth(e.target.value)}
-										disabled={userType === "student"}
-										className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal text-left outline outline-0 focus:outline-0 disabled:bg-slate-100 disabled:cursor-not-allowed transition-all border text-sm px-2 py-2 rounded-[7px] border-blue-gray-200  "
-									>
-										<option value="">Present</option>
-										<option value="January">January</option>
-										<option value="February">February</option>
-										<option value="March">March</option>
-										<option value="April">April</option>
-										<option value="May">May</option>
-										<option value="June">June</option>
-										<option value="July">July</option>
-										<option value="August">August</option>
-										<option value="September">September</option>
-										<option value="October">October</option>
-										<option value="November">November</option>
-										<option value="December">December</option>
-									</select>
-								</div>
-							</div>
+							 
 
-							<div className="w-full">
-								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
-									Graduation Year
-								</p>
-								<div className="relative h-10 min-w-full w-full">
-									<select
-										disabled={userType === "student"}
-										value={graduationYear}
-										onChange={(e) => setGraduationYear(e.target.value)}
-										className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal text-left outline outline-0 focus:outline-0 disabled:bg-slate-100 disabled:cursor-not-allowedus transition-all border text-sm px-2 py-2 rounded-[7px] border-blue-gray-200  "
-									>
-										<option value="">Present</option>
-										{Array.from({ length: 30 }, (_, index) => (
-											<option key={index} value={2024 - index}>
-												{2024 - index}
-											</option>
-										))}
-									</select>
-								</div>
-							</div>
+							 
 						</div>
 
 						<div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
@@ -254,41 +186,10 @@ export const UserProfile = () => {
 									/>
 								</div>
 							</div>
-							<div className="w-full">
-								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
-									Select a campus
-								</p>
-								<select
-									value={campus}
-									onChange={(e) => setCampus(e.target.value)}
-									className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal text-left outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 transition-all border text-sm px-2 py-2 rounded-[7px] border-blue-gray-200"
-								>
-									<option value="" disabled selected>
-										Select a campus
-									</option>
-									<option value="sexton">Sexton Campus</option>
-									<option value="studley">Studley Campus</option>
-									<option value="truro">Truro Campus</option>
-								</select>
-							</div>
+							 
 						</div>
 						<div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-							<div className="w-full">
-								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
-									Select a university
-								</p>
-								<select
-									value={location}
-									onChange={(e) => setLocation(e.target.value)}
-									className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal text-left outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 transition-all border text-sm px-2 py-2 rounded-[7px] border-blue-gray-200"
-								>
-									<option value="" disabled selected>
-										Select a city
-									</option>
-									<option value="halifax">Halifax</option>
-									<option value="truro">Truro</option>
-								</select>
-							</div>
+						 
 							<div className="w-full">
 								<p className="block antialiased font-sans text-md leading-normal text-slate-700 mb-2 font-medium">
 									Phone Number
