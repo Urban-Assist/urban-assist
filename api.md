@@ -8,3 +8,19 @@ JSON:
   "currency": "usd",
   "paymentMethodId": "pm_card_visa"
 }
+
+
+user-auth:
+
+1. /auth/register -- not secure
+
+request body : 
+
+{
+  "email":"your email",
+  "password":"your password",
+  "firstName":"fname",
+  "lastName":"lname"
+}
+
+

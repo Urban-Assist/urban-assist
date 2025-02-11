@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.example.userauth.model.User;
 import org.example.userauth.repository.UserRepository;
 import org.example.userauth.security.CustomUserDetailService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -46,10 +48,10 @@ public class AuthController {
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with email already exists, try logging in");
+            return ResponseEntity.status(409).body("User with email already exists, try logging in");
         }
         User response = userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully with email: " + response.getEmail());
+        return ResponseEntity.status(200).body(response.getEmail() + " registered successfully");
        } catch (Exception e) {
         e.printStackTrace();
         return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
@@ -79,4 +81,6 @@ public class AuthController {
         
          return ResponseEntity.ok(jwt);
     }
+
+  
 }
