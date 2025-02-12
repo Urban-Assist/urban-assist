@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import ServiceProviders from './pages/ServiceProviders';
 import PortfolioPage from './pages/PortfolioPage';
 import Login from './pages/Login';
+import Registration from './pages/Registration';
  function App() {
   const [count, setCount] = useState(0)
 
@@ -19,6 +20,7 @@ import Login from './pages/Login';
            <Route path="/services/:service" element={<ServiceProviders />} />
           <Route path="/portfolio/:providerName" element={<PortfolioPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registration/>} />
         </Routes>
       </div>
     </Router>
