@@ -6,6 +6,11 @@ import Dashboard from './pages/Dashboard';
 import ServiceProviders from './pages/ServiceProviders';
 import PortfolioPage from './pages/PortfolioPage';
 import Login from './pages/Login';
+import RegistrationPage from './pages/Registration';
+import ProviderAvailibility from './pages/ProviderAvailibility';
+import ClientBookingPage from './pages/BookingSlots';
+
+
  function App() {
   const [count, setCount] = useState(0)
 
@@ -19,6 +24,12 @@ import Login from './pages/Login';
            <Route path="/services/:service" element={<ServiceProviders />} />
           <Route path="/portfolio/:providerName" element={<PortfolioPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/add-availability" element={<ProviderAvailibility />} />
+          <Route path="/booking" element={<ClientBookingPage />} />
+
+
+
         </Routes>
       </div>
     </Router>

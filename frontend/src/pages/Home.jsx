@@ -15,7 +15,6 @@ function Home() {
       <div className="absolute inset-0 bg-black opacity-30"></div>
       </div>
       <h2 className='text-4xl font-bold absolute text-white top-70 left-95 tracking-wide'>URBAN ASSIST</h2>
-
     </div>
     <Discover />
     <Explore />

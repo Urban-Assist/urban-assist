@@ -152,10 +152,10 @@ export default function PortfolioPage() {
           {/* Call to Action Button */}
           <div className="text-center">
             <a
-              href={`mailto:${provider.contactInfo.email}`}
+              href='/booking'
               className="inline-block py-3 px-8 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-md hover:bg-gradient-to-l transition-all"
             >
-              Contact {providerName}
+              Book {providerName}
             </a>
           </div>
 
