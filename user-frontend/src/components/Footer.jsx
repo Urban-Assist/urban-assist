@@ -47,7 +47,7 @@ const Footer = () => {
           </div>
           <hr class="mt-12 mb-6" />
           <div class="text-base text-center text-gray-600">
-            Copyright © 2024 ReadymadeUI
+            Copyright © 2025 Urban Assist
           </div>
         </div>
       </footer>);

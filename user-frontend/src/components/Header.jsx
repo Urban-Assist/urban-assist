@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from '../assets/Logo.png';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -7,7 +8,7 @@ const Header = () => {
     <header
       className='shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] sticky top-0 py-3 px-4 sm:px-10 bg-white z-50 min-h-[70px]'>
       <div className='flex flex-wrap items-center gap-4'>
-        <a href="javascript:void(0)"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" className='w-36' />
+        <a href="javascript:void(0)"><img src={logo} alt="logo" className='w-20' />
         </a>
 
         <div id="collapseMenu"
