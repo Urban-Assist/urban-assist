@@ -1,73 +1,167 @@
-import React from 'react'
+import React, { useState } from 'react';
 
-function Registration() {
-  return (
-    <div className="font-[sans-serif] bg-white md:h-screen">
-    <div className="grid md:grid-cols-2 items-center gap-8 h-full">
-      <div className="max-md:order-1 p-4 bg-gray-50 h-full">
-        <img src="https://readymadeui.com/signin-image.webp" className="max-w-[80%] w-full h-full aspect-square object-contain block mx-auto" alt="login-image" />
-      </div>
+const RegistrationPage = () => {
+    // State for form data
+    const [formData, setFormData] = useState({
+        name: '',
+        role: '',
+        email: '',
+        password: ''
+    });
 
-      <div className="flex items-center p-6 h-full w-full">
-        <form className="max-w-lg w-full mx-auto">
-          <div className="mb-8">
-            <h3 className="text-blue-500 text-2xl font-bold max-md:text-center">Create an account</h3>
-          </div>
+    // State for error handling
+    const [error, setError] = useState('');
 
-          <div>
-            <label className="text-gray-800 text-xs block mb-2">Full Name</label>
-            <div className="relative flex items-center">
-              <input name="name" type="text" required className="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none" placeholder="Enter name" />
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 24 24">
-                <circle cx="10" cy="7" r="6" data-original="#000000"></circle>
-                <path d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z" data-original="#000000"></path>
-              </svg>
+    // Handle input changes
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    // Form validation
+    const validateForm = () => {
+        if (!formData.name.trim()) {
+            setError('Name is required');
+            return false;
+        }
+        if (!formData.role) {
+            setError('Please select a role');
+            return false;
+        }
+        if (!formData.email.trim()) {
+            setError('Email is required');
+            return false;
+        }
+        if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            setError('Please enter a valid email address');
+            return false;
+        }
+        if (formData.password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return false;
+        }
+
+        return true;
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            // Add your API call here
+            console.log('Form submitted:', formData);
+            // Reset form after successful submission
+            setFormData({
+                name: '',
+                role: '',
+                email: '',
+                password: '',
+            });
+        } catch (err) {
+            setError(err.message || 'An error occurred during registration');
+        }
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
+            <div className="bg-white p-8 rounded-3xl shadow-2xl w-110 transform transition-transform hover:scale-105 duration-500">
+                <div className="text-center mb-8">
+                    <h1 className="text-4xl font-extrabold text-gray-800 mb-2">Create account</h1>
+                    <p className="text-gray-500">Sign up to get started</p>
+                </div>
+
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 animate-pulse">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Full Name
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
+                            placeholder="Enter your full name"
+                            required
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Email Address
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
+                            placeholder="Enter your email"
+                            required
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Role
+                        </label>
+                        <select
+                            name="role"
+                            value={formData.role}
+                            className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
+                            required
+                            onChange={handleChange}
+                        >
+                            <option value="">Select your role</option>
+                            <option value="user">User</option>
+                            <option value="admin">Service Provider</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            name="password"
+                            className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
+                            placeholder="Enter your password"
+                            required
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full py-3 cursor-pointer bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity font-medium "
+                    >
+                        Sign Up
+                    </button>
+                </form>
+
+                <div className="text-center mt-6">
+                    <p className="text-gray-600">
+                        Already have an account?{' '}
+                        <a href="/login" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
+                            Sign in
+                        </a>
+                    </p>
+                </div>
             </div>
-          </div>
-          <div className="mt-6">
-            <label className="text-gray-800 text-xs block mb-2">Email</label>
-            <div className="relative flex items-center">
-              <input name="email" type="text" required className="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none" placeholder="Enter email" />
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
-                <defs>
-                  <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                    <path d="M0 512h512V0H0Z" data-original="#000000"></path>
-                  </clipPath>
-                </defs>
-                <g clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
-                  <path fill="none" stroke-miterlimit="10" stroke-width="40" d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z" data-original="#000000"></path>
-                  <path d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z" data-original="#000000"></path>
-                </g>
-              </svg>
-            </div>
-          </div>
-          <div className="mt-6">
-            <label className="text-gray-800 text-xs block mb-2">Password</label>
-            <div className="relative flex items-center">
-              <input name="password" type="password" required className="w-full bg-transparent text-sm border-b border-gray-300 focus:border-blue-500 pl-2 pr-8 py-3 outline-none" placeholder="Enter password" />
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" viewBox="0 0 128 128">
-                <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" data-original="#000000"></path>
-              </svg>
-            </div>
-          </div>
-          <div className="flex items-center mt-6">
-            <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 shrink-0 rounded" />
-            <label for="remember-me" className="ml-3 block text-sm text-gray-800">
-              I accept the <a href="javascript:void(0);" className="text-blue-500 font-semibold hover:underline ml-1">Terms and Conditions</a>
-            </label>
-          </div>
+        </div>
+    );
+};
 
-          <div className="mt-8">
-            <button type="button" className="w-full py-2.5 px-4 text-sm tracking-wider rounded bg-blue-600 hover:bg-blue-700 text-white focus:outline-none">
-              Creat an account
-            </button>
-            <p className="text-sm mt-6 text-gray-800">Already have an account? <a href="javascript:void(0);" className="text-blue-500 font-semibold hover:underline ml-1">Login here</a></p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  )
-}
-
-export default Registration
+export default RegistrationPage;

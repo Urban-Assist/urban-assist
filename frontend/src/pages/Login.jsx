@@ -34,7 +34,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
+    <div className="min-h-screen flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
       <div className="bg-white p-8 rounded-3xl shadow-2xl w-96 transform transition-transform hover:scale-105 duration-500">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-gray-800 mb-2">Welcome Back!</h1>
@@ -96,7 +96,7 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity duration-300 font-medium animate-bounce"
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity font-medium "
           >
             Sign In
           </button>
@@ -105,7 +105,7 @@ function Login() {
         <div className="text-center mt-6">
           <p className="text-gray-600">
             Don't have an account?{' '}
-            <a href="/" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
+            <a href="/register" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
               Sign up
             </a>
           </p>
