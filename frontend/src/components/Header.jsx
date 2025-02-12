@@ -50,8 +50,8 @@ const Header = () => {
         </div>
 
         <div className='flex ml-auto'>
-          <button className='mr-6 font-semibold border-none outline-none'><a href='javascript:void(0)'
-              className='text-blue-600 hover:underline'>Login</a></button>
+          <button className='mr-6 font-semibold border-none outline-none'><a href='/login'
+              className='text-blue-600 hover:underline' >Login</a></button>
           <button className='bg-blue-600 hover:bg-blue-700 transition-all text-white rounded-full px-5 py-2.5'>Sign
             up</button>
           <button id="toggleOpen" className='lg:hidden ml-7'>
