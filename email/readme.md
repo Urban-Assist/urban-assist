@@ -6,4 +6,15 @@ To run this application, set up the following environment variables.
 
 #### PORT
 ```bash
-PORT=your_port_number
+PORT = "your port"
+```
+
+#### EMAIL_ADDRESS
+```bash
+EMAIL_ADDRESS= "sender email"
+```
+
+#### MAIL_ACCESS_TOKEN
+```bash
+MAIL_ACCESS_TOKEN ="sender app password - gmail"
+
