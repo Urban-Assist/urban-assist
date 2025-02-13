@@ -5,8 +5,11 @@ import org.example.userauth.DTO.MailResponse;
 import org.example.userauth.model.EmailConfirmation;
 import org.example.userauth.repository.EmailTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+ 
 import org.example.userauth.model.User;
 
 
@@ -18,6 +21,8 @@ public class EmailService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Value("${EMAIL_SERVER_URL}") // Inject the URL from the environment variable
+    private String emailServiceUrl;
     public boolean sendEmail( String token, User user) {
     
         //send email with token for verification
@@ -25,7 +30,7 @@ public class EmailService {
             emailRequest.setTo(user.getEmail());
             emailRequest.setText(token);
             emailRequest.setSubject("Email Verification");
-            String url = "http://localhost:9000/mail/send";
+            String url = emailServiceUrl;
     
             try {
                 MailResponse response = restTemplate.postForObject(url, emailRequest, MailResponse.class);

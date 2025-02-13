@@ -6,19 +6,23 @@ To run this application, set up the following environment variables.
 
 #### AUTH_SERVER_PORT
 ```bash
-AUTH_SERVER_PORT = "your port"
+AUTH_SERVER_PORT = "your port for running the authentication & user management server."
 ```
 
 #### DB_URL
 ```bash
-DB_URL= "sender email"
+DB_URL= "DB connction url"
 ```
 
 #### DB_USERNAME
 ```bash
-DB_USERNAME ="sender app password - gmail"
+DB_USERNAME ="DB user name"
 ```
 
 #### DB_PASSWORD
 ```bash
-DB_PASSWORD ="sender app password - gmail"
+DB_PASSWORD ="DB password"
+
+#### EMAIL_SERVER_URL
+```bash
+EMAIL_SERVER_URL ="URL on which DB is running"
