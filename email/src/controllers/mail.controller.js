@@ -3,7 +3,12 @@ function sendMailFunction(req, res) {
     const { to, subject, text } = req.body;
     sendMail(to, subject, text)
       .then(() => {
-        res.status(200).send("Email sent successfully");
+        const response = {
+          
+          message: "Email sent successfully",
+          status:200
+        };
+        res.status(200).send(response);
       })
       .catch((error) => {
         console.error(error);

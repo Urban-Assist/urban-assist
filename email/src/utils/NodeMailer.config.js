@@ -29,7 +29,8 @@ const sendMail = async (receiver, subject, data) => {
         };
 
         const info = await transporter.sendMail(mailData);
-        console.log('Email sent:', info.response);
+        console.log('Email sent:', info.response );
+        console.log(info.envelope)
         return info;
     } catch (error) {
         console.error('Email error:', error);
