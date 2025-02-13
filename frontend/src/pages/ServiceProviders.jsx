@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { FaStar, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaLinkedin } from "react-icons/fa";
-import Sidenav from "../components/Sidenav";
+import UserSidenav from "../components/UserSidenav";
 import { Link } from "react-router-dom";
 
 const providers = {
@@ -32,7 +32,7 @@ export default function ServiceProviders() {
     return (
         <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
             <div class="flex items-start">
-                <Sidenav />
+                <UserSidenav />
                 <section className="main-content w-full px-6">
                     <div className="my-6 px-2">
                         <div className="container mx-auto px-6 py-10">

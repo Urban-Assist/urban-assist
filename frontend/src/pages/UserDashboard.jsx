@@ -1,19 +1,19 @@
 
 import ServiceCards from '../components/ServicesCards';
-import Sidenav from '../components/Sidenav';
+import UserSidenav from '../components/UserSidenav';
 
-function Dashboard() {
+function UserDashboard() {
 
   return (
 
     <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
       <div class="flex items-start">
 
-        <Sidenav />
-        <ServiceCards />
+        <UserSidenav />
+        <ServiceCards title="Our Premium Services"/>
 
       </div>
     </div>
   );
 }
-export default Dashboard;
+export default UserDashboard;
