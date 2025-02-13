@@ -2,7 +2,7 @@
 import logo from '../assets/Logo.png';
 
 
-function Sidenav(){
+function UserSidenav(){
 
     return(
         <>
@@ -10,7 +10,7 @@ function Sidenav(){
                 <div id="sidebar-collapse-menu"
                   class="bg-white shadow-lg h-screen fixed top-0 left-0 overflow-auto z-[99] lg:min-w-[250px] lg:w-max max-lg:w-0 max-lg:invisible transition-all duration-500">
                   <div class="flex items-center gap-2 pt-6 pb-2 px-4 sticky top-0 bg-white min-h-[64px] z-[100]">
-                    <a href="javascript:void(0)"><img src={logo} alt="logo"
+                    <a href="/"><img src={logo} alt="logo"
                         class='w-[140px]' />
                     </a>
                     <button id="close-sidebar" class='lg:hidden ml-auto'>
@@ -25,7 +25,7 @@ function Sidenav(){
                   <div class="py-4 px-4">
                     <ul class="space-y-2">
                       <li>
-                        <a href="javascript:void(0)"
+                        <a href="/dashboard"
                           class="text-gray-800 text-sm flex items-center cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2.5 transition-all duration-300">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-[18px] h-[18px] mr-3"
                             viewBox="0 0 24 24">
@@ -306,4 +306,4 @@ function Sidenav(){
 
 
 
-export default Sidenav;
+export default UserSidenav;

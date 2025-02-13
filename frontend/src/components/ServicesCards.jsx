@@ -11,14 +11,14 @@ const services = [
   { name: "Mental Well-being", slug: "mental-wellbeing", icon: <FaHeart className="text-pink-500" />, description: "Nurturing your mind and soul with care and support." },
 ];
 
-export default function ServiceCards() {
+export default function ServiceCards({ title }) {
   const navigate = useNavigate();
 
   return (
     <section className="main-content w-full px-6">
       <div className="my-6 px-2">
         <div className="p-6">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Our Premium Services</h2>
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">{title}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <motion.div

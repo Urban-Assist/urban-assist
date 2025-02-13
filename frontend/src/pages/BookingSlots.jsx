@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import Sidenav from "../components/Sidenav";
+import UserSidenav from "../components/UserSidenav";
 
 const localizer = momentLocalizer(moment);
 
@@ -30,7 +30,13 @@ const ClientBookingPage = () => {
                 },
                 {
                     _id: "3",
-                    date: moment().add(1, "day").format("YYYY-MM-DD"),
+                    date: moment().add(3, "day").format("YYYY-MM-DD"),
+                    startTime: "14:00",
+                    endTime: "15:00",
+                },
+                {
+                    _id: "4",
+                    date: moment().add(6, "day").format("YYYY-MM-DD"),
                     startTime: "14:00",
                     endTime: "15:00",
                 },
@@ -84,13 +90,14 @@ const ClientBookingPage = () => {
             <div
                 style={{
                     position: "relative",
-                    backgroundColor: hasSlots ? "#E3F2FD" : "inherit",
+                    backgroundColor: hasSlots ? "#BBDEFB" : "inherit",
                     height: "100%",
                     width: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     cursor: "pointer",
+                    borderLeft: "1px solid #D9D9D9",
                 }}
             >
                 {children}
@@ -101,10 +108,10 @@ const ClientBookingPage = () => {
     return (
         <div className="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
             <div className="flex items-start">
-                <Sidenav />
+                <UserSidenav />
 
                 <div className="container mx-auto p-4">
-                    <h1 className="text-2xl font-bold my-6">Book Provider Availability</h1>
+                    <h1 className="text-2xl font-bold my-6">Service Provider Availability</h1>
 
                     {/* Layout: Calendar on the left, Slot List on the right */}
                     <div className="flex flex-col md:flex-row gap-6">
@@ -169,7 +176,7 @@ const ClientBookingPage = () => {
                                     </p>
                                     <button
                                         onClick={handleConfirmBooking}
-                                        className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-600"
+                                        className="bg-green-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-600"
                                     >
                                         Confirm Booking
                                     </button>

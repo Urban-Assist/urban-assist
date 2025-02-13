@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { FaStar, FaPhoneAlt, FaEnvelope, FaLinkedin, FaMapMarkerAlt, FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import Sidenav from "../components/Sidenav";
+import UserSidenav from "../components/UserSidenav";
 import { useState } from "react";
 import { Carousel } from "@material-tailwind/react";
 
@@ -59,12 +59,12 @@ export default function PortfolioPage() {
     <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
       <div class="flex items-start">
 
-        <Sidenav />
+        <UserSidenav />
 
         <div className="w-full mx-auto px-10 py-12 bg-gray-50">
           {/* Profile Header */}
           <div className="flex items-center space-x-6 mb-10">
-            <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-md border-2 border-gradient-to-r from-blue-500 to-purple-500">
+            <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-md">
               <img
                 src={provider.profilePic}
                 alt={providerName}
