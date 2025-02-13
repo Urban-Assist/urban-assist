@@ -50,8 +50,8 @@ public class AuthController {
         if(userRepository.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(409).body("User with email already exists, try logging in");
         }
-        User response = userService.registerUser(user);
-        return ResponseEntity.status(200).body(response.getEmail() + " registered successfully");
+        ResponseEntity<?> response = userService.registerUser(user);
+        return ResponseEntity.status(200).body(response);
        } catch (Exception e) {
         e.printStackTrace();
         return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
