@@ -22,6 +22,7 @@ DB_USERNAME ="DB user name"
 #### DB_PASSWORD
 ```bash
 DB_PASSWORD ="DB password"
+```
 
 #### EMAIL_SERVER_URL
 ```bash
