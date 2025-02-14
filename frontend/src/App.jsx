@@ -12,9 +12,10 @@ import ProviderAvailibility from './pages/ProviderAvailibility';
 import ClientBookingPage from './pages/BookingSlots';
 import PortfolioMakerPage from './pages/PortfolioMaker';
 import TermsAndConditions from './pages/TermsAndConditions';
+import Payment from './pages/Payment';
 
 
- function App() {
+function App() {
   const [count, setCount] = useState(0)
 
   return (
@@ -23,17 +24,18 @@ import TermsAndConditions from './pages/TermsAndConditions';
         {/* <h1>My App</h1> */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={ <UserDashboard /> } />
-           <Route path="/services/:service" element={<ServiceProviders />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/services/:service" element={<ServiceProviders />} />
           <Route path="/portfolio/:providerName" element={<PortfolioPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/add-availability" element={<ProviderAvailibility />} />
           <Route path="/booking" element={<ClientBookingPage />} />
+          <Route path="/payment" element={<Payment />} />
 
 
           {/* test urls to be modified later*/}
-          <Route path="/dashboard2" element={ <ProviderDashboard /> } />
+          <Route path="/dashboard2" element={<ProviderDashboard />} />
           <Route path="/register-service/:providerName" element={<PortfolioMakerPage />} />
           <Route path="/terms-and-condtions" element={<TermsAndConditions />} />
 
