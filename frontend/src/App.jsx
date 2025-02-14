@@ -11,6 +11,7 @@ import RegistrationPage from './pages/Registration';
 import ProviderAvailibility from './pages/ProviderAvailibility';
 import ClientBookingPage from './pages/BookingSlots';
 import PortfolioMakerPage from './pages/PortfolioMaker';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 
  function App() {
@@ -34,6 +35,8 @@ import PortfolioMakerPage from './pages/PortfolioMaker';
           {/* test urls to be modified later*/}
           <Route path="/dashboard2" element={ <ProviderDashboard /> } />
           <Route path="/register-service/:providerName" element={<PortfolioMakerPage />} />
+          <Route path="/terms-and-condtions" element={<TermsAndConditions />} />
+
 
 
         </Routes>
