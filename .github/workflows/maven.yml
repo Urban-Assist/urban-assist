@@ -1,6 +1,5 @@
 name: CI/CD Pipeline for User-Auth Microservice
 
- 
 on:
   push:
     paths:
@@ -8,7 +7,15 @@ on:
   pull_request:
     paths:
       - 'user-auth/**'
-  workflow_dispatch: # Add this to enable manual triggering
+  workflow_dispatch: # Enable manual triggering
+
+env:
+  AUTH_SERVER_PORT: 8080
+  DB_URL: ${{ secrets.DB_URL }} # Fetch from GitHub Secrets
+  DB_USERNAME: ${{ secrets.DB_USERNAME }} # Fetch from GitHub Secrets
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }} # Fetch from GitHub Secrets
+  EMAIL_SERVER_URL: ${{ secrets.EMAIL_SERVER_URL }} # Fetch from GitHub Secrets
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -60,4 +67,10 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d --name user-auth -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
+          docker run -d --name user-auth -p ${{ env.AUTH_SERVER_PORT }}:${{ env.AUTH_SERVER_PORT }} \
+            -e AUTH_SERVER_PORT=${{ env.AUTH_SERVER_PORT }} \
+            -e DB_URL=${{ env.DB_URL }} \
+            -e DB_USERNAME=${{ env.DB_USERNAME }} \
+            -e DB_PASSWORD=${{ env.DB_PASSWORD }} \
+            -e EMAIL_SERVER_URL=${{ env.EMAIL_SERVER_URL }} \
+            ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
