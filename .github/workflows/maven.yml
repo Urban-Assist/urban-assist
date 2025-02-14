@@ -36,7 +36,7 @@ jobs:
                 -p${{ env.DB_PASSWORD }} \
                 -e "SELECT 1;"
       - name: Build Java project with Maven 
-        run: mvn clean -f user-auth/pom.xml # Replace with Gradle if needed
+        run: mvn clean install -f user-auth/pom.xml # Replace with Gradle if needed
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
