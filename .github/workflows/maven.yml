@@ -1,5 +1,6 @@
 name: CI/CD Pipeline for User-Auth Microservice
 
+ 
 on:
   push:
     paths:
@@ -7,7 +8,7 @@ on:
   pull_request:
     paths:
       - 'user-auth/**'
-
+  workflow_dispatch: # Add this to enable manual triggering
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
