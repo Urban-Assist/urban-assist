@@ -1,6 +1,5 @@
 name: CI/CD Pipeline for User-Auth Microservice
 
- 
 on:
   push:
     paths:
@@ -8,7 +7,15 @@ on:
   pull_request:
     paths:
       - 'user-auth/**'
-  workflow_dispatch: # Add this to enable manual triggering
+  workflow_dispatch: # Enable manual triggering
+
+env:
+  AUTH_SERVER_PORT: 8080
+  DB_URL: jdbc:mysql://central-db-web.cjkii4k08kf4.ca-central-1.rds.amazonaws.com:3306/demo # Fetch from GitHub Secrets
+  DB_USERNAME: admin # Fetch from GitHub Secrets
+  DB_PASSWORD: Helloadmin007 # Fetch from GitHub Secrets
+  EMAIL_SERVER_URL: ${{ secrets.EMAIL_SERVER_URL }} # Fetch from GitHub Secrets
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -21,9 +28,15 @@ jobs:
         with:
           java-version: '17' # Replace with your Java version
           distribution: 'temurin'
-
-      - name: Build Java project with Maven
-        run: mvn clean package -f user-auth/pom.xml # Replace with Gradle if needed
+      - name: Test Database Connection
+        run: |
+          sudo apt-get update && sudo apt-get install -y mysql-client
+          mysql -h central-db-web.cjkii4k08kf4.ca-central-1.rds.amazonaws.com \
+                -u ${{ env.DB_USERNAME }} \
+                -p${{ env.DB_PASSWORD }} \
+                -e "SELECT 1;"
+      - name: Build Java project with Maven 
+        run: mvn clean  -f user-auth/pom.xml # Replace with Gradle if needed
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -51,7 +64,7 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
+           docker pull ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
 
       - name: Stop and remove existing container
         run: |
@@ -60,4 +73,5 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d --name user-auth -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
+          docker run -d  --name handyshare/user-auth -p ${{ env.AUTH_SERVER_PORT }}:${{ env.AUTH_SERVER_PORT }} 
+            ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
