@@ -28,7 +28,13 @@ jobs:
         with:
           java-version: '17' # Replace with your Java version
           distribution: 'temurin'
-
+      - name: Test Database Connection
+        run: |
+          apt-get update && apt-get install -y mysql-client
+          mysql -h central-db-web.cjkii4k08kf4.ca-central-1.rds.amazonaws.com \
+                -u ${{ env.DB_USERNAME }} \
+                -p${{ env.DB_PASSWORD }} \
+                -e "SELECT 1;"
       - name: Build Java project with Maven
         run: mvn clean package -f user-auth/pom.xml # Replace with Gradle if needed
 
