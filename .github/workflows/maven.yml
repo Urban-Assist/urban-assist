@@ -73,10 +73,5 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run -d  handyshare/user-auth -p ${{ env.AUTH_SERVER_PORT }}:${{ env.AUTH_SERVER_PORT }} \
-            -e AUTH_SERVER_PORT=${{ env.AUTH_SERVER_PORT }} \
-            -e DB_URL=${{ env.DB_URL }} \
-            -e DB_USERNAME=${{ env.DB_USERNAME }} \
-            -e DB_PASSWORD=${{ env.DB_PASSWORD }} \
-            -e EMAIL_SERVER_URL=${{ env.EMAIL_SERVER_URL }} \
+          docker run -d  --name handyshare/user-auth -p ${{ env.AUTH_SERVER_PORT }}:${{ env.AUTH_SERVER_PORT }} 
             ${{ secrets.DOCKER_USERNAME }}/user-auth:latest
