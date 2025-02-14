@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home'
 import './App.css'
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import UserDashboard from './pages/UserDashboard';
 import ProviderDashboard from './pages/ProviderDashboard';
 import ServiceProviders from './pages/ServiceProviders';
@@ -14,6 +16,7 @@ import PortfolioMakerPage from './pages/PortfolioMaker';
 import TermsAndConditions from './pages/TermsAndConditions';
 import Payment from './pages/Payment';
 
+const stripePromise = loadStripe('pk_test_51QpEzSBzR4uJF8SUuTzrlJFalbN5SvRzEGDPX7icdx5xVh0Kid8GzKMaRbfbv8hcKIDxkIuxecJpIKpfqZsbuqhF00NxiKnbXu');
 
 function App() {
   const [count, setCount] = useState(0)
@@ -31,8 +34,11 @@ function App() {
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/add-availability" element={<ProviderAvailibility />} />
           <Route path="/booking" element={<ClientBookingPage />} />
-          <Route path="/payment" element={<Payment />} />
-
+          <Route path="/payment" element={
+            <Elements stripe={stripePromise}>
+              <Payment />
+            </Elements>
+          } />
 
           {/* test urls to be modified later*/}
           <Route path="/dashboard2" element={<ProviderDashboard />} />
