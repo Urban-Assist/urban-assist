@@ -27,7 +27,7 @@ public class EmailService {
     public boolean sendEmail( String token, User user, HttpServletRequest request) {
       
         String currUrl = request.getRequestURL().toString();
-        String baseUrl ="http://localhost:8080/auth/email-verification/";
+        String baseUrl ="http://localhost:8080/auth/email-verification?token="+token;
         //send email with token for verification
         MailRequest emailRequest = new MailRequest();
             emailRequest.setTo(user.getEmail());

@@ -83,7 +83,7 @@ public class AuthController {
          return ResponseEntity.ok(jwt);
     }
 
-    @PostMapping("/email-verification")
+    @GetMapping("/email-verification")
     public ResponseEntity<?> postMethodName(@RequestParam("token") String token) {
         //TODO: process POST request
          
