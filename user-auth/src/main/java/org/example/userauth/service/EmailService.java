@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
- 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.example.userauth.model.User;
 
 
@@ -23,12 +24,14 @@ public class EmailService {
 
     @Value("${EMAIL_SERVER_URL}") // Inject the URL from the environment variable
     private String emailServiceUrl;
-    public boolean sendEmail( String token, User user) {
-    
+    public boolean sendEmail( String token, User user, HttpServletRequest request) {
+      
+        String currUrl = request.getRequestURL().toString();
+        String baseUrl ="http://localhost:8080/auth/email-verification/";
         //send email with token for verification
         MailRequest emailRequest = new MailRequest();
             emailRequest.setTo(user.getEmail());
-            emailRequest.setText(token);
+            emailRequest.setText(baseUrl); // Replace this with the template for the email
             emailRequest.setSubject("Email Verification");
             String url = emailServiceUrl;
     
