@@ -87,16 +87,12 @@ public class AuthController {
     }
 
     @GetMapping("/email-verification")
-    public ResponseEntity<?> postMethodName(@RequestParam("token") String token) {
+    public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
         //TODO: process POST request
          
-        userService.verifyEmail(token);
+        userService.verifyEmail(token );
         return ResponseEntity.ok("Email verified successfully");
     }
-    
-    @GetMapping("/demo")
-    public String getMethodName() {
-        return new String("Hello world");
-    }
+  
     
 }
