@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
  import { app } from "./app.js";
-dotenv.config({ path: "./.env" });
+import path from "path";
+ const nodeEnv = process.env.ENV_MODE || 'development';
+ const envFile = path.resolve(process.cwd(), `.env.${nodeEnv}`);
+ dotenv.config({ path: envFile });
  
    
   app.listen(process.env.PORT || 8001, () => {
