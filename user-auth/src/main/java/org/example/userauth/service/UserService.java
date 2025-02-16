@@ -1,9 +1,6 @@
 package org.example.userauth.service;
-
+import java.util.Optional;
 import java.util.UUID;
-
-import org.example.userauth.DTO.MailRequest;
-import org.example.userauth.DTO.MailResponse;
 import org.example.userauth.model.EmailConfirmation;
 import org.example.userauth.model.User;
 import org.example.userauth.repository.EmailTokenRepository;
@@ -12,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
- 
+import jakarta.servlet.http.HttpServletRequest;
+import org.example.userauth.service.EmailService;
 @Service
 public class UserService {
 
@@ -32,8 +28,8 @@ public class UserService {
  
     @Autowired
     EmailService emailService;
-    public ResponseEntity<?> registerUser(User user) {
-      
+
+    public ResponseEntity<?> registerUser(User user, HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         //create token for email varification
@@ -41,7 +37,7 @@ public class UserService {
         System.out.println("Token generated ✅");
 
         //send email with token for verification
-        Boolean emailSent = emailService.sendEmail(token, user);
+        Boolean emailSent = emailService.sendEmail(token, user, request);
         if (emailSent){
             User registeredUser = userRepository.save(user);
             System.out.println("User registered ✅");
@@ -74,4 +70,27 @@ public class UserService {
             return ResponseEntity.status(400).body(response);   
         }
      }
+    public ResponseEntity<?> verifyEmail(String token) {
+        System.out.println(token);
+        
+        // TODO Auto-generated method stub
+        EmailConfirmation emailToken = emailTokenRepository.findByToken(token);
+        if(emailToken == null){
+            //create respone JSON object
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode response = objectMapper.createObjectNode();
+            response.put("message", "Invalid token ❌");
+            response.put("Reason","Token not found ❌");    
+            System.out.println("Invalid token ❌");
+            
+           return ResponseEntity.status(400).body(response);
+        }
+        User tempUser = emailToken.getUser();
+        Optional<User> user = userRepository.findById(tempUser.getId());
+        user.get().setVarified(true);
+        userRepository.save(user.get());
+      
+        emailTokenRepository.delete(emailToken);
+         return  ResponseEntity.ok().body("Email verified successfully ✅");
+    }
 }
