@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -89,6 +92,11 @@ public class AuthController {
          
         userService.verifyEmail(token);
         return ResponseEntity.ok("Email verified successfully");
+    }
+    
+    @GetMapping("/demo")
+    public String getMethodName() {
+        return new String("Hello world");
     }
     
 }

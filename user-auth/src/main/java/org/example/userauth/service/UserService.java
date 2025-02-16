@@ -1,27 +1,18 @@
 package org.example.userauth.service;
-
 import java.util.Optional;
 import java.util.UUID;
-
-import org.example.userauth.DTO.MailRequest;
-import org.example.userauth.DTO.MailResponse;
 import org.example.userauth.model.EmailConfirmation;
 import org.example.userauth.model.User;
 import org.example.userauth.repository.EmailTokenRepository;
 import org.example.userauth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import jakarta.servlet.http.HttpServletRequest;
- 
+import org.example.userauth.service.EmailService;
 @Service
 public class UserService {
 
@@ -37,6 +28,7 @@ public class UserService {
  
     @Autowired
     EmailService emailService;
+
     public ResponseEntity<?> registerUser(User user, HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
