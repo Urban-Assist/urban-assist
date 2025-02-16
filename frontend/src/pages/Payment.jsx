@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const Payment = () => {
     const location = useLocation();
@@ -32,10 +32,12 @@ const Payment = () => {
             return;
         }
 
-        const cardElement = elements.getElement(CardElement);
+        const cardNumberElement = elements.getElement(CardNumberElement);
+        const cardExpiryElement = elements.getElement(CardExpiryElement);
+        const cardCvcElement = elements.getElement(CardCvcElement);
         const { paymentMethod, error } = await stripe.createPaymentMethod({
             type: "card",
-            card: cardElement,
+            card: cardNumberElement,
         });
 
         if (error) {
@@ -66,51 +68,71 @@ const Payment = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-6 rounded-lg shadow-md w-96">
-                <h2 className="text-2xl font-bold mb-4">Payment Details</h2>
-                <p><strong>Date:</strong> {moment(selectedSlot.date).format("LL")}</p>
-                <p><strong>Time:</strong> {moment(selectedSlot.startTime, "HH:mm").format("h:mm A")} - {moment(selectedSlot.endTime, "HH:mm").format("h:mm A")}</p>
-                <p><strong>Service Fee:</strong> $50</p>
 
-                {/* Payment Form */}
-                {!paymentSuccess && (
-                    <form onSubmit={handlePayment} className="space-y-4">
-                        <CardElement className="p-3 border rounded" />
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-700"
-                        >
-                            {loading ? "Processing..." : "Pay"}
-                        </button>
-                    </form>
-                )}
+        <div className="flex w-1/2 h-[75vh] p-8 max-auto mt-8 absolute left-1/4">
+            {/* Left Section - Booking Details */}
+            <div className="w-1/3 bg-gray-700 text-white flex flex-col justify-center p-8 shadow-md">
+                <h2 className="text-2xl font-bold mb-4">Restoration</h2>
+                <p className="text-lg">John Doe</p>
+                <p className="text-lg font-semibold mt-2">Price: $150</p>
+            </div>
 
-                {message && <p className="text-center mt-4 text-red-600">{message}</p>}
+            {/* Right Section - Payment Form */}
+            <div className="w-2/3 flex items-center justify-center bg-gray-100">
+                <div className="bg-gray-100 p-8 rounded-lg w-96">
+                    <h2 className="text-2xl font-bold mb-6 text-center">Payment Details</h2>
 
-                {/* Booking Confirmation Modal */}
-                {paymentSuccess && (
-                    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
-                            <h2 className="text-xl font-bold mb-4">Booking Confirmed</h2>
-                            <p>
-                                Your booking for{" "}
-                                {moment(selectedSlot.date).format("LL")} -{" "}
-                                {moment(selectedSlot.startTime, "HH:mm").format("h:mm A")} to{" "}
-                                {moment(selectedSlot.endTime, "HH:mm").format("h:mm A")} has been confirmed!
-                            </p>
-                            <div className="mt-4 flex justify-end">
-                                <button
-                                    onClick={() => navigate("/")} // Redirect to home page
-                                    className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-600"
-                                >
-                                    Close
-                                </button>
+                    {/* Payment Form */}
+                    {!paymentSuccess && (
+                        <form onSubmit={handlePayment} className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Cardholder Name"
+                                className="w-full p-2 border rounded"
+                                required
+                            />
+
+                            <CardNumberElement className="w-full p-2 border rounded" />
+                            <div className="flex space-x-2">
+                                <CardExpiryElement className="w-1/2 p-2 border rounded" />
+                                <CardCvcElement className="w-1/2 p-2 border rounded" />
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                            >
+                                {loading ? "Processing..." : "Pay: $150"}
+                            </button>
+                        </form>
+                    )}
+
+                    {message && <p className="text-center mt-4 text-red-600">{message}</p>}
+
+                    {/* Booking Confirmation Modal */}
+                    {paymentSuccess && (
+                        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+                            <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+                                <h2 className="text-xl font-bold mb-4">Booking Confirmed</h2>
+                                <p>
+                                    Your booking for{" "}
+                                    {moment(selectedSlot.date).format("LL")} -{" "}
+                                    {moment(selectedSlot.startTime, "HH:mm").format("h:mm A")} to{" "}
+                                    {moment(selectedSlot.endTime, "HH:mm").format("h:mm A")} has been confirmed!
+                                </p>
+                                <div className="mt-4 flex justify-end">
+                                    <button
+                                        onClick={() => navigate("/")} // Redirect to home page
+                                        className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-600"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );
