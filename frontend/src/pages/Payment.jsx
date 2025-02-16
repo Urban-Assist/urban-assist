@@ -69,18 +69,18 @@ const Payment = () => {
 
     return (
 
-        <div className="flex w-1/2 h-[75vh] p-8 max-auto mt-8 absolute left-1/4">
+        <div className="flex w-1/2 h-[75vh] p-8 max-auto mt-8 absolute left-1/4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-lg bg-white">
             {/* Left Section - Booking Details */}
-            <div className="w-1/3 bg-gray-700 text-white flex flex-col justify-center p-8 shadow-md">
+            <div className="w-1/3 bg-gray-700 text-white flex flex-col justify-center p-8 rounded-l-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Restoration</h2>
                 <p className="text-lg">John Doe</p>
                 <p className="text-lg font-semibold mt-2">Price: $150</p>
             </div>
 
             {/* Right Section - Payment Form */}
-            <div className="w-2/3 flex items-center justify-center bg-gray-100">
-                <div className="bg-gray-100 p-8 rounded-lg w-96">
-                    <h2 className="text-2xl font-bold mb-6 text-center">Payment Details</h2>
+            <div className="w-2/3 flex items-center justify-center bg-gray-50 rounded-r-lg">
+                <div className="bg-gray-50 p-8 rounded-lg w-96">
+                    <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Payment Details</h2>
 
                     {/* Payment Form */}
                     {!paymentSuccess && (
@@ -88,14 +88,14 @@ const Payment = () => {
                             <input
                                 type="text"
                                 placeholder="Cardholder Name"
-                                className="w-full p-2 border rounded"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 required
                             />
 
-                            <CardNumberElement className="w-full p-2 border rounded" />
+                            <CardNumberElement className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
                             <div className="flex space-x-2">
-                                <CardExpiryElement className="w-1/2 p-2 border rounded" />
-                                <CardCvcElement className="w-1/2 p-2 border rounded" />
+                                <CardExpiryElement className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                                <CardCvcElement className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
                             </div>
 
                             <button

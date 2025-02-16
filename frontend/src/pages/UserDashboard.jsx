@@ -1,15 +1,14 @@
 
 import ServiceCards from '../components/ServicesCards';
-import UserSidenav from '../components/UserSidenav';
 
 function UserDashboard() {
 
   return (
 
-    <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
+      <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
       <div class="flex items-start">
 
-        <UserSidenav />
+       
         <ServiceCards title="Our Premium Services"/>
 
       </div>

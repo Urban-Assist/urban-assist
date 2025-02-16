@@ -4,7 +4,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import UserSidenav from "../components/UserSidenav";
-
+import Header from "../components/Header";
 const localizer = momentLocalizer(moment);
 
 const ClientBookingPage = () => {
@@ -109,9 +109,9 @@ const ClientBookingPage = () => {
     };
 
     return (
-        <div className="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
+        <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
+
             <div className="flex items-start">
-                <UserSidenav />
 
                 <div className="container mx-auto p-4">
                     <h1 className="text-2xl font-bold my-6">Service Provider Availability</h1>
