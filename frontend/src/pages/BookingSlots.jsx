@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import UserSidenav from "../components/UserSidenav";
 import Header from "../components/Header";
@@ -11,6 +12,7 @@ const ClientBookingPage = () => {
     const [selectedDate, setSelectedDate] = useState(moment().toDate());
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State for modal visibility
+    const navigate = useNavigate();
 
     // Mock fetch function
     const fetchAvailabilities = async () => {
@@ -52,7 +54,7 @@ const ClientBookingPage = () => {
     const getSlotsForSelectedDate = () => {
         return availabilities.filter((slot) =>
             moment(slot.date).isSame(moment(selectedDate), "day"
-        ));
+            ));
     };
 
     // Handle date selection
@@ -71,7 +73,8 @@ const ClientBookingPage = () => {
         if (!selectedSlot) return;
 
         // Show the confirmation modal
-        setShowConfirmationModal(true);
+        //setShowConfirmationModal(true);
+        navigate("/payment", { state: { selectedSlot } });
     };
 
     // Close the modal and reset the selected slot
@@ -84,7 +87,7 @@ const ClientBookingPage = () => {
     const CustomDateCellWrapper = ({ children, value }) => {
         const hasSlots = availabilities.some((slot) =>
             moment(slot.date).isSame(moment(value), "day"
-        ));
+            ));
 
         return (
             <div
@@ -147,8 +150,8 @@ const ClientBookingPage = () => {
                                                 key={slot._id}
                                                 onClick={() => handleSlotSelect(slot)}
                                                 className={`p-4 border rounded-lg cursor-pointer transition-all ${selectedSlot?._id === slot._id
-                                                        ? "bg-blue-100 border-blue-500"
-                                                        : "bg-white border-gray-200 hover:bg-gray-50"
+                                                    ? "bg-blue-100 border-blue-500"
+                                                    : "bg-white border-gray-200 hover:bg-gray-50"
                                                     }`}
                                             >
                                                 {moment(slot.startTime, "HH:mm").format("h:mm A")} -{" "}
@@ -188,29 +191,6 @@ const ClientBookingPage = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Confirmation Modal */}
-            {showConfirmationModal && (
-                <div className="fixed inset-0  z-50 bg-black/50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
-                        <h2 className="text-xl font-bold mb-4">Booking Confirmed</h2>
-                        <p>
-                            Your booking for{" "}
-                            {moment(selectedSlot.date).format("LL")} -{" "}
-                            {moment(selectedSlot.startTime, "HH:mm").format("h:mm A")} to{" "}
-                            {moment(selectedSlot.endTime, "HH:mm").format("h:mm A")} has been confirmed!
-                        </p>
-                        <div className="mt-4 flex justify-end">
-                            <button
-                                onClick={closeConfirmationModal}
-                                className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-600"
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

@@ -1,5 +1,5 @@
 export const frontendRoutes = {
-  EXAMPLE:"#",
+  EXAMPLE: "#",
   HOME: "/",
   DASHBOARD: "/dashboard",
   SERVICE: "/services",
@@ -11,4 +11,5 @@ export const frontendRoutes = {
   PROVIDER_DASHBOARD: "/dashboard2",
   REGISTER_SERVICE: "/register-service",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
+  PAYMENT: "/payment",
 };
