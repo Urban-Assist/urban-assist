@@ -1,48 +1,89 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home'
-import './App.css'
-import UserDashboard from './pages/UserDashboard';
-import ProviderDashboard from './pages/ProviderDashboard';
-import ServiceProviders from './pages/ServiceProviders';
-import PortfolioPage from './pages/PortfolioPage';
-import Login from './pages/Login';
-import RegistrationPage from './pages/Registration';
-import ProviderAvailibility from './pages/ProviderAvailibility';
-import ClientBookingPage from './pages/BookingSlots';
-import PortfolioMakerPage from './pages/PortfolioMaker';
-import TermsAndConditions from './pages/TermsAndConditions';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Suspense } from "react";
+import Home from "./pages/Home";
+import "./App.css";
+import { frontendRoutes } from "./utils/frontendRoutes";
 
 
- function App() {
-  const [count, setCount] = useState(0)
+import LoadAnimation from "./components/LoadAnimation";
+import Header from "./components/Header";
+const UserDashboard = React.lazy(() => import("./pages/UserDashboard"));
+const ProviderDashboard = React.lazy(() => import("./pages/ProviderDashboard"));
+const ServiceProviders = React.lazy(() => import("./pages/ServiceProviders"));
+const PortfolioPage = React.lazy(() => import("./pages/PortfolioPage"));
+const Login = React.lazy(() => import("./pages/Login"));
+const RegistrationPage = React.lazy(() => import("./pages/Registration"));
+const ProviderAvailibility = React.lazy(() => import("./pages/ProviderAvailibility"));
+const ClientBookingPage = React.lazy(() => import("./pages/BookingSlots"));
+const PortfolioMakerPage = React.lazy(() => import("./pages/PortfolioMaker"));
+const TermsAndConditions = React.lazy(() =>import("./pages/TermsAndConditions"));
 
+
+function App() {
   return (
     <Router>
-      <div className=' h-[100vh]'>
-        {/* <h1>My App</h1> */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={ <UserDashboard /> } />
-           <Route path="/services/:service" element={<ServiceProviders />} />
-          <Route path="/portfolio/:providerName" element={<PortfolioPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<RegistrationPage />} />
-          <Route path="/add-availability" element={<ProviderAvailibility />} />
-          <Route path="/booking" element={<ClientBookingPage />} />
+          <Route
+            path={frontendRoutes.LOGIN}
+            element={<ExcludeNavbar Component={Login} />}
+          />
+          <Route
+            path={frontendRoutes.REGISTER}
+            element={<ExcludeNavbar Component={RegistrationPage} />}
+          />
 
-
-          {/* test urls to be modified later*/}
-          <Route path="/dashboard2" element={ <ProviderDashboard /> } />
-          <Route path="/register-service/:providerName" element={<PortfolioMakerPage />} />
-          <Route path="/terms-and-condtions" element={<TermsAndConditions />} />
-
-
-
+          <Route
+            path={frontendRoutes.HOME}
+            element={<IncludeNavbar Component={Home} />}
+          />
+          <Route
+            path={frontendRoutes.DASHBOARD}
+            element={<IncludeNavbar Component={UserDashboard} />}
+          />
+          <Route
+            path={`${frontendRoutes.SERVICE}/:service`}
+            element={<IncludeNavbar Component={ServiceProviders} />}
+          />
+          <Route
+            path={`${frontendRoutes.PORTFOLIO}/:providerName`}
+            element={<IncludeNavbar Component={PortfolioPage} />}
+          />
+          <Route
+            path={frontendRoutes.ADD_AVAIBILITY}
+            element={<IncludeNavbar Component={ProviderAvailibility} />}
+          />
+          <Route
+            path={frontendRoutes.BOOKING}
+            element={<IncludeNavbar Component={ClientBookingPage} />}
+          />
+          <Route
+            path={frontendRoutes.PROVIDER_DASHBOARD}
+            element={<IncludeNavbar Component={ProviderDashboard} />}
+          />
+          <Route
+            path={`${frontendRoutes.REGISTER_SERVICE}/:providerName`}
+            element={<IncludeNavbar Component={PortfolioMakerPage} />}
+          />
+          <Route
+            path={frontendRoutes.TERMS_AND_CONDITIONS}
+            element={<IncludeNavbar Component={TermsAndConditions} />}
+          />
         </Routes>
-      </div>
     </Router>
-  )
+  );
 }
-
-export default App
+const ExcludeNavbar = ({ Component }) => (
+  <Suspense fallback={<LoadAnimation />}>
+    <Component />
+  </Suspense>
+);
+const IncludeNavbar = ({ Component }) => (
+  <>
+    <Header />
+    <Suspense fallback={<LoadAnimation />}>
+      <Component />
+    </Suspense>
+  </>
+);
+export default App;
