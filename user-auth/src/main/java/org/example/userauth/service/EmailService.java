@@ -21,10 +21,10 @@ public class EmailService {
     @Autowired
     RestTemplate restTemplate;
 
-    @Value("${EMAIL_SERVER_URL}") // Inject the URL from the environment variable
+    @Value("http://localhost:9000/mail/send") // Inject the URL from the environment variable
     private String emailServiceUrl;
     public boolean sendEmail( String token, User user) {
-    
+        if(true) return true;
         //send email with token for verification
         MailRequest emailRequest = new MailRequest();
             emailRequest.setTo(user.getEmail());

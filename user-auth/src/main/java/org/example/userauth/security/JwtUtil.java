@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "secret+95";
+    private String SECRET_KEY = "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
