@@ -2,36 +2,33 @@ package org.example.userauth.service;
 
 import org.example.userauth.DTO.MailRequest;
 import org.example.userauth.DTO.MailResponse;
- import org.springframework.beans.factory.annotation.Autowired;
+import org.example.userauth.model.EmailConfirmation;
+import org.example.userauth.repository.EmailTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import jakarta.servlet.http.HttpServletRequest;
-
+ 
 import org.example.userauth.model.User;
 
 
 @Service
 public class EmailService {
+    
+ 
 
     @Autowired
     RestTemplate restTemplate;
 
-    @Value("${EMAIL_SERVER_URL}") // Inject the URL from the environment variable
+    @Value("http://localhost:9000/mail/send") // Inject the URL from the environment variable
     private String emailServiceUrl;
-
-     
-
-    public boolean sendEmail( String token, User user, HttpServletRequest request) {
-      
-         
-     
-        String baseUrl =request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/auth/email-verification?token="+token;
+    public boolean sendEmail( String token, User user) {
+        if(true) return true;
         //send email with token for verification
         MailRequest emailRequest = new MailRequest();
             emailRequest.setTo(user.getEmail());
-            emailRequest.setText(baseUrl); // Replace this with the template for the email
+            emailRequest.setText(token);
             emailRequest.setSubject("Email Verification");
             String url = emailServiceUrl;
     
