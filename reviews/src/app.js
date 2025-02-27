@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
  import cors from "cors";
+ import {db} from './db/index.js'
+  import {connection} from './db/index.js'
+  import { Review } from "./model/Review.js";
  dotenv.config();
 
  const app = express();
@@ -26,9 +29,31 @@ app.use(
 );
 
 app.use(express.static("public"));
- 
+
+db.sync().then(() => {
+  console.log("Database synced");
+}
+).catch((err) => {
+  console.error("Error in syncing database", err);
+}
+);
+app.post('/ping', (req, res) => {
+  Review.create({ 
+    userId: 1,
+    review: 'This is a review',
+    rating: 5
+  })
+  .then((review) => {
+    res.send(review);
+  })
+  .catch((
+    err) => {
+    console.error(err);
+    res.status(500).send('An error occurred');
+  }
+  );
+ });
+
 // routes import
-import { reviewsRouter } from "./routes/reviews.js";
-//routes declaration
-app.use("/reviews", reviewsRouter);
- export { app };
+ //routes declaration
+export { app };
