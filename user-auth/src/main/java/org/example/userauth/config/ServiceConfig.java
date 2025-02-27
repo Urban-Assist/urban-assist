@@ -76,6 +76,4 @@ public class ServiceConfig {
         return http.build();
     }
 
-
-    
 }

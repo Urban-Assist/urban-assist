@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
  import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +52,8 @@ public class AuthController {
     private UserRepository userRepository;
 
 
-
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser( @Valid @RequestBody User user) {
+    public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -61,7 +61,7 @@ public class AuthController {
             response.put("message", "User with email already exists, try logging in");
             return ResponseEntity.status(409).body(response);
         }
-        ResponseEntity<?> response = userService.registerUser(user);
+        ResponseEntity<?> response = userService.registerUser(user, request);
         return ResponseEntity.status(200).body(response);
        } catch (Exception e) {
         e.printStackTrace();
@@ -93,5 +93,13 @@ public class AuthController {
          return ResponseEntity.ok(jwt);
     }
 
+    @GetMapping("/email-verification")
+    public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
+        //TODO: process POST request
+         
+        userService.verifyEmail(token );
+        return ResponseEntity.ok("Email verified successfully");
+    }
   
+    
 }
