@@ -38,7 +38,7 @@ public class User {
     @NotBlank(message = "Last name is required")
     private String lastName;
 
-    private Boolean verified = false;
+    private Boolean varified = false;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
