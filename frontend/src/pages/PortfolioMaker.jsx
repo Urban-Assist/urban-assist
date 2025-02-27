@@ -117,11 +117,7 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
-      <div className="flex items-start">
-        <ProviderSidenav />
-
-        <div className="w-full mx-auto px-10 py-12 bg-gray-50">
+    <div className="w-full mx-auto px-10 py-12 bg-gray-50">
           {/* Edit Button */}
           <div className="flex justify-end mb-6">
             <button
@@ -332,7 +328,5 @@ export default function PortfolioPage() {
             </div>
           )}
         </div>
-      </div>
-    </div>
   );
 }
