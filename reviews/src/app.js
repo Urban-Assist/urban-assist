@@ -1,10 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-
  import cors from "cors";
-
-
  dotenv.config();
+
  const app = express();
 /*cors allow access to the network from the 
 cross-origin. means www.example.com can allow 
@@ -30,6 +28,7 @@ app.use(
 app.use(express.static("public"));
  
 // routes import
-  
+import { reviewsRouter } from "./routes/reviews.js";
 //routes declaration
+app.use("/reviews", reviewsRouter);
  export { app };
