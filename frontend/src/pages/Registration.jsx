@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const RegistrationPage = () => {
+    const navigate = useNavigate();
     // State for form data
     const [formData, setFormData] = useState({
         firstName: '',
@@ -76,6 +77,7 @@ const RegistrationPage = () => {
                     email: '',
                     password: ''
                 });
+                navigate('/login');
             }
         } catch (err) {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;

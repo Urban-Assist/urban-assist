@@ -22,10 +22,14 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
+ 
 
 @RestController
 @RequestMapping("/auth")
@@ -52,7 +56,10 @@ public class AuthController {
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(409).body("User with email already exists, try logging in");
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode response = objectMapper.createObjectNode();
+            response.put("message", "User with email already exists, try logging in");
+            return ResponseEntity.status(409).body(response);
         }
         ResponseEntity<?> response = userService.registerUser(user, request);
         return ResponseEntity.status(200).body(response);
