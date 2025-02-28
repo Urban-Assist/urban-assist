@@ -63,7 +63,7 @@ public class ServiceConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF using the new lambda DSL
                 .formLogin(formlogin -> formlogin.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Allow public access to these endpoints
+                        .requestMatchers("/auth/**","auth/public-key").permitAll() // Allow public access to these endpoints
                         .anyRequest().authenticated()
                 )
                   .addFilterBefore(JwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,4 +1,6 @@
 package org.example.userauth.controller;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -22,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -99,6 +99,10 @@ public class AuthController {
         userService.verifyEmail(token );
         return ResponseEntity.ok("Email verified successfully");
     }
-  
+    
+     @GetMapping("/public-key")
+    public String getPublicKey() throws Exception {
+        return new String(Files.readAllBytes(Paths.get("/Users/vaibhav_patel/Documents/urban-assist/user-auth/private_key.der")));
+    }
     
 }

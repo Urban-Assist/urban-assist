@@ -3,9 +3,26 @@ package org.example.userauth.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +32,44 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c";
-
+    private static PrivateKey privateKey;
+    private static PublicKey publicKey;
+    static {
+    try {
+        Security.addProvider(new BouncyCastleProvider());
+        
+        // Read private key (PKCS#1 format)
+        PEMParser pemParser = new PEMParser(new FileReader("/Users/vaibhav_patel/Documents/urban-assist/user-auth/private.pem"));
+        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
+        Object object = pemParser.readObject();
+        
+        if (object instanceof PEMKeyPair) {
+            KeyPair keyPair = converter.getKeyPair((PEMKeyPair) object);
+            privateKey = keyPair.getPrivate();
+        } else {
+            throw new IllegalArgumentException("Unexpected private key format");
+        }
+        pemParser.close();
+        
+        // Read public key (X.509 format)
+        pemParser = new PEMParser(new FileReader("/Users/vaibhav_patel/Documents/urban-assist/user-auth/public.pem"));
+        object = pemParser.readObject();
+        
+        if (object instanceof SubjectPublicKeyInfo) {
+            publicKey = converter.getPublicKey((SubjectPublicKeyInfo) object);
+        } else {
+            throw new IllegalArgumentException("Unexpected public key format");
+        }
+        pemParser.close();
+        
+        System.out.println("Keys loaded successfully");
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("Failed to load keys", e);
+    }
+}
+    
+ 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -31,7 +84,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -52,7 +105,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() +5 * 60 * 1000)) // 10 hours
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
 
