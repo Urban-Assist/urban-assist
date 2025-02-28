@@ -1,36 +1,29 @@
-    {
-        // Use IntelliSense to learn about possible attributes.
-        // Hover to view descriptions of existing attributes.
-        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-        "version": "0.2.0",
-        "configurations": [
-            {
-                "type": "java",
-                "name": "UserManagementApplication",
-                "request": "launch",
-                "mainClass": "com.example.userManagement.UserManagementApplication",
-                "projectName": "user-profile-service"
-            },
-            {
-                "type": "java",
-                "name": "Current File",
-                "request": "launch",
-                "mainClass": "${file}"
-            },
-            {
-                "type": "java",
-                "name": "UserAuthApplication",
-                "request": "launch",
-                "mainClass": "org.example.userauth.UserAuthApplication",
-                "projectName": "user-auth",
-                "env": {
-                    "DB_PASSWORD": "vaibhav@admin",
-                    "DB_USERNAME": "root",
-                    "AUTH_SERVER_PORT": 8080,
-                    "DB_URL": "jdbc:mysql://localhost:3306/demo",
-                    "EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
-                    "PUBLIC_KEY": " -----BEGIN PUBLIC KEY----- MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmJH3ZYCOfDjeD3zUS2DL JhN626Dy7bkN32tTvt1RrWTUyTjc4WaauxWNrOc56a5Didf40VlT95VutXi4E8IM pExPs7epIEYRNE8xb1kqeuO90yCGeeMk5KEfgGZiIIKyDeZiKmuJ1pQiLrDJLzml BAbOXOKg4QTJjW70K7toVekgipb3jXYRlqjw2sxxCQAldZ6W04D33GEbUMNjT9UD 3K0zyRBQTLOxDD9RgtycgjR2pugdc5WpIrmsaNt4GoJc8balBmfp4oIQ/I2ghzmU Y4KTEXxQBnfW2ZJ3RbRGNiC0TTliYcm17Cj/Puj9ht8Z6+nrkRh1VBw0GHCVIIeo IQIDAQAB -----END PUBLIC KEY----- "
-                }
-            }
-        ]
-    }
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "UserAuthApplication",
+            "request": "launch",
+            "mainClass": "org.example.userauth.UserAuthApplication",
+            "projectName": "user-auth",
+            "env":{
+                "DB_PASSWORD":"vaibhav@admin",
+                "DB_USERNAME":"root",
+                "AUTH_SERVER_PORT":8080,
+                "DB_URL":"jdbc:mysql://localhost:3306/demo",
+                "EMAIL_SERVER_URL":"http://localhost:9001/mail/send",
+                 
+        }
+        }
+    ]
+}
