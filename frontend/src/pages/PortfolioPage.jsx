@@ -161,10 +161,10 @@ export default function PortfolioPage() {
 
           {/* Modal Carousel */}
           {isCarouselOpen && (
-            <div className="fixed inset-0 lg:left-60 flex justify-center items-center z-50 bg-black/50">
-              <div className="relative w-full md:w-3/4 bg-transparent p-8 rounded-xl">
+            <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/50">
+              <div className="relative w-full md:w-3/4 bg-transparent rounded-xl h-180">
 
-                <Carousel className="rounded-xl h-full">
+                <Carousel className="rounded-xl">
                   {provider.workImages.map((image, index) => (
                     <img
                       key={index}

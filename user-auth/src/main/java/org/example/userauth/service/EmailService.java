@@ -20,10 +20,14 @@ public class EmailService {
 
     @Value("${EMAIL_SERVER_URL}") // Inject the URL from the environment variable
     private String emailServiceUrl;
+
+     
+
     public boolean sendEmail( String token, User user, HttpServletRequest request) {
       
-        String currUrl = request.getRequestURL().toString();
-        String baseUrl ="http://localhost:8080/auth/email-verification?token="+token;
+         
+     
+        String baseUrl =request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/auth/email-verification?token="+token;
         //send email with token for verification
         MailRequest emailRequest = new MailRequest();
             emailRequest.setTo(user.getEmail());
