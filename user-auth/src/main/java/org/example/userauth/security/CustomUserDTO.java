@@ -13,10 +13,10 @@ public class CustomUserDTO implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDTO(String username, String password, Long userId, Collection<? extends GrantedAuthority> authorities) {
-        this.username = username;
+        this.username = username; //doest not mean actual user name, it means email.
         this.password = password;
         this.userId = userId;
-        this.authorities = authorities;
+        this.authorities = authorities; // roles
     }
 
     public Long getUserId() {

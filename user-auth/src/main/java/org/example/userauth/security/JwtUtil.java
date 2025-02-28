@@ -53,6 +53,7 @@ public class JwtUtil {
         pemParser.close();
         
         // Read public key (X.509 format)
+        //to do : change the hardcoded path to the env
         pemParser = new PEMParser(new FileReader("/Users/vaibhav_patel/Documents/urban-assist/user-auth/public.pem"));
         object = pemParser.readObject();
         

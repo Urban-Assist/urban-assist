@@ -6,7 +6,9 @@ let publicKey = null;
   // Fetch the public key once on startup
   async function fetchPublicKey() {
     try {
-        const response = await axios.get('http://localhost:8080/auth/public-key');
+
+        // to do use env below
+        const response = await axios.get('http://localhost:8080/auth/public-key'); 
         // Format the public key with proper PEM format
         const rawKey = response.data;
         publicKey = `-----BEGIN PUBLIC KEY-----\n${

@@ -4,9 +4,13 @@ const app = express();
 
 const deleteUser = async(req, res) => {
   const { userId } = req.params;
+  //rabit queue connection
      const connection = await amqp.connect('amqp://localhost');
+     //create chanel
     const channel = await connection.createChannel();
+
     const queue = 'deleteUser';
+    
     const msg = { userId };
     channel.assertQueue(queue, { durable: false });
     channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)));

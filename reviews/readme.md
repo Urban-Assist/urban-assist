@@ -1,5 +1,8 @@
-//to do - formatting
-//to do - in the user-auth, public and private keys are in the github make sure to separate them in the env as of now.   
+//to do - formatting - readme.me
+//to do - in the user-auth, public and private keys are in the github make sure to separate them in the env as of now. -- update the  read me.
+
+//to do - make an end point to fetch all the reviews where the producer key matches in the table. -- use API utils 
+
 
 set this envs
 

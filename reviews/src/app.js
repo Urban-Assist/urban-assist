@@ -27,8 +27,6 @@ app.use(
 //Static files
 app.use(express.static("public"));
 
-//load the public key for verification
- 
 
   // Call this function at startup
   fetchPublicKey();

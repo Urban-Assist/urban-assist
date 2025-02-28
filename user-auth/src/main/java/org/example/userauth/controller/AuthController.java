@@ -38,7 +38,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth-api")
+//for making end point which is accessible for the users = /auth-api/user
+//for making end point which is accessible for the admin = /auth-api/admin
+//for making end point which is accessible for the provider = /auth-api/provider
+//for making end point as open  use , just /auth-api/public/ENDPOINT_NAME
 @Validated
 public class AuthController {
 
@@ -77,7 +81,7 @@ public class AuthController {
        }
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/public/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request) throws Exception {
         // Authenticate the user
         try {
@@ -113,5 +117,8 @@ public class AuthController {
     public String getPublicKey() throws Exception {
         return new String(publicKey);
     }
-    
+    @GetMapping("/provider/demo")
+    public ResponseEntity<?> admin() {
+        return ResponseEntity.ok("user access granted");
+    }
 }
