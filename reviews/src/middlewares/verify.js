@@ -4,7 +4,7 @@ function authenticateJWT(req, res, next) {
     const token = req.header('Authorization')?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: 'Unauthorized' }); // API error util use
+        return res.status(401).json({ error: 'Unauthorized' }); // to do API error util use
     }
 
     try {
