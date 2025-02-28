@@ -1,4 +1,5 @@
 //to do - formatting
+//to do - in the user-auth, public and private keys are in the github make sure to separate them in the env as of now.   
 
 set this envs
 

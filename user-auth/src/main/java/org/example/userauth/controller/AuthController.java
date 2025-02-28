@@ -12,6 +12,7 @@ import org.example.userauth.security.CustomUserDetailService;
 import org.example.userauth.security.JwtUtil;
 import org.example.userauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+ 
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -50,6 +52,8 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${PUBLIC_KEY}")  
+    private String publicKey;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
@@ -102,7 +106,7 @@ public class AuthController {
     
      @GetMapping("/public-key")
     public String getPublicKey() throws Exception {
-        return new String(Files.readAllBytes(Paths.get("/Users/vaibhav_patel/Documents/urban-assist/user-auth/private_key.der")));
+        return new String(publicKey);
     }
     
 }

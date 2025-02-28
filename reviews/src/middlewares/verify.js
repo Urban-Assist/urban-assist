@@ -1,4 +1,5 @@
-import { publicKey } from "../app";
+import { publicKey } from "../app.js";
+import jwt from "jsonwebtoken";
 function authenticateJWT(req, res, next) {
     const token = req.header('Authorization')?.split(' ')[1];
 
@@ -10,8 +11,8 @@ function authenticateJWT(req, res, next) {
         const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
         req.user = decoded; // Attach user data to request
         next();
-    } catch (error) {
-        return res.status(401).json({ error: 'Invalid token' });
+    } catch (er) {
+        return res.status(401).json({ error:er });
     }
 }
 
