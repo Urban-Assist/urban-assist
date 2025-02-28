@@ -1,10 +1,10 @@
 import express from "express";
-import dotenv from "dotenv";
+ 
 import cors from "cors";
 import { Review } from "./model/Review.js";
 
 //This will load the environment variables from the .env file in the root.
-dotenv.config();
+ 
 
 const app = express();
 

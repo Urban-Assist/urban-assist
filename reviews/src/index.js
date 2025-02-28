@@ -1,6 +1,7 @@
 import { app } from "./app.js";
- import {connection,db} from './db/index.js'
-
+ import {connection,db} from './db/db.js'
+import dotenv from 'dotenv'
+dotenv.config()
 //connect to the database.
 connection();
 db.sync().then(() => {

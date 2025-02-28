@@ -20,11 +20,14 @@ const addReview = async (req, res) => {
 
 //Function to delete a reviews associated with the provider.
 const deleteProvider = async (req, res) => {
+    const QUEUE_NAME= process.env.RABIT_MQ_NAME;
+    const QUEUE_URL= process.env.RABIT_MQ_URL;
     try {
+
       // Connect to the RabbitMQ server
-      const connection = await amqp.connect('amqp://localhost');
+      const connection = await amqp.connect(QUEUE_URL);
       const channel = await connection.createChannel();
-      const queue = 'deleteUser';
+      const queue = QUEUE_NAME;
       
       // Assert the queue
       await channel.assertQueue(queue, { durable: false });
