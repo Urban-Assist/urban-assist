@@ -9,6 +9,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -91,12 +92,20 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        
+        // Add roles to claims
         claims.put("roles", userDetails.getAuthorities().stream()
-            .map(authority -> authority.getAuthority())
-            .collect(Collectors.toList()));
-    return createToken(claims, userDetails.getUsername());
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
+        
+        // Add userId to claims (if using CustomUserDetails)
+        if (userDetails instanceof CustomUserDTO) {
+            claims.put("id", ((CustomUserDTO) userDetails).getUserId());
+        }
+
+        return createToken(claims, userDetails.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
