@@ -100,7 +100,10 @@ public class JwtUtil {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
         
-         
+        // Add userId to claims (if using CustomUserDetails)
+        if (userDetails instanceof CustomUserDTO) {
+            claims.put("id", ((CustomUserDTO) userDetails).getUserId());
+        }
 
         return createToken(claims, userDetails.getUsername());
     }
