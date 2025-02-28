@@ -7,7 +7,11 @@ const Review = db.define("Review", {
     autoIncrement: true,
     primaryKey: true,
   },
-  userId: {
+  providerID: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  consumerID: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

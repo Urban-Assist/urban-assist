@@ -1,7 +1,17 @@
-  import { app } from "./app.js";
- import {connection} from './db/index.js'
- 
-  connection();
-  app.listen(process.env.PORT || 8001, () => {
+import { app } from "./app.js";
+ import {connection,db} from './db/index.js'
+
+//connect to the database.
+connection();
+db.sync().then(() => {
+  console.log("Database synced");
+}
+).catch((err) => {
+  console.error("Error in syncing database", err);
+}
+);
+  
+//start the server
+app.listen(process.env.PORT || 8001, () => {
     console.log(`\n ⚙️ Server is running on port: ${process.env.PORT}`);
-  })
+})
