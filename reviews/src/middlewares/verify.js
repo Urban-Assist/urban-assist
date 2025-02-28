@@ -1,4 +1,4 @@
-import { publicKey } from "../app.js";
+import { publicKey } from "../utils/FetchPK.js";
 import jwt from "jsonwebtoken";
 function authenticateJWT(req, res, next) {
     const token = req.header('Authorization')?.split(' ')[1];

@@ -9,6 +9,8 @@ import  authenticateJWT from "../middlewares/verify.js";
 //secured routes
 router.route("/addReview").post(addReview);
 router.route("/providerDeleted").delete(deleteProvider);
+
+//End point to check authentication is working as expected or not
 router.route("/demo").get(authenticateJWT,(req,res)=>{
     res.status(200).send("hello");
 })
