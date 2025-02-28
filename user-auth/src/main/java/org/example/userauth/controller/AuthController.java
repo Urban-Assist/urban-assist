@@ -1,4 +1,6 @@
 package org.example.userauth.controller;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import org.example.userauth.security.CustomUserDetailService;
 import org.example.userauth.security.JwtUtil;
 import org.example.userauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,11 +22,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+ 
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+ 
  import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+ 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -51,6 +57,8 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${PUBLIC_KEY}")  
+    private String publicKey;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
@@ -100,6 +108,10 @@ public class AuthController {
         userService.verifyEmail(token );
         return ResponseEntity.ok("Email verified successfully");
     }
-  
+    
+     @GetMapping("/public-key")
+    public String getPublicKey() throws Exception {
+        return new String(publicKey);
+    }
     
 }
