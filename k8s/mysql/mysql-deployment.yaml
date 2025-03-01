@@ -17,13 +17,25 @@ spec:
         image: mysql:8.0  # Use the official MySQL image
         env:
           - name: MYSQL_ROOT_PASSWORD
-            value: "root"  # Set the root password
-          - name: MYSQL_DATABASE
-            value: "demo"  # Optional: Create a database
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: MYSQL_ROOT_PASSWORD
           - name: MYSQL_USER
-            value: "admin"  # Optional: Create a user
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: MYSQL_USER
           - name: MYSQL_PASSWORD
-            value: "admin"  # Optional: Set the user password
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: MYSQL_PASSWORD
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: MYSQL_DATABASE
         ports:
           - containerPort: 3306  # MySQL default port
         volumeMounts:

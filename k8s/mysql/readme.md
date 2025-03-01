@@ -38,13 +38,14 @@ kubectl get svc
 ```
 
 2. Set up port forwarding to access MySQL from your local machine:
+This is only for the local development, on the production use the name "mysql" as the host
 ```bash
 kubectl port-forward svc/<service-name> <local-port>:3306
 ```
 
 Example:
 ```bash
-kubectl port-forward svc/mysql-service 3306:3306
+kubectl port-forward svc/mysql-service 30006:3306
 ```
 
 ## Database Connection Details
