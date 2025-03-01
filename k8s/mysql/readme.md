@@ -18,16 +18,9 @@ minikube start
 2. Apply Kubernetes configurations in the following order:
 ```bash
 # Create storage class
-kubectl apply -f storage-class.yaml
+kubectl apply -f /k8s/mysql/
 
-# Create persistent volume claim
-kubectl apply -f pvc.yaml
-
-# Deploy MySQL database
-kubectl apply -f mysql-deployment.yaml
-
-# Create MySQL service
-kubectl apply -f mysql-svc.yaml
+ 
 ```
 
 ## Accessing the Database Locally
@@ -72,9 +65,7 @@ kubectl logs <pod-name>
 
 To delete all resources:
 ```bash
-kubectl delete -f mysql-svc.yaml
-kubectl delete -f mysql-deployment.yaml
-kubectl delete -f pvc.yaml
-kubectl delete -f storage-class.yaml
+kubectl delete -f /k8s/mysql/
+ 
 ```
 
