@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0  # Use the official MySQL image
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "root"  # Set the root password
+          - name: MYSQL_DATABASE
+            value: "demo"  # Optional: Create a database
+          - name: MYSQL_USER
+            value: "admin"  # Optional: Create a user
+          - name: MYSQL_PASSWORD
+            value: "admin"  # Optional: Set the user password
+        ports:
+          - containerPort: 3306  # MySQL default port
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-pod-volume
+        
+      volumes:
+      - name: mysql-pod-volume
+        persistentVolumeClaim:  # Fixed typo in "persistentVolumeClaim"
+          claimName: mysql-pvc
+          
