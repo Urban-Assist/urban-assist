@@ -10,8 +10,4 @@ spec:
       nodePort: 30001
   selector:
     app: mysql
-<<<<<<< HEAD
-  type: NodePort  # Use ClusterIP for internal access
-=======
   type: NodePort  # to do change to the clusterIP in the production environment
->>>>>>> 4fd6dcf (Add MySQL service and secrets configuration for Kubernetes deployment)
