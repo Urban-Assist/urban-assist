@@ -19,3 +19,6 @@ EMAIL_ADDRESS= "sender email"
 MAIL_ACCESS_TOKEN ="sender app password - gmail"
 
 Flag for the development and production environemtns is the ENV_MODE 
+
+
+//to do remove the env from the github
