@@ -9,7 +9,7 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-
+#did not exposeed the port as it doesn't matter. 😂
 
 # Start command
 CMD [ "node", "src/index.js" ]
