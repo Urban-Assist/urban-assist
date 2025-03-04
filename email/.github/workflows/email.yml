@@ -1,0 +1,65 @@
+name: Email microservice ci/cd
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'urban-assist/email/**' # Trigger only on changes within email directory
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: self-hosted
+    name: Compile the project
+    defaults:
+      working-directory: urban-assist/email # Set working directory for compile job
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install
+      - name: Build the project
+        run: npm run build
+
+  deploy:
+    runs-on: self-hosted
+    needs: compile
+    name: Deploy the project
+    defaults:
+      working-directory: urban-assist/email # Set working directory for deploy job
+    env:
+      NODE_ENV: production
+      PORT: ${{ secrets.EMAIL_SERVICE_PORT }}
+      EMAIL_ADDRESS: ${{ secrets.EMAIL_SERVICE_EMAIL_ADDRESS }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_SERVICE_EMAIL_PASSWORD }}
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-server:latest .
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/demo-server:latest
+      - name: Deploy Docker container
+        run: |
+          docker stop demo-server || true
+          docker rm demo-server || true
+          docker run -d --name demo-server -p $PORT:8001 \
+            -e NODE_ENV=$NODE_ENV \
+            -e PORT=$PORT \
+            -e EMAIL_ADDRESS=$EMAIL_ADDRESS \
+            -e EMAIL_PASSWORD=$EMAIL_PASSWORD \
+            
+            ${{ secrets.DOCKER_USERNAME }}/demo-server:latest

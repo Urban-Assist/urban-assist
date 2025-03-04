@@ -30,7 +30,8 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
-    private String role = "user";
+    @NotBlank(message = "Role is required")
+    private String role;
 
     @NotBlank(message = "First name is required")
     private String firstName;

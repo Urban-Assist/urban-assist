@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const RegistrationPage = () => {
+    const navigate = useNavigate();
     // State for form data
     const [formData, setFormData] = useState({
-        name: '',
+        firstName: '',
+        lastName: '',
         role: '',
         email: '',
         password: ''
@@ -11,6 +14,7 @@ const RegistrationPage = () => {
 
     // State for error handling
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     // Handle input changes
     const handleChange = (e) => {
@@ -23,8 +27,12 @@ const RegistrationPage = () => {
 
     // Form validation
     const validateForm = () => {
-        if (!formData.name.trim()) {
-            setError('Name is required');
+        if (!formData.firstName.trim()) {
+            setError('First name is required');
+            return false;
+        }
+        if (!formData.lastName.trim()) {
+            setError('Last name is required');
             return false;
         }
         if (!formData.role) {
@@ -50,24 +58,32 @@ const RegistrationPage = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
 
         if (!validateForm()) {
             return;
         }
 
         try {
-            // Add your API call here
-            console.log('Form submitted:', formData);
-            // Reset form after successful submission
-            setFormData({
-                name: '',
-                role: '',
-                email: '',
-                password: '',
-            });
+            const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
+            const response = await axios.post(AUTH_API+'/auth/register', formData);
+            if (response.status === 200) {
+                setSuccess('Registration successful!');
+                setError('');
+                // Optionally, you can redirect the user to the login page or clear the form
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    role: '',
+                    email: '',
+                    password: ''
+                });
+                navigate('/login');
+            }
         } catch (err) {
-            setError(err.message || 'An error occurred during registration');
+            const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
+            console.log(AUTH_API);
+            setError(err.response?.data?.message || 'An error occurred during registration');
+            setSuccess('');
         }
     };
 
@@ -85,17 +101,37 @@ const RegistrationPage = () => {
                     </div>
                 )}
 
+                {success && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 animate-pulse">
+                        {success}
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Full Name
+                            First Name
                         </label>
                         <input
                             type="text"
-                            name="name"
-                            value={formData.name}
+                            name="firstName"
+                            value={formData.firstName}
                             className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
-                            placeholder="Enter your full name"
+                            placeholder="Enter your first name"
+                            required
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Last Name
+                        </label>
+                        <input
+                            type="text"
+                            name="lastName"
+                            value={formData.lastName}
+                            className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
+                            placeholder="Enter your last name"
                             required
                             onChange={handleChange}
                         />
@@ -107,6 +143,7 @@ const RegistrationPage = () => {
                         <input
                             type="email"
                             name="email"
+                            value={formData.email}
                             className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
                             placeholder="Enter your email"
                             required
@@ -136,6 +173,7 @@ const RegistrationPage = () => {
                         <input
                             type="password"
                             name="password"
+                            value={formData.password}
                             className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
                             placeholder="Enter your password"
                             required

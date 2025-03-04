@@ -44,8 +44,9 @@
 
 ---
 
+//to do: add other endpoints as well.
 ## User Authentication
-### Endpoint: `POST /auth/register`
+### Endpoint: `POST /auth-api/public/register`
 - **Security:** ❌ Not Secure
 - **Request Format (JSON):**
   ```json

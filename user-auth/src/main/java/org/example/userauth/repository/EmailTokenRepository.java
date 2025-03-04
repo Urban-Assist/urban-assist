@@ -5,6 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface  EmailTokenRepository extends JpaRepository<EmailConfirmation, Long> {
-    
-    
+    EmailConfirmation findByToken(String token);
 }

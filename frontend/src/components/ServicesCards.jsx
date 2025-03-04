@@ -15,7 +15,7 @@ export default function ServiceCards({ title }) {
   const navigate = useNavigate();
 
   return (
-    <section className="main-content w-full px-6">
+    <section className="main-content w-full px-6 mt-10">
       <div className="my-6 px-2">
         <div className="p-6">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">{title}</h2>

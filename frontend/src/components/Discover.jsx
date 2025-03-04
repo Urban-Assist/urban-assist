@@ -1,6 +1,6 @@
 const DivOne = () => {
     return(
-        <div class="mt-28 bg-gray-50 px-4 sm:px-10 py-12">
+        <div class=" bg-gray-50 px-4 sm:px-10 py-12">
         <div class="max-w-7xl mx-auto">
           <div class="md:text-center max-w-2xl mx-auto">
             <h2 class="md:text-4xl text-3xl font-bold mb-6">Discover Our Exclusive Features</h2>

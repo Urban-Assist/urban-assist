@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FaStar, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaLinkedin } from "react-icons/fa";
 import UserSidenav from "../components/UserSidenav";
 import { Link } from "react-router-dom";
-
+import Header from "../components/Header";
 const providers = {
     restoration: [
         { name: "John Doe", description: "Expert in home restoration", stars: 4.5, price: "$150/hr", profilePic: "https://randomuser.me/api/portraits/men/1.jpg", address: "New York, NY" },
@@ -30,9 +30,9 @@ export default function ServiceProviders() {
     const serviceProviders = providers[service] || [];
 
     return (
-        <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
+        <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
+
             <div class="flex items-start">
-                <UserSidenav />
                 <section className="main-content w-full px-6">
                     <div className="my-6 px-2">
                         <div className="container mx-auto px-6 py-10">

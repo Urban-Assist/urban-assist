@@ -63,7 +63,10 @@ public class ServiceConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF using the new lambda DSL
                 .formLogin(formlogin -> formlogin.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Allow public access to these endpoints
+                        .requestMatchers("/auth-api/public/**").permitAll() 
+                        .requestMatchers("/auth-api/user/**").hasAnyAuthority("user","admin")
+                        .requestMatchers("/auth-api/provider/**").hasAnyAuthority("provider","admin")
+                        .requestMatchers("/auth-api/admin/**").hasAnyAuthority("admin")
                         .anyRequest().authenticated()
                 )
                   .addFilterBefore(JwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
@@ -76,19 +79,4 @@ public class ServiceConfig {
         return http.build();
     }
 
-
-//     @Bean
-//     public CorsConfigurationSource corsConfigurationSource() {
-//         CorsConfiguration configuration = new CorsConfiguration();
-//         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-//         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "PUT", "DELETE"));
-//         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-//         configuration.setAllowCredentials(true);
-//         configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
-    
-//         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//         source.registerCorsConfiguration("/**", configuration);
-//         return source;
-//     }
-    
 }
