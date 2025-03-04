@@ -1,5 +1,6 @@
 package org.example.userauth.service;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 import org.example.userauth.model.EmailConfirmation;
@@ -42,7 +43,7 @@ public class UserService {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
-    public ResponseEntity<?> registerUser(User user, HttpServletRequest request) {
+    public ResponseEntity<?> registerUser(User user, HttpServletRequest request) throws IOException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         //create token for email verification

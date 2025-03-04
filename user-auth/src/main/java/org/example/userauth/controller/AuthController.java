@@ -64,7 +64,7 @@ public class AuthController {
     @Value("${PUBLIC_KEY}")  
     private String publicKey;
 
-    @PostMapping("/register")
+    @PostMapping("public/register")
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
@@ -105,7 +105,7 @@ public class AuthController {
          return ResponseEntity.ok(jwt);
     }
 
-    @GetMapping("/email-verification")
+    @GetMapping("/public/email-verification")
     public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
         //TODO: process POST request
          
