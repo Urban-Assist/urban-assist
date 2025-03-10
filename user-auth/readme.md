@@ -4,6 +4,11 @@
 This microservice handles all the user profile related operations.
 
   
+Use this commands to generate public and private keys:
+```bash
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout -out public.pem
+```
 
 ## 🔧 Required Environment Variables
 

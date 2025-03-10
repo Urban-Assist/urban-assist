@@ -15,7 +15,7 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     try {
       const AUTH_URL = process.env.REACT_APP_AUTH_URL;
       const response = await axios.post(AUTH_URL + '/auth/authenticate', formData, {
@@ -29,7 +29,8 @@ function Login() {
         navigate('/homepage');
       }
     } catch (error) {
-      setError(error.response?.data || 'Login failed. Please try again.');
+      console.error('Login error:', error);
+      setError(error.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
@@ -47,10 +48,10 @@ function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit()} className="space-y-6">
           <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email Address
+              Email Add
             </label>
             <input
               type="email"

@@ -3,7 +3,7 @@ import { FaStar, FaPhoneAlt, FaEnvelope, FaLinkedin, FaMapMarkerAlt, FaTimes, Fa
 import UserSidenav from "../components/UserSidenav";
 import { useState } from "react";
 import { Carousel } from "@material-tailwind/react";
-
+import Header from "../components/Header";
 // Placeholder for portfolio data
 const portfolios = {
   "John Doe": {
@@ -56,10 +56,10 @@ export default function PortfolioPage() {
 
   return (
 
-    <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
+    <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
+
       <div class="flex items-start">
 
-        <UserSidenav />
 
         <div className="w-full mx-auto px-10 py-12 bg-gray-50">
           {/* Profile Header */}
@@ -161,10 +161,10 @@ export default function PortfolioPage() {
 
           {/* Modal Carousel */}
           {isCarouselOpen && (
-            <div className="fixed inset-0 lg:left-60 flex justify-center items-center z-50 bg-black/50">
-              <div className="relative w-full md:w-3/4 bg-transparent p-8 rounded-xl">
+            <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/50">
+              <div className="relative w-full md:w-3/4 bg-transparent rounded-xl h-180">
 
-                <Carousel className="rounded-xl h-full">
+                <Carousel className="rounded-xl">
                   {provider.workImages.map((image, index) => (
                     <img
                       key={index}

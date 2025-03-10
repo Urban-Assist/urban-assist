@@ -9,16 +9,11 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-slim
 WORKDIR /app
 
-# Set environment variables
-# ENV DB_PASSWORD=vaibhav@admin
-# ENV DB_USERNAME=root
-# ENV AUTH_SERVER_PORT=9000
-# ENV DB_URL=jdbc:mysql://host.docker.internal:3306/demo
-# Copy the built jar from build stage
-COPY --from=build /app/target/*.jar app.jar
 
-# Expose the port
-EXPOSE ${AUTH_SERVER_PORT}
+# Copy the built jar from build stage
+COPY --from=build /app/target/*.jar /app/app.jar
+
+
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
