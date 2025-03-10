@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Table(name = "email_confirmation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

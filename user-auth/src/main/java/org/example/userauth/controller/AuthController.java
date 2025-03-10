@@ -31,9 +31,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
  
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 
  
 
@@ -67,10 +64,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ObjectNode response = objectMapper.createObjectNode();
-            response.put("message", "User with email already exists, try logging in");
-            return ResponseEntity.status(409).body(response);
+            return ResponseEntity.status(409).body("User with email already exists, try logging in");
         }
         ResponseEntity<?> response = userService.registerUser(user, request);
         return ResponseEntity.status(200).body(response);
