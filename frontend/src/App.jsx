@@ -4,12 +4,12 @@ import { Suspense } from "react";
 import Home from "./pages/Home";
 import "./App.css";
 import { frontendRoutes } from "./utils/frontendRoutes";
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+// import { Elements } from '@stripe/react-stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
 import LoadAnimation from "./components/LoadAnimation";
 import Header from "./components/Header";
 
-const stripePromise = loadStripe('pk_test_51QpEzSBzR4uJF8SUuTzrlJFalbN5SvRzEGDPX7icdx5xVh0Kid8GzKMaRbfbv8hcKIDxkIuxecJpIKpfqZsbuqhF00NxiKnbXu');
+// const stripePromise = loadStripe('pk_test_51QpEzSBzR4uJF8SUuTzrlJFalbN5SvRzEGDPX7icdx5xVh0Kid8GzKMaRbfbv8hcKIDxkIuxecJpIKpfqZsbuqhF00NxiKnbXu');
 
 const UserDashboard = React.lazy(() => import("./pages/UserDashboard"));
 const ProviderDashboard = React.lazy(() => import("./pages/ProviderDashboard"));
@@ -22,6 +22,8 @@ const ClientBookingPage = React.lazy(() => import("./pages/BookingSlots"));
 const PortfolioMakerPage = React.lazy(() => import("./pages/PortfolioMaker"));
 const TermsAndConditions = React.lazy(() => import("./pages/TermsAndConditions"));
 const Payment = React.lazy(() => import("./pages/Payment"));
+const Setting = React.lazy(() => import("./pages/Setting"));
+
 
 
 function App() {
@@ -36,14 +38,18 @@ function App() {
           path={frontendRoutes.REGISTER}
           element={<ExcludeNavbar Component={RegistrationPage} />}
         />
-        <Route
+        {/* <Route
           path={frontendRoutes.PAYMENT}
           element={<ExcludeNavbarStripe Component={Payment} />}
-        />
+        /> */}
 
         <Route
           path={frontendRoutes.HOME}
           element={<IncludeNavbar Component={Home} />}
+        />
+        <Route
+          path={frontendRoutes.SETTING}
+          element={<IncludeNavbar Component={Setting} />}
         />
         <Route
           path={frontendRoutes.DASHBOARD}
@@ -87,13 +93,13 @@ const ExcludeNavbar = ({ Component }) => (
   </Suspense>
 );
 
-const ExcludeNavbarStripe = ({ Component }) => (
-  <Elements stripe={stripePromise}>
-    <Suspense fallback={<LoadAnimation />}>
-      <Component />
-    </Suspense>
-  </Elements>
-);
+// const ExcludeNavbarStripe = ({ Component }) => (
+//   <Elements stripe={stripePromise}>
+//     <Suspense fallback={<LoadAnimation />}>
+//       <Component />
+//     </Suspense>
+//   </Elements>
+// );
 
 const IncludeNavbar = ({ Component }) => (
   <>

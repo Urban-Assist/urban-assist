@@ -12,4 +12,5 @@ export const frontendRoutes = {
   REGISTER_SERVICE: "/register-service",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
   PAYMENT: "/payment",
+  SETTING: "/setting"
 };

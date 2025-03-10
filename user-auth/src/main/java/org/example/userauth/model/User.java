@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Table(name = "user") 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -30,8 +31,7 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @NotBlank(message = "Role is required")
-    private String role;
+    private String role = "user";
 
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -39,7 +39,7 @@ public class User {
     @NotBlank(message = "Last name is required")
     private String lastName;
 
-    private Boolean varified = false;
+    private Boolean verified = false;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
