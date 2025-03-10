@@ -61,8 +61,7 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @Value("${PUBLIC_KEY}")  
-    private String publicKey;
+    
 
     @PostMapping("public/register")
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
@@ -107,16 +106,12 @@ public class AuthController {
 
     @GetMapping("/public/email-verification")
     public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
-        //TODO: process POST request
-         
+          
         userService.verifyEmail(token );
         return ResponseEntity.ok("Email verified successfully");
     }
     
-     @GetMapping("/public-key")
-    public String getPublicKey() throws Exception {
-        return new String(publicKey);
-    }
+    
     @GetMapping("/provider/demo")
     public ResponseEntity<?> admin() {
         return ResponseEntity.ok("user access granted");

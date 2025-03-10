@@ -2,8 +2,7 @@ import express from "express";
 import axios from "axios";
 import cors from "cors";
 import { Review } from "./model/Review.js";
-import { fetchPublicKey } from "./utils/FetchPK.js";
- 
+  
 
 const app = express();
 
@@ -28,8 +27,7 @@ app.use(
 app.use(express.static("public"));
 
 
-  // Call this function at startup
-  fetchPublicKey();
+  
 
 // routes import
 import { router } from "./routes/review.route.js";
