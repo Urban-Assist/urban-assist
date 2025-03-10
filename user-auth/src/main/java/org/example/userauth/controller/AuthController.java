@@ -1,4 +1,6 @@
 package org.example.userauth.controller;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import org.example.userauth.security.CustomUserDetailService;
 import org.example.userauth.security.JwtUtil;
 import org.example.userauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,19 +22,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+ 
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
+ 
+ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+ 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
+ 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth-api")
+//for making end point which is accessible for the users = /auth-api/user
+//for making end point which is accessible for the admin = /auth-api/admin
+//for making end point which is accessible for the provider = /auth-api/provider
+//for making end point as open  use , just /auth-api/public/ENDPOINT_NAME
 @Validated
 public class AuthController {
 
@@ -50,8 +61,10 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${PUBLIC_KEY}")  
+    private String publicKey;
 
-    @PostMapping("/register")
+    @PostMapping("public/register")
     public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
        try {
         if(userRepository.existsByEmail(user.getEmail())) {
@@ -68,7 +81,7 @@ public class AuthController {
        }
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/public/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request) throws Exception {
         // Authenticate the user
         try {
@@ -92,13 +105,20 @@ public class AuthController {
          return ResponseEntity.ok(jwt);
     }
 
-    @GetMapping("/email-verification")
+    @GetMapping("/public/email-verification")
     public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
         //TODO: process POST request
          
         userService.verifyEmail(token );
         return ResponseEntity.ok("Email verified successfully");
     }
-  
     
+     @GetMapping("/public-key")
+    public String getPublicKey() throws Exception {
+        return new String(publicKey);
+    }
+    @GetMapping("/provider/demo")
+    public ResponseEntity<?> admin() {
+        return ResponseEntity.ok("user access granted");
+    }
 }
