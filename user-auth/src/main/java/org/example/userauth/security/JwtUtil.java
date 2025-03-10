@@ -36,6 +36,7 @@ public class JwtUtil {
     private static PrivateKey privateKey;
     private static PublicKey publicKey;
     static {
+    // to do : change the key loading from hardcoded path to the env.
     try {
         Security.addProvider(new BouncyCastleProvider());
         
