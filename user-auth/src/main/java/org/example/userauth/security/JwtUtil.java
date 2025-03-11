@@ -3,6 +3,8 @@ package org.example.userauth.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -40,10 +42,18 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        
+        // Add roles to claims
         claims.put("roles", userDetails.getAuthorities().stream()
-            .map(authority -> authority.getAuthority())
-            .collect(Collectors.toList()));
-    return createToken(claims, userDetails.getUsername());
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
+        
+        // Add userId to claims (if using CustomUserDetails)
+        if (userDetails instanceof CustomUserDTO) {
+            claims.put("id", ((CustomUserDTO) userDetails).getUserId());
+        }
+
+        return createToken(claims, userDetails.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

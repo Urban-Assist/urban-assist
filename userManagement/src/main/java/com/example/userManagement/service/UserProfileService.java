@@ -25,19 +25,23 @@ public class UserProfileService {
         return convertToDTO(userProfile);
     }
 
-
     public UserProfileDTO updateProfile(UserProfileDTO profileDTO) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!email.equals(profileDTO.getEmail())) {
             throw new RuntimeException("Cannot update other user's profile");
         }
-
-        UserProfile userProfile = new UserProfile();
-        BeanUtils.copyProperties(profileDTO, userProfile);
-
-        userProfile = userProfileRepository.save(userProfile);
-        return convertToDTO(userProfile);
+    
+        // Fetch existing user profile
+        UserProfile existingUserProfile = userProfileRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+    
+        // Update the existing profile
+        BeanUtils.copyProperties(profileDTO, existingUserProfile, "id", "email");  // Don't overwrite id and email
+    
+        existingUserProfile = userProfileRepository.save(existingUserProfile);  // Save the updated profile
+        return convertToDTO(existingUserProfile);
     }
+    
 
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void handleUserRegistration(UserProfileDTO profileDTO) {
