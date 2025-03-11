@@ -1,9 +1,12 @@
 package com.example.userManagement.service;
 
-import com.example.userManagement.dto.UserProfileDTO;
+ import com.example.userManagement.dto.UserProfileDTO;
+import com.example.userManagement.model.ProviderProfile;
 import com.example.userManagement.model.UserProfile;
+import com.example.userManagement.repository.ProviderProfileRepository;
 import com.example.userManagement.repository.UserProfileRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,8 +14,13 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 @Service
 public class UserProfileService {
 
+    @Autowired
     private final UserProfileRepository userProfileRepository;
 
+     
+ 
+    @Autowired
+    private ProviderProfileRepository providerProfileRepository;
     public UserProfileService(UserProfileRepository userProfileRepository) {
         this.userProfileRepository = userProfileRepository;
     }
@@ -45,7 +53,23 @@ public class UserProfileService {
 
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void handleUserRegistration(UserProfileDTO profileDTO) {
-        if (!userProfileRepository.existsByEmail(profileDTO.getEmail())) {
+        final String userRole = profileDTO.getRole();
+        if(userRole.equals("provider")){
+
+            if(!providerProfileRepository.existsByEmail(profileDTO.getEmail())){
+                ProviderProfile providerProfileDTO = new ProviderProfile();
+                providerProfileDTO.setEmail(profileDTO.getEmail());
+                providerProfileRepository.save(providerProfileDTO);
+
+            }
+            else{
+                System.out.println("Profile already exists for: " + profileDTO.getEmail());
+            }
+            System.out.println("Provider profile created for: " + profileDTO.getEmail() + " ✅");
+        }
+        if(userRole.equals("user")){
+            
+            if (!userProfileRepository.existsByEmail(profileDTO.getEmail())) {
             UserProfile profile = new UserProfile();
             profile.setEmail(profileDTO.getEmail());
             profile.setFirstName(profileDTO.getFirstName());
@@ -56,7 +80,11 @@ public class UserProfileService {
         } else {
             System.out.println("Profile already exists for: " + profileDTO.getEmail());
         }
+        }
+        
+        
     }
+
 
     private UserProfileDTO convertToDTO(UserProfile userProfile) {
         UserProfileDTO dto = new UserProfileDTO();

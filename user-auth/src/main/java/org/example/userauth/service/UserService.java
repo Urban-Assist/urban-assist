@@ -61,7 +61,8 @@ public class UserService {
             UserProfileDTO profileDTO = new UserProfileDTO(
                     registeredUser.getEmail(),
                     registeredUser.getFirstName(),
-                    registeredUser.getLastName()
+                    registeredUser.getLastName(),
+                    registeredUser.getRole()
             );
 
             rabbitTemplate.convertAndSend(exchange, routingKey, profileDTO);

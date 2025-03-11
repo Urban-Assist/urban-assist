@@ -12,7 +12,7 @@ CROS_ORIGIN = http://localhost:3000
 RABIT_MQ_NAME =  deleteUser
 RABIT_MQ_URL = amqp://localhost
 
-
+JWT_SECRET = vaibhav
 DATABASE_NAME = reviews
 DATABASE_USER = root
 DATABASE_PASSWORD = vaibhav@admin
