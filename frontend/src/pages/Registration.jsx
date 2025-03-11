@@ -65,7 +65,8 @@ const RegistrationPage = () => {
 
         try {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
-            const response = await axios.post(AUTH_API+'/auth/register', formData);
+            console.log(AUTH_API);
+            const response = await axios.post(AUTH_API+'/auth-api/public/register', formData);
             if (response.status === 200) {
                 setSuccess('Registration successful!');
                 setError('');
@@ -77,12 +78,12 @@ const RegistrationPage = () => {
                     email: '',
                     password: ''
                 });
-                navigate('/login');
+               navigate('/login');
             }
         } catch (err) {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
             console.log(AUTH_API);
-            setError(err.response?.data?.message || 'An error occurred during registration');
+            setError(err.response?.data|| 'An error occurred during registration');
             setSuccess('');
         }
     };
