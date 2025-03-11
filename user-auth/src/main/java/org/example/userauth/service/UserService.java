@@ -18,6 +18,7 @@ import org.example.userauth.service.EmailService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.example.userauth.DTO.UserProfileDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -94,26 +95,32 @@ public class UserService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> verifyEmail(String token) {
-        System.out.println(token);
+        System.out.println("Verifying token: " + token);
 
         EmailConfirmation emailToken = emailTokenRepository.findByToken(token);
         if (emailToken == null) {
-            //create response JSON object
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
             response.put("message", "Invalid token ❌");
-            response.put("Reason", "Token not found ❌");
+            response.put("reason", "Token not found ❌");
             System.out.println("Invalid token ❌");
-
             return ResponseEntity.status(400).body(response);
         }
-        User tempUser = emailToken.getUser();
-        Optional<User> user = userRepository.findById(tempUser.getId());
-        user.get().setVerified(true);
-        userRepository.save(user.get());
 
+        User tempUser = emailToken.getUser();
+        User user = userRepository.findById(tempUser.getId())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Set verified flag and save
+        user.setVerified(true);
+        userRepository.save(user);
+
+        // Delete token after successful verification
         emailTokenRepository.delete(emailToken);
+        
+        System.out.println("Email verified successfully for user: " + user.getEmail());
         return ResponseEntity.ok().body("Email verified successfully ✅");
     }
 }
