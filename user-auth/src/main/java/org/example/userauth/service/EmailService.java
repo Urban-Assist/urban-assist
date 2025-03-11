@@ -1,6 +1,8 @@
 package org.example.userauth.service;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -26,10 +28,13 @@ public class EmailService {
 
     public boolean sendEmail(String token, User user, HttpServletRequest request) throws IOException {
         // Read the HTML template
-        String htmlTemplate = new String(Files.readAllBytes(Paths.get("user-auth/src/main/java/org/example/userauth/templates/verify.html")));
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/verify.html");
+        String htmlTemplate = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
         // Generate the verification link
-        String verificationLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/auth-api/public/email-verification?token=" + token;
+        String verificationLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                + "/auth-api/public/email-verification?token=" + token;
 
         // Replace the placeholder with the actual verification link
         String emailContent = htmlTemplate.replace("{{verificationLink}}", verificationLink);
@@ -42,7 +47,7 @@ public class EmailService {
         String url = emailServiceUrl;
 
         try {
-             MailResponse response = restTemplate.postForObject(url, emailRequest, MailResponse.class);
+            MailResponse response = restTemplate.postForObject(url, emailRequest, MailResponse.class);
 
             // Check if the email was sent successfully
             if (response.getStatus() == 200 && response.getMessage().equals("Email sent successfully")) {
