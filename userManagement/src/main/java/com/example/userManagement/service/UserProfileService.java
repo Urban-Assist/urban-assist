@@ -45,26 +45,21 @@ public class UserProfileService {
 
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void handleUserRegistration(UserProfileDTO profileDTO) {
-        if (!userProfileRepository.existsByEmail(profileDTO.getEmail())) {
 
-            //check the role
+        
+        // if (!userProfileRepository.existsByEmail(profileDTO.getEmail())) {
+        //     UserProfile profile = new UserProfile();
+        //     profile.setEmail(profileDTO.getEmail());
+        //     profile.setFirstName(profileDTO.getFirstName());
+        //     profile.setLastName(profileDTO.getLastName());
 
-            // if user --> consumer
-
-            //if provider --> provider
-            
-            UserProfile profile = new UserProfile();
-            profile.setEmail(profileDTO.getEmail());
-            profile.setFirstName(profileDTO.getFirstName());
-            profile.setLastName(profileDTO.getLastName());
-            profile.setRole(profileDTO.getRole());
-
-            userProfileRepository.save(profile);
-            System.out.println("User profile created for: " + profileDTO.getEmail() + " ✅");
-        } else {
-            System.out.println("Profile already exists for: " + profileDTO.getEmail());
-        }
+        //     userProfileRepository.save(profile);
+        //     System.out.println("User profile created for: " + profileDTO.getEmail() + " ✅");
+        // } else {
+        //     System.out.println("Profile already exists for: " + profileDTO.getEmail());
+        // }
     }
+
 
     private UserProfileDTO convertToDTO(UserProfile userProfile) {
         UserProfileDTO dto = new UserProfileDTO();
