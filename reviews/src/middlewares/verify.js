@@ -20,9 +20,7 @@ function authenticateJWT(req, res, next) {
 
         // Attach user data to request
         req.user =  decoded;
-
-        
-        
+        console.log("Authentication ✅");
         next();
     } catch (err) {
         console.error("JWT Verification Error:", err);
@@ -34,13 +32,17 @@ function authorizeRole( expected ) {
     return function(req, res, next) {
         const actualRole = req.user.roles
         console.log("Actual Role:", actualRole);
-        
-        const expectedRole = Array.isArray(expected) ? expected : [expected];
-        console.log("Expected Role:", expectedRole);
-        if(expectedRole.includes(actualRole)) {
+
+        //convert the expected role to an array if it is not
+        const expectedRoles = Array.isArray(expected) ? expected : [expected];
+        console.log("Expected Roles:", expectedRoles);
+        if(expectedRoles.includes(actualRole)) {
+            console.log("Authorization ✅");
             return next();
         }
-        next();
+        console.error("Authorization ❌");
+        return res.status(403).json({ error: 'Forbidden' }); // to do use api util  
+       
     }
     
 }

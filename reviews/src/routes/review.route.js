@@ -11,7 +11,7 @@ router.route("/addReview").post(addReview);
 router.route("/providerDeleted").delete(deleteProvider);
 
 //End point to check authentication is working as expected or  not
-router.route("/demo").get(authenticateJWT,authorizeRole(["user","admin"]),(req,res)=>{
+router.route("/demo").get(authenticateJWT,authorizeRole(["provider","admin"]),(req,res)=>{
     res.status(200).send("hello");
 })
 export {  router };
