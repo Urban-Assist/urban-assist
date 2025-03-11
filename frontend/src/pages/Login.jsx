@@ -17,8 +17,8 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     try {
-      const AUTH_URL = process.env.REACT_APP_AUTH_URL;
-      const response = await axios.post(AUTH_URL + '/auth/authenticate', formData, {
+      const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
+      const response = await axios.post(AUTH_API + '/auth-api/public/authenticate', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -26,7 +26,7 @@ function Login() {
 
       if (response.status === 200) {
         localStorage.setItem('token', response.data);
-        navigate('/homepage');
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -48,7 +48,7 @@ function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit()} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Email Add
