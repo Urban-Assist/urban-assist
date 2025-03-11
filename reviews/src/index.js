@@ -3,6 +3,8 @@ import { app } from "./app.js";
 import dotenv from 'dotenv'
 dotenv.config()
 //connect to the database.
+
+ 
 connection();
 db.sync().then(() => {
   console.log("Database synced");

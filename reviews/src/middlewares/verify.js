@@ -1,23 +1,38 @@
-
 import jwt from "jsonwebtoken";
+
 function authenticateJWT(req, res, next) {
     const token = req.header('Authorization')?.split(' ')[1];
-    const jwt_secret = process.env.JWT_SECRET;
+    // Convert secret to Buffer to match Java's byte encoding
+    const jwt_secret = Buffer.from("vaibhav", "utf-8");
+
     if (!token) {
-        return res.status(401).json({ error: 'Unauthorized' }); // to do API error util use
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    console.log("Received Token:", token);
+    
     try {
-        const decoded = jwt.verify(token, jwt_secret, { algorithms: ['RS256'] });
+        // Decode without verification first to debug
+        const decoded_without_verification = jwt.decode(token, {complete: true});
+        console.log("Token header:", decoded_without_verification?.header);
+        console.log("Token payload:", decoded_without_verification?.payload);
         
-        //add the decoded token as user in the request
-        req.user = decoded; // Attach user data to request
+        // Verify with Buffer-based secret
+        const decoded = jwt.verify(token, jwt_secret, { algorithms: ['HS256'] });
+        console.log("Decoded Token:", decoded);
+
+        // Attach user data to request
+        req.user = decoded;
+        
         next();
-    } catch (er) {
-        return res.status(401).json({ error:er }); // use API error util
+    } catch (err) {
+        console.error("JWT Verification Error:", err);
+        return res.status(401).json({ error: 'Invalid token' });
     }
 }
 
-export default authenticateJWT;
+function authorizeRole(expectedRole, actualRole) {
+    return expectedRole === actualRole;
+}
 
-// to do : add the fucntion to check the role of the user. and allow id the role user has matches the expected role.
+export default authenticateJWT;
