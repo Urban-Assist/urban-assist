@@ -14,8 +14,7 @@ const addReview = async (req, res) => {
         .json(new ApiResponse(200,newReview,"Review created successfully" + review.review));
     } catch (error) {
         console.error(error);
-        
-        res.status(400).send({ message: "There was an error creating the review" }); //to do Use API util
+        throw new ApiError(400,"Something went wrong while creating review.",error)  
     }
 }
 
@@ -72,7 +71,7 @@ const deleteProvider = async (req, res) => {
       
     } catch (error) {
       console.error('Error in deleteProvider:', error);
-      res.status(400).send({ message: "There was an error deleting the provider" }); // Use api util
+      throw new ApiError(400,"Something went wrong while deleting provider.",error)
     }
   };
 export{addReview,deleteProvider};

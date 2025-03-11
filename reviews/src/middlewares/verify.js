@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+import { ApiError } from "../utils/ApiError.js";
+import { publicKey } from "../utils/FetchPK.js";
+>>>>>>> Stashed changes
 import jwt from "jsonwebtoken";
 
 function authenticateJWT(req, res, next) {
@@ -6,7 +11,11 @@ function authenticateJWT(req, res, next) {
     const jwt_secret = Buffer.from("vaibhav", "utf-8");
 
     if (!token) {
+<<<<<<< Updated upstream
         return res.status(401).json({ error: 'Unauthorized' });
+=======
+        throw new ApiError(401, 'Unauthorized');
+>>>>>>> Stashed changes
     }
 
     console.log("Received Token:", token);
