@@ -1,6 +1,6 @@
 package com.example.userManagement.repository;
 
-import com.example.userManagement.model.ProviderProfile;
+ import com.example.userManagement.model.ProviderProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
