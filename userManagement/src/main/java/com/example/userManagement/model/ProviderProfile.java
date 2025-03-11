@@ -1,38 +1,42 @@
 package com.example.userManagement.model;
 
-import java.util.List;
-
-import jakarta.persistence.*;
+ 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import jakarta.validation.constraints.NotBlank;
+
 
 @Data
-@Entity
-@Table(name = "provider")
-@NoArgsConstructor
+@ToString
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class ProviderProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-    private int experience;
-    private double charge;
-    private boolean certification;
-    private String certificationNumber;
+    // @NotBlank(message = "Provider ID is mandatory")
+    // private int providerID;
+
+    private String picture;
+
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
-    @Lob
-    private String picture; // Base64 or URL for image storage
+    private String name;
+    private String description;
+    private String certificationNumber;
+    
+     
+    private int experience;
+    private double charge;
+    private boolean certified;
 
-    @ElementCollection
-    private List<String> reviews;
-
-    public ProviderProfile orElseThrow(Object object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
-    }
 }
