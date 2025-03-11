@@ -11,8 +11,8 @@ const addReview = async (req, res) => {
         const newReview = await Review.create(review);
         return res
         .status(201)
-        .json(new ApiResponse(200,newReview,"Review created successfully" + review.review));
-    } catch (error) {
+        .json(new ApiResponse(201,"Review created successfully",newReview));
+      } catch (error) {
         console.error(error);
         throw new ApiError(400,"Something went wrong while creating review.",error)  
     }
