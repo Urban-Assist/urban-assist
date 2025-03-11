@@ -65,7 +65,8 @@ const RegistrationPage = () => {
 
         try {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
-            const response = await axios.post(AUTH_API+'/auth/register', formData);
+            console.log("env" + AUTH_API);
+            const response = await axios.post(AUTH_API+'/auth-api/public/register', formData);
             if (response.status === 200) {
                 setSuccess('Registration successful!');
                 setError('');
