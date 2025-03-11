@@ -50,7 +50,7 @@ public class ProviderProfileService {
             provider.setDescription(providerDTO.getDescription());
             provider.setExperience(providerDTO.getExperience());
             provider.setCharge(providerDTO.getCharge());
-            provider.setCertification(providerDTO.isCertification());
+            provider.setCertification(providerDTO.isCertified());
             provider.setCertificationNumber(providerDTO.getCertificationNumber());
 
             providerProfileRepository.save(provider);

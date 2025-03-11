@@ -46,6 +46,13 @@ public class UserProfileService {
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void handleUserRegistration(UserProfileDTO profileDTO) {
         if (!userProfileRepository.existsByEmail(profileDTO.getEmail())) {
+
+            //check the role
+
+            // if user --> consumer
+
+            //if provider --> provider
+            
             UserProfile profile = new UserProfile();
             profile.setEmail(profileDTO.getEmail());
             profile.setFirstName(profileDTO.getFirstName());
