@@ -50,6 +50,7 @@ public class UserProfileService {
             profile.setEmail(profileDTO.getEmail());
             profile.setFirstName(profileDTO.getFirstName());
             profile.setLastName(profileDTO.getLastName());
+            profile.setRole(profileDTO.getRole());
 
             userProfileRepository.save(profile);
             System.out.println("User profile created for: " + profileDTO.getEmail() + " ✅");
