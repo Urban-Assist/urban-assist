@@ -9,7 +9,7 @@ const router = Router();
 //secured routes
 router.route("/addReview").post(addReview);
 router.route("/providerDeleted").delete(deleteProvider);
-router.route("/reviews/:providerID").get(getReviewsByProviderId);
+router.route("/:providerID").get(getReviewsByProviderId);
 
 //to do : function to list all the reviews associated with a provider using the provider ID. 
 // use rabbitMQ
