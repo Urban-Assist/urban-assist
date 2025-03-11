@@ -21,7 +21,8 @@ public class ProviderProfile {
     private String description;
     private int experience;
     private double charge;
-    private boolean certification;
+    
+    private boolean certfied;
     private String certificationNumber;
     private String email;
 
