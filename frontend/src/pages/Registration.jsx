@@ -164,7 +164,7 @@ const RegistrationPage = () => {
                         >
                             <option value="">Select your role</option>
                             <option value="user">User</option>
-                            <option value="admin">Service Provider</option>
+                            <option value="provider">Service Provider</option>
                         </select>
                     </div>
                     <div>
