@@ -83,7 +83,7 @@ const RegistrationPage = () => {
         } catch (err) {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
             console.log(AUTH_API);
-            setError(err.response?.data?.message || 'An error occurred during registration');
+            setError(err.response?.data|| 'An error occurred during registration');
             setSuccess('');
         }
     };
