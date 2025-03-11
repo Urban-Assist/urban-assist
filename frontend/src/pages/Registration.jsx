@@ -156,6 +156,7 @@ const RegistrationPage = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Role
                         </label>
+                        
                         <select
                             name="role"
                             value={formData.role}
