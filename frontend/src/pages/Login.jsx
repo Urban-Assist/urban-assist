@@ -15,7 +15,7 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault(); // Prevent the default form submission behavior
     try {
       const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
       const response = await axios.post(AUTH_API + '/auth-api/public/authenticate', formData, {
@@ -51,7 +51,7 @@ function Login() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email Add
+              Email Address
             </label>
             <input
               type="email"

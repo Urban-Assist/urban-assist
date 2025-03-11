@@ -65,7 +65,8 @@ const RegistrationPage = () => {
 
         try {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
-            console.log(AUTH_API);
+            console.log("env" + AUTH_API);
+
             const response = await axios.post(AUTH_API+'/auth-api/public/register', formData);
             if (response.status === 200) {
                 setSuccess('Registration successful!');
@@ -83,6 +84,7 @@ const RegistrationPage = () => {
         } catch (err) {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
             console.log(AUTH_API);
+
             setError(err.response?.data|| 'An error occurred during registration');
             setSuccess('');
         }
@@ -155,6 +157,7 @@ const RegistrationPage = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Role
                         </label>
+                        
                         <select
                             name="role"
                             value={formData.role}
