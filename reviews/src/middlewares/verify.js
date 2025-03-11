@@ -12,17 +12,16 @@ function authenticateJWT(req, res, next) {
     console.log("Received Token:", token);
     
     try {
-        // Decode without verification first to debug
-        const decoded_without_verification = jwt.decode(token, {complete: true});
-        console.log("Token header:", decoded_without_verification?.header);
-        console.log("Token payload:", decoded_without_verification?.payload);
+        
         
         // Verify with Buffer-based secret
         const decoded = jwt.verify(token, jwt_secret, { algorithms: ['HS256'] });
         console.log("Decoded Token:", decoded);
 
         // Attach user data to request
-        req.user = decoded;
+        req.user =  decoded;
+
+        
         
         next();
     } catch (err) {
@@ -31,8 +30,19 @@ function authenticateJWT(req, res, next) {
     }
 }
 
-function authorizeRole(expectedRole, actualRole) {
-    return expectedRole === actualRole;
+function authorizeRole( expected ) {
+    return function(req, res, next) {
+        const actualRole = req.user.roles
+        console.log("Actual Role:", actualRole);
+        
+        const expectedRole = Array.isArray(expected) ? expected : [expected];
+        console.log("Expected Role:", expectedRole);
+        if(expectedRole.includes(actualRole)) {
+            return next();
+        }
+        next();
+    }
+    
 }
 
-export default authenticateJWT;
+export {authenticateJWT, authorizeRole};
