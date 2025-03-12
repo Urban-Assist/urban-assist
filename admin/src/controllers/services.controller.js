@@ -14,4 +14,14 @@ const createService = async (req, res) => {
         return res.status(500).json(new ApiError(500,"Internal Server Error"));
      }
 }
-export { createService };
+
+const listServices = async (req, res) => {
+    try {
+        const services = await Service.findAll();
+        return res.status(200).json(new ApiResponse(200,"Services fetched successfully",services));
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(new ApiError(500,"Internal Server Error"));
+    }
+}
+export { createService , listServices };

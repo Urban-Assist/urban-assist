@@ -6,7 +6,10 @@ import dotenv from 'dotenv'
 dotenv.config()
 //connect to the database.
 
- 
+ function demo () {
+   console.log("env :"+ process.env.CORS_ORIGIN);
+ };
+ demo();
 connection();
 db.sync().then(() => {
   console.log("Database synced");
