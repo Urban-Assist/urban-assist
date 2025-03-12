@@ -1,6 +1,5 @@
 
 import ServiceCards from '../components/ServicesCards';
-import ProviderSidenav from '../components/ProviderSidenav';
 
 function UserDashboard() {
 

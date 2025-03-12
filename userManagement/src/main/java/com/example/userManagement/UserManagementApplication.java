@@ -9,7 +9,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"example.userManagement", "com.example"})
 public class UserManagementApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagementApplication.class);

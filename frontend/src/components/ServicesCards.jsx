@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FaTools, FaBroom, FaWrench, FaBolt, FaRecycle, FaHeart } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 
 const services = [
   { name: "Restoration", slug: "restoration", icon: <FaRecycle className="text-blue-500" />, description: "Bringing life back to your spaces with expert restoration services." },
@@ -12,6 +13,20 @@ const services = [
 ];
 
 export default function ServiceCards({ title }) {
+
+  // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyaXdlbWl3MTg5QHBheXBvc3MuY29tIiwicm9sZXMiOlsidXNlciJdLCJpZCI6NSwiZXhwIjoxNzQxNzIwMTc0LCJpYXQiOjE3NDE3MTk4NzR9.TFkEekx4YGU4IeiDCdDRipV7FkLNpO3E9Su4fLUa6vQ";
+  // const decoded = jwtDecode(token);
+  // const role = decoded.roles[0];
+
+  const role = "provider";
+  function handleNavigate(slug) {
+    if (role === "user") {
+      navigate(`/services/${slug}`);
+    } else if (role === "provider") {
+      navigate("/provider/profile");
+    }
+  }
+
   const navigate = useNavigate();
 
   return (
@@ -26,7 +41,7 @@ export default function ServiceCards({ title }) {
                 className="bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center text-center space-y-4 border border-gray-200 hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/services/${service.slug}`)}
+                onClick={() => { handleNavigate(service.slug) }}
               >
                 <div className="text-6xl">{service.icon}</div>
                 <h3 className="text-2xl font-semibold text-gray-700">{service.name}</h3>

@@ -76,7 +76,7 @@ function App() {
           element={<IncludeNavbar Component={ProviderDashboard} />}
         />
         <Route
-          path={`${frontendRoutes.REGISTER_SERVICE}/:providerName`}
+          path={frontendRoutes.PROFILE}
           element={<IncludeNavbar Component={PortfolioMakerPage} />}
         />
         <Route

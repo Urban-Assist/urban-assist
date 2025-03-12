@@ -148,11 +148,6 @@ const ProviderAvailibility = () => {
     return (
 
 
-        <div class="relative h-full min-h-screen font-[sans-serif]">
-            <div class="flex items-start">
-
-                <ProviderSidenav />
-
                 <div className="container mx-auto p-6">
                     <h1 className="text-2xl font-bold mb-4">Add Your Availability</h1>
 
@@ -213,8 +208,6 @@ const ProviderAvailibility = () => {
                         </div>
                     )}
                 </div>
-            </div>
-        </div>
 
 
     );

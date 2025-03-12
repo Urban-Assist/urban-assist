@@ -9,7 +9,7 @@ export const frontendRoutes = {
   ADD_AVAIBILITY: "/add-availability",
   BOOKING: "/booking",
   PROVIDER_DASHBOARD: "/dashboard2",
-  REGISTER_SERVICE: "/register-service",
+  PROFILE: "/provider/profile",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
   PAYMENT: "/payment",
   SETTING: "/setting"
