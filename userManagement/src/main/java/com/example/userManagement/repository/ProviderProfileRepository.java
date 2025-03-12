@@ -8,5 +8,7 @@ public interface ProviderProfileRepository extends JpaRepository<ProviderProfile
     boolean existsByEmail(String email);
 
     Optional<ProviderProfile> findByEmail(String email);
+
+    Optional<ProviderProfile> findByEmailAndService(String email, String service);
 }
 

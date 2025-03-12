@@ -43,12 +43,15 @@ public class ProviderProfile {
     @Column
     private String phoneNumber;
 
-    @Column(unique = true, nullable = false)
+    @Column( nullable = false)
     private String email;
 
     @Column
     private String linkedin;
   
+    @Column
+    private String service;
+
     private String certificationNumber;
     private int experience;
     private boolean certified;

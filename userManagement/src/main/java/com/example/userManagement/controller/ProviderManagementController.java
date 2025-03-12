@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -17,14 +17,16 @@ public class ProviderManagementController {
     private final ProviderProfileService providerProfileService;
 
     @GetMapping
-    public ResponseEntity<ProviderProfileDTO> getCurrentProviderProfile() {
-        ProviderProfileDTO profile = providerProfileService.getCurrentProviderProfile();
+    public ResponseEntity<ProviderProfileDTO> getCurrentProviderProfile(@RequestParam String service) {
+        
+        ProviderProfileDTO profile = providerProfileService.getCurrentProviderProfile(service);
         return ResponseEntity.ok(profile);
     }
 
     @PostMapping
-    public ResponseEntity<ProviderProfileDTO> createProviderProfile() {
-        ProviderProfileDTO profile = providerProfileService.createProviderProfile();
+    public ResponseEntity<ProviderProfileDTO> createProviderProfile(@RequestParam String service) {
+        System.out.println("Received name: " + service);
+        ProviderProfileDTO profile = providerProfileService.createProviderProfile(service);
         return ResponseEntity.status(HttpStatus.CREATED).body(profile);
     }
 
