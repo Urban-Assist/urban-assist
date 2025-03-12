@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
 
-@CrossOrigin(origins = "*")
+
 @RestController
 @RequestMapping("/api/provider")
 @RequiredArgsConstructor

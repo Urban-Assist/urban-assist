@@ -25,8 +25,7 @@ const Setting = () => {
   const [pincode, setPincode] = useState("");
   const [province, setProvince] = useState("");
 
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyaXdlbWkxOEBwYXlwb3NzLmNvbSIsInJvbGVzIjpbInVzZXIiXSwiZXhwIjoxNzQxNjQzMzk0LCJpYXQiOjE3NDE2NDMwOTR9.MftdcDJIb4pPRAoLybcGtNGdz8JekaM5JmzywxqCWFw";
-
+  const token = localStorage.getItem("token");
   // Fetch user data from server
   useEffect(() => {
     const fetchUserData = async () => {

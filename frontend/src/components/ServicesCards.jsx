@@ -20,10 +20,10 @@ const iconMap = {
 export default function ServiceCards({ title }) {
 
   // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyaXdlbWl3MTg5QHBheXBvc3MuY29tIiwicm9sZXMiOlsidXNlciJdLCJpZCI6NSwiZXhwIjoxNzQxNzIwMTc0LCJpYXQiOjE3NDE3MTk4NzR9.TFkEekx4YGU4IeiDCdDRipV7FkLNpO3E9Su4fLUa6vQ";
-  // const decoded = jwtDecode(token);
-  // const role = decoded.roles[0];
+  const token = localStorage.getItem('token');
+  const decoded = jwtDecode(token);
+  const role = decoded.roles[0];
 
-  const role = "provider";
   function handleNavigate(slug) {
     if (role === "user") {
       navigate(`/services/${slug}`);
