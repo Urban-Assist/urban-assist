@@ -18,4 +18,5 @@ public class ProviderProfileDTO {
     private String phoneNumber;
     private String email;
     private String linkedin;
+    private String service;
 }

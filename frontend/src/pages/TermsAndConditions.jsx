@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import ProviderSidenav from "../components/ProviderSidenav";
 import bg from '../assets/terms-cond-bg.png';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const TermsAndConditions = ({ onAgree }) => {
+const TermsAndConditions = () => {
   const [isChecked, setIsChecked] = useState(false);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const name = params.get('service');
 
   const handleAgree = () => {
     if (isChecked) {
@@ -13,6 +19,32 @@ const TermsAndConditions = ({ onAgree }) => {
       alert("Please agree to the terms and conditions to proceed.");
     }
   };
+
+  const onAgree = async () => {
+    console.log(token);
+    const API_URL = "http://localhost:8083/api/provider?service=" + name;
+    try {
+      const response = await axios.post(
+        API_URL,
+        {}, // Request body (empty object if no body is needed)
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const status = response.status; // axios automatically parses JSON
+      console.log(status);
+
+      if (status === 201) {
+        navigate("/provider/profile?service=" + name);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+  }
 
   return (
 

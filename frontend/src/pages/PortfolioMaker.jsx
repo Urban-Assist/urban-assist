@@ -37,9 +37,19 @@ export default function PortfolioPage() {
   useEffect(() => {
     const fetchProviderData = async () => {
       setIsLoading(true);
+
+      // Extract the query parameter "name" from the current URL
+      const params = new URLSearchParams(location.search);
+      const name = params.get('service'); // Get the value of the "name" query parameter
+
+      if (!name) {
+        console.error('No name query parameter found in the URL');
+        setIsLoading(false);
+        return;
+      }
       
       try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_JAVA_URL}/api/provider`,
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_JAVA_URL}/api/provider?service=${name}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,7 +66,7 @@ export default function PortfolioPage() {
         console.error("Error fetching provider data:", error);
         // If there's an error, still use the default data structure
         if(error.response.status === 404){
-          navigate("/terms-and-conditions");
+          navigate(`/terms-and-conditions?service=${name}`);
         }
        
       } finally {
@@ -174,7 +184,7 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="w-full mx-auto px-10 py-12 bg-gray-50 min-h-screen">
+    <div className="w-full mx-auto px-10 py-12 bg-gray-50 min-h-screen mt-10">
       {/* Edit Button */}
       <div className="flex justify-end mb-6">
         <button
@@ -415,7 +425,7 @@ export default function PortfolioPage() {
 
       {/* Modal Carousel */}
       {isCarouselOpen && formData.workImages && formData.workImages.length > 0 && (
-        <div className="fixed inset-0 lg:left-60 flex justify-center items-center z-50 bg-black/80">
+        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/80">
           <div className="relative w-full md:w-3/4 lg:w-2/3 bg-transparent p-4 md:p-8 rounded-xl">
             <Carousel className="rounded-xl h-full">
               {formData.workImages.map((image, index) => (

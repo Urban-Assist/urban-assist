@@ -24,11 +24,11 @@ export default function ServiceCards({ title }) {
   const decoded = jwtDecode(token);
   const role = decoded.roles[0];
 
-  function handleNavigate(slug) {
+  function handleNavigate(name) {
     if (role === "user") {
-      navigate(`/services/${slug}`);
+      navigate(`/services/${name}`);
     } else if (role === "provider") {
-      navigate("/provider/profile");
+      navigate("/provider/profile?service="+name.toLowerCase());
     }
   }
 
@@ -43,10 +43,7 @@ export default function ServiceCards({ title }) {
         setLoading(true);
         const serviceURL = import.meta.env.VITE_ADMIN_SERVER;
         console.log(serviceURL);
-        
-        // Get token from local storage
-        const token = localStorage.getItem('token');
-        
+        console.log(token);
         // Set up request headers with bearer token
         const config = {
           headers: {
@@ -113,7 +110,7 @@ export default function ServiceCards({ title }) {
                 className="bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center text-center space-y-4 border border-gray-200 hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => { handleNavigate(service.slug) }}
+                onClick={() => { handleNavigate(service.name) }}
               >
                 <div className="text-6xl">{service.icon}</div>
                 <h3 className="text-2xl font-semibold text-gray-700">{service.name}</h3>

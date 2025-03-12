@@ -12,6 +12,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class ProviderProfileService {
@@ -19,7 +20,8 @@ public class ProviderProfileService {
     private final ProviderProfileRepository providerProfileRepository;
     private final UserProfileRepository userProfileRepository;
 
-    public ProviderProfileService(ProviderProfileRepository providerProfileRepository, UserProfileRepository userProfileRepository) {
+    public ProviderProfileService(ProviderProfileRepository providerProfileRepository,
+            UserProfileRepository userProfileRepository) {
         this.providerProfileRepository = providerProfileRepository;
         this.userProfileRepository = userProfileRepository;
     }
@@ -28,14 +30,24 @@ public class ProviderProfileService {
      * Fetches the provider profile for the authenticated user.
      * If no profile exists, throws a 404 Not Found error.
      */
-    public ProviderProfileDTO getCurrentProviderProfile() {
+    public ProviderProfileDTO getCurrentProviderProfile(String service) {
         // Extract email from the authenticated user's context
-        
+
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         // Fetch the provider profile
-        
-        ProviderProfile providerProfile = providerProfileRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException( HttpStatus.NOT_FOUND,"Provider profile not found"));
+
+        ProviderProfile providerProfile = providerProfileRepository.findByEmailAndService(email, service)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Provider profile not found"));
+
+        // Check if the service is null and throw 404 if so
+        if (providerProfile.getService() == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Service is null for the provider");
+        }
+
+        // If the service exists, check if it contains the required service
+        if (!providerProfile.getService().contains(service)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Service not available for the provider");
+        }
 
         return convertToDTO(providerProfile);
     }
@@ -44,7 +56,7 @@ public class ProviderProfileService {
      * Creates a new provider profile for the authenticated user.
      * If the user profile does not exist, throws a 404 Not Found error.
      */
-    public ProviderProfileDTO createProviderProfile() {
+    public ProviderProfileDTO createProviderProfile(String service) {
         // Extract email from the authenticated user's context
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -66,13 +78,13 @@ public class ProviderProfileService {
         newProfile.setTestimonials(Collections.emptyList());
         newProfile.setPhoneNumber("Not provided");
         newProfile.setLinkedin("#");
+        newProfile.setService(service);
 
         // Save the new provider profile
         ProviderProfile savedProfile = providerProfileRepository.save(newProfile);
         return convertToDTO(savedProfile);
     }
 
-    
     public ProviderProfileDTO updateProfile(ProviderProfileDTO profileDTO) {
         // Extract email from the authenticated user's context
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -83,7 +95,7 @@ public class ProviderProfileService {
         }
 
         // Fetch the existing profile
-        ProviderProfile existingProfile = providerProfileRepository.findByEmail(email)
+        ProviderProfile existingProfile = providerProfileRepository.findByEmailAndService(email,profileDTO.getService())
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
         // Update the profile fields (excluding id and email)
@@ -94,7 +106,6 @@ public class ProviderProfileService {
         return convertToDTO(updatedProfile);
     }
 
-    
     private ProviderProfileDTO convertToDTO(ProviderProfile profile) {
         ProviderProfileDTO dto = new ProviderProfileDTO();
         BeanUtils.copyProperties(profile, dto);

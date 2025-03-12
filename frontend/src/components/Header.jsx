@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   return (
-    <header className="h-16 sm:h-20 flex items-center bg-[rgb(252,250,250)] font-montserrat shadow-md fixed top-0 left-0 w-full z-50 ">
+    <header className="h-16 sm:h-20 flex items-center bg-[rgb(252,250,250)] font-montserrat shadow-md fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto px-6 sm:px-12 flex items-center justify-between">
         {/* Logo */}
         <Link to={frontendRoutes.HOME} className="no-underline">
