@@ -31,8 +31,8 @@ export default function PortfolioPage() {
     
   };
 
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyaXdlbWl3MTg5QHBhb2xsLmNvbSIsInJvbGVzIjpbInByb3ZpZGVyIl0sImlkIjo5LCJleHAiOjE3NDE3MzgxMTYsImlhdCI6MTc0MTczNzgxNn0.Nh7DTISckh8W69-FBGiNLl3jLOKBsPOv_oVpFCiJvRk";
-
+  const token = localStorage.getItem('token');
+  console.log(token);
 
   useEffect(() => {
     const fetchProviderData = async () => {

@@ -1,5 +1,6 @@
 import nodeMailer from 'nodemailer';
-
+import dotenv from 'dotenv';
+dotenv.config();
  
     const MAIL_ADDRESS = process.env.EMAIL_ADDRESS;
     const MAIL_ACCESS = process.env.MAIL_ACCESS_TOKEN;
