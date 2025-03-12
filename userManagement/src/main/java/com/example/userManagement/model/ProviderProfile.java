@@ -1,42 +1,56 @@
 package com.example.userManagement.model;
 
- 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import jakarta.validation.constraints.NotBlank;
-
+import java.util.List;
 
 @Data
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Table(name = "provider_profile")
 public class ProviderProfile {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @NotBlank(message = "Provider ID is mandatory")
-    // private int providerID;
+    @Column(nullable = false)
+    private String firstName;
 
-    private String picture;
+    @Column(nullable = false)
+    private String lastName;
 
-    @NotBlank(message = "Email is mandatory")
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column
+    private String profilePic;
+
+    @Column
+    private int stars = 0;
+
+    @Column
+    private String address;
+
+    @Column
+    private String price;
+
+    @ElementCollection
+    private List<String> workImages;
+
+    @ElementCollection
+    private List<String> testimonials;
+
+    @Column
+    private String phoneNumber;
+
+    @Column(unique = true, nullable = false)
     private String email;
 
-    private String name;
-    private String description;
+    @Column
+    private String linkedin;
+  
     private String certificationNumber;
-    
-     
     private int experience;
-    private double charge;
     private boolean certified;
-
+  
 }
