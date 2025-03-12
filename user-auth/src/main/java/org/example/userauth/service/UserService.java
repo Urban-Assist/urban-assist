@@ -52,7 +52,7 @@ public class UserService {
         System.out.println("Token generated ✅");
 
         //send email with token for verification
-        Boolean emailSent = emailService.sendEmail(token, user, request);
+        Boolean emailSent = emailService.sendEmail(token, user, request, "verify.html");
         if (emailSent) {
             User registeredUser = userRepository.save(user);
             System.out.println("User registered ✅");
@@ -97,10 +97,14 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<?> verifyEmail(String token) {
+    public ResponseEntity<?> verifyEmail(String token, HttpServletRequest request) throws IOException {
         System.out.println("Verifying token: " + token);
-
+        
+        // Add debug logging for database query
+        System.out.println("Looking for token in database: " + token);
         EmailConfirmation emailToken = emailTokenRepository.findByToken(token);
+        System.out.println("Database query result: " + (emailToken == null ? "No token found" : "Token found for user: " + emailToken.getUser().getEmail()));
+        
         if (emailToken == null) {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
@@ -118,6 +122,16 @@ public class UserService {
         user.setVerified(true);
         userRepository.save(user);
 
+        // send a welcome email
+        Boolean emailSent = emailService.sendEmail("welcome.html", request, tempUser);
+        if(!emailSent){
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode response = objectMapper.createObjectNode();
+            response.put("message", "Unable to verify email ❌");
+            response.put("reason", "Email not sent ❌");
+            System.out.println("Unable to verify email ❌");
+            return ResponseEntity.status(400).body(response);
+        }
         // Delete token after successful verification
         emailTokenRepository.delete(emailToken);
         
