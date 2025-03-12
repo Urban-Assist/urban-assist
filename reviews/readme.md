@@ -6,14 +6,14 @@
 
 set this envs
 
-CORS_ORIGIN = http://localhost:3000
+
 PORT = 8001
 CROS_ORIGIN = http://localhost:3000
 RABIT_MQ_NAME =  deleteUser
 RABIT_MQ_URL = amqp://localhost
 
-
+JWT_SECRET = vaibhav
 DATABASE_NAME = reviews
 DATABASE_USER = root
-DATABASE_PASSWORD = vaibhav@admin
-DATABASE_HOST = localhost
+DATABASE_PASSWORD = admin@vaibhav
+DATABASE_HOST = 127.0.0.1

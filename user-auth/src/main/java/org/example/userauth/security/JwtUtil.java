@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c";
+    // Using a consistent encoding approach with Node.js
+    private final String SECRET_KEY = new String(Base64.getEncoder().encode("vaibhav".getBytes()));
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -61,7 +63,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() +5 * 60 * 1000)) // 10 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5 minutes
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }

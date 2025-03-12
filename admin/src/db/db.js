@@ -10,6 +10,7 @@ console.log(DB_NAME,DB_USER,DB_PASSWORD,DB_HOST)
  const db = new Sequelize(DB_NAME,DB_USER,DB_PASSWORD,{
     host: DB_HOST,
     dialect: 'mysql',
+    logging: true
      
 })
 

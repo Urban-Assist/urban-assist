@@ -48,4 +48,9 @@ public class ProviderProfile {
 
     @Column
     private String linkedin;
+  
+    private String certificationNumber;
+    private int experience;
+    private boolean certified;
+  
 }
