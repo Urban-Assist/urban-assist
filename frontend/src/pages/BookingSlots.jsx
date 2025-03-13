@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 import axios from "axios";
+import { useLocation, useParams } from "react-router-dom";
 
 const ClientBookingPage = () => {
     const [availabilities, setAvailabilities] = useState([]);
@@ -13,16 +14,27 @@ const ClientBookingPage = () => {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const { Id } = useParams(); // Getting the provider ID from URL
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const service = queryParams.get('service');
+
+
 
     // Fetch availabilities from the API
     const fetchAvailabilities = async () => {
         try {
-            const response = await axios.get(`http://localhost:8083/api/availabilities?service=restoration`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            
+            const response = await axios.post(`http://localhost:8083/api/availabilities/get`,
+
+                { service: service, id: Id }
+
+                ,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
             // Transform the API response to match the expected format
             const transformedData = response.data.map(slot => ({
                 _id: slot.id.toString(),
@@ -35,7 +47,7 @@ const ClientBookingPage = () => {
                 originalStartTime: slot.startTime,
                 originalEndTime: slot.endTime
             }));
-            
+
             console.log("Transformed data:", transformedData);
             setAvailabilities(transformedData);
         } catch (error) {
@@ -141,11 +153,10 @@ const ClientBookingPage = () => {
                                             <li
                                                 key={slot._id}
                                                 onClick={() => handleSlotSelect(slot)}
-                                                className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                                                    selectedSlot?._id === slot._id
-                                                        ? "bg-blue-100 border-blue-500"
-                                                        : "bg-white border-gray-200 hover:bg-gray-50"
-                                                }`}
+                                                className={`p-4 border rounded-lg cursor-pointer transition-all ${selectedSlot?._id === slot._id
+                                                    ? "bg-blue-100 border-blue-500"
+                                                    : "bg-white border-gray-200 hover:bg-gray-50"
+                                                    }`}
                                             >
                                                 {moment(slot.startTime, "HH:mm").format("h:mm A")} -{" "}
                                                 {moment(slot.endTime, "HH:mm").format("h:mm A")}

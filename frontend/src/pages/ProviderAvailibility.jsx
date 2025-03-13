@@ -32,13 +32,16 @@ const ProviderAvailibility = () => {
         console.log("TODO: intermediate page for selecting service");
 
         try {
-            const response = await axios.get(`http://localhost:8083/api/availabilities?service=${service}`, {
+            const response = await axios.post(`http://localhost:8083/api/availabilities/get`,
 
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                { service: service }
 
-            });
+                ,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
             setAvailabilities(response.data);
         } catch (error) {
             console.error("Error fetching availabilities:", error);
