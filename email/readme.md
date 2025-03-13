@@ -22,3 +22,8 @@ Flag for the development and production environemtns is the ENV_MODE
 
 
 //to do remove the env from the github
+
+EMAIL_ADDRESS=handyshare4@gmail.com
+MAIL_ACCESS_TOKEN=kywbbqtaldsigaij
+PORT=9001
+CORS_ORIGIN=*
