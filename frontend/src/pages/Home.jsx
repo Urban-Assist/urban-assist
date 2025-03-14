@@ -497,11 +497,10 @@ function Home() {
                   </p>
                 </div>
               </div>
-              <a href="mailto:devpatel43543@gmail.com">
-                <button className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap flex-shrink-0 shadow-sm">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=help@urbanassist.ca" target="_blank" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap flex-shrink-0 shadow-sm">
                   Contact Support
-                </button>
               </a>
+
             </div>
           </div>
         </div>
