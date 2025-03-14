@@ -167,7 +167,7 @@ function Faq() {
                   </p>
                 </div>
               </div>
-              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@urbanassist.coma" target="_blank" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap flex-shrink-0 shadow-sm">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@urbanassist.com" target="_blank" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors whitespace-nowrap flex-shrink-0 shadow-sm">
                   Contact Support
               </a>
             </div>
