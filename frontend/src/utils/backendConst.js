@@ -1,0 +1,1 @@
+const BASE_URL_BACKEND = "http://localhost:5002"

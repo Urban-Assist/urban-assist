@@ -64,7 +64,7 @@ const Payment = () => {
             return;
         }
 
-        const response = await fetch("http://localhost:5002/api/payments/card-pay", {
+        const response = await fetch(`${BASE_URL_BACKEND}/api/payments/card-pay`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
