@@ -1,4 +1,6 @@
-package example.userManagement.controller;
+package com.example.userManagement.controller;
+
+ 
 
 import com.example.userManagement.dto.ProviderProfileDTO;
 import org.springframework.http.ResponseEntity;
