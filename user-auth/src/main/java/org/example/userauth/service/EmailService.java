@@ -64,7 +64,7 @@ public class EmailService {
         }
     }
 
-    public boolean sendEmail(String template, HttpServletRequest request, User user) throws IOException {
+    public boolean sendWelcomeEmail(String template, HttpServletRequest request, User user) throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/"+template);
         String htmlTemplate = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 

@@ -123,7 +123,7 @@ public class UserService {
         userRepository.save(user);
 
         // send a welcome email
-        Boolean emailSent = emailService.sendEmail("welcome.html", request, tempUser);
+        Boolean emailSent = emailService.sendWelcomeEmail("welcome.html", request, tempUser);
         if(!emailSent){
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
