@@ -4,14 +4,14 @@ import { Suspense } from "react";
 import Home from "./pages/Home";
 import "./App.css";
 import { frontendRoutes } from "./utils/frontendRoutes";
-// import { Elements } from '@stripe/react-stripe-js';
-// import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import LoadAnimation from "./components/LoadAnimation";
 import Header from "./components/Header";
 import AdminHeader from "./components/AdminHeader";
 import AdminDashboard from "./pages/AdminDashboard";
 
-// const stripePromise = loadStripe('pk_test_51QpEzSBzR4uJF8SUuTzrlJFalbN5SvRzEGDPX7icdx5xVh0Kid8GzKMaRbfbv8hcKIDxkIuxecJpIKpfqZsbuqhF00NxiKnbXu');
+const stripePromise = loadStripe('pk_test_51QnViyF1vLG8nlrHDfi0ryxde9fiAT2Mm3ND780vXmb3r7YbNZ2wPPrVMgAhUaT4h8UKbU8TTff6ed3woPYPYSrh007ojJgaVA');
 
 const UserDashboard = React.lazy(() => import("./pages/UserDashboard"));
 const ProviderDashboard = React.lazy(() => import("./pages/ProviderDashboard"));
@@ -40,10 +40,10 @@ function App() {
           path={frontendRoutes.REGISTER}
           element={<ExcludeNavbar Component={RegistrationPage} />}
         />
-        {/* <Route
+        <Route
           path={frontendRoutes.PAYMENT}
           element={<ExcludeNavbarStripe Component={Payment} />}
-        /> */}
+        />
 
         <Route
           path={frontendRoutes.HOME}
@@ -99,13 +99,13 @@ const ExcludeNavbar = ({ Component }) => (
   </Suspense>
 );
 
-// const ExcludeNavbarStripe = ({ Component }) => (
-//   <Elements stripe={stripePromise}>
-//     <Suspense fallback={<LoadAnimation />}>
-//       <Component />
-//     </Suspense>
-//   </Elements>
-// );
+const ExcludeNavbarStripe = ({ Component }) => (
+  <Elements stripe={stripePromise}>
+    <Suspense fallback={<LoadAnimation />}>
+      <Component />
+    </Suspense>
+  </Elements>
+);
 
 const IncludeNavbar = ({ Component }) => (
   <>
