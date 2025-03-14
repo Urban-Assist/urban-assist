@@ -3,47 +3,56 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import UserSidenav from "../components/UserSidenav";
-import Header from "../components/Header";
 const localizer = momentLocalizer(moment);
+import axios from "axios";
+import { useLocation, useParams } from "react-router-dom";
 
 const ClientBookingPage = () => {
     const [availabilities, setAvailabilities] = useState([]);
     const [selectedDate, setSelectedDate] = useState(moment().toDate());
     const [selectedSlot, setSelectedSlot] = useState(null);
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State for modal visibility
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const { Id } = useParams(); // Getting the provider ID from URL
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const service = queryParams.get('service');
 
-    // Mock fetch function
+
+
+    // Fetch availabilities from the API
     const fetchAvailabilities = async () => {
-        setTimeout(() => {
-            setAvailabilities([
+        try {
+            const response = await axios.post(`http://localhost:8083/api/availabilities/get`,
+
+                { service: service, id: Id }
+
+                ,
                 {
-                    _id: "1",
-                    date: moment().format("YYYY-MM-DD"),
-                    startTime: "09:00",
-                    endTime: "10:00",
-                },
-                {
-                    _id: "2",
-                    date: moment().format("YYYY-MM-DD"),
-                    startTime: "11:00",
-                    endTime: "12:00",
-                },
-                {
-                    _id: "3",
-                    date: moment().add(3, "day").format("YYYY-MM-DD"),
-                    startTime: "14:00",
-                    endTime: "15:00",
-                },
-                {
-                    _id: "4",
-                    date: moment().add(6, "day").format("YYYY-MM-DD"),
-                    startTime: "14:00",
-                    endTime: "15:00",
-                },
-            ]);
-        }, 1000);
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+            // Transform the API response to match the expected format
+            const transformedData = response.data.map(slot => ({
+                _id: slot.id.toString(),
+                date: moment(slot.startTime).format("YYYY-MM-DD"),
+                startTime: moment(slot.startTime).format("HH:mm"),
+                endTime: moment(slot.endTime).format("HH:mm"),
+                providerEmail: slot.providerEmail,
+                service: slot.service,
+                // Keep the original data too for reference
+                originalStartTime: slot.startTime,
+                originalEndTime: slot.endTime
+            }));
+
+            console.log("Transformed data:", transformedData);
+            setAvailabilities(transformedData);
+        } catch (error) {
+            console.error("Error fetching availabilities:", error);
+        }
     };
 
     useEffect(() => {
@@ -53,8 +62,8 @@ const ClientBookingPage = () => {
     // Filter availabilities for the selected date
     const getSlotsForSelectedDate = () => {
         return availabilities.filter((slot) =>
-            moment(slot.date).isSame(moment(selectedDate), "day"
-            ));
+            moment(slot.date).isSame(moment(selectedDate), "day")
+        );
     };
 
     // Handle date selection
@@ -71,23 +80,20 @@ const ClientBookingPage = () => {
     // Handle booking confirmation
     const handleConfirmBooking = () => {
         if (!selectedSlot) return;
-
-        // Show the confirmation modal
-        //setShowConfirmationModal(true);
         navigate("/payment", { state: { selectedSlot } });
     };
 
-    // Close the modal and reset the selected slot
+    // Close the confirmation modal and reset the selected slot
     const closeConfirmationModal = () => {
         setShowConfirmationModal(false);
         setSelectedSlot(null);
     };
 
-    // Custom Date Cell Wrapper
+    // Custom Date Cell Wrapper to highlight dates with available slots
     const CustomDateCellWrapper = ({ children, value }) => {
         const hasSlots = availabilities.some((slot) =>
-            moment(slot.date).isSame(moment(value), "day"
-            ));
+            moment(slot.date).isSame(moment(value), "day")
+        );
 
         return (
             <div
@@ -110,9 +116,7 @@ const ClientBookingPage = () => {
 
     return (
         <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
-
             <div className="flex items-start">
-
                 <div className="container mx-auto p-4">
                     <h1 className="text-2xl font-bold my-6">Service Provider Availability</h1>
 
@@ -156,6 +160,9 @@ const ClientBookingPage = () => {
                                             >
                                                 {moment(slot.startTime, "HH:mm").format("h:mm A")} -{" "}
                                                 {moment(slot.endTime, "HH:mm").format("h:mm A")}
+                                                <div className="text-sm text-gray-500">
+                                                    Provider: {slot.providerEmail}
+                                                </div>
                                             </li>
                                         ))}
                                     </ul>
@@ -176,10 +183,12 @@ const ClientBookingPage = () => {
                                         {moment(selectedSlot.date).format("LL")} -{" "}
                                         {moment(selectedSlot.startTime, "HH:mm").format("h:mm A")} to{" "}
                                         {moment(selectedSlot.endTime, "HH:mm").format("h:mm A")}
+                                        <br />
+                                        <span className="text-gray-600">Provider: {selectedSlot.providerEmail}</span>
                                     </p>
                                     <button
                                         onClick={handleConfirmBooking}
-                                        className="bg-green-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-600"
+                                        className="bg-green-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-700"
                                     >
                                         Confirm Booking
                                     </button>

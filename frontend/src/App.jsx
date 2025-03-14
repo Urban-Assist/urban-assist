@@ -66,7 +66,7 @@ function App() {
           element={<IncludeNavbar Component={ServiceProviders} />}
         />
         <Route
-          path={`${frontendRoutes.PORTFOLIO}/:providerName`}
+          path={`${frontendRoutes.PORTFOLIO}/:Id`}
           element={<IncludeNavbar Component={PortfolioPage} />}
         />
         <Route
@@ -74,7 +74,7 @@ function App() {
           element={<IncludeNavbar Component={ProviderAvailibility} />}
         />
         <Route
-          path={frontendRoutes.BOOKING}
+          path={`${frontendRoutes.BOOKING}/:Id`}
           element={<IncludeNavbar Component={ClientBookingPage} />}
         />
         <Route

@@ -12,6 +12,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
@@ -95,7 +98,8 @@ public class ProviderProfileService {
         }
 
         // Fetch the existing profile
-        ProviderProfile existingProfile = providerProfileRepository.findByEmailAndService(email,profileDTO.getService())
+        ProviderProfile existingProfile = providerProfileRepository
+                .findByEmailAndService(email, profileDTO.getService())
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
         // Update the profile fields (excluding id and email)
@@ -104,6 +108,35 @@ public class ProviderProfileService {
         // Save the updated profile
         ProviderProfile updatedProfile = providerProfileRepository.save(existingProfile);
         return convertToDTO(updatedProfile);
+    }
+
+    public Set<ProviderProfileDTO> getProvidersByService(String service) {
+        // Ensure the user is authenticated before fetching the providers
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (email == null || email.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+
+        return providerProfileRepository.findByService(service)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toSet());
+    }
+
+    public ProviderProfileDTO getProviderById(Long id, String service) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (email == null || email.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+        System.out.println("here after authentication"+service);
+
+        ProviderProfile providerProfile = providerProfileRepository
+                .findByIdAndService(id, service)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Provider profile not found"));
+
+        System.out.println(providerProfile);
+        return convertToDTO(providerProfile);
     }
 
     private ProviderProfileDTO convertToDTO(ProviderProfile profile) {
