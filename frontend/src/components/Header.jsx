@@ -43,7 +43,7 @@ const Header = () => {
             to={frontendRoutes.HOME}
             className={getNavLinkClass(frontendRoutes.EXAMPLE)}
           >
-            Favorites
+            Report
           </Link>
           <Link
             to={frontendRoutes.HOME}
