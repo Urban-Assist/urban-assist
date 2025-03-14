@@ -6,6 +6,7 @@ export const frontendRoutes = {
   PORTFOLIO: "/portfolio",
   LOGIN: "/login",
   REGISTER: "/register",
+  ADMIN: "/admin",
   ADD_AVAIBILITY: "/add-availability",
   BOOKING: "/booking",
   PROVIDER_DASHBOARD: "/dashboard2",
