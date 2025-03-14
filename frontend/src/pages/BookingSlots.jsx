@@ -19,8 +19,6 @@ const ClientBookingPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const service = queryParams.get('service');
 
-
-
     // Fetch availabilities from the API
     const fetchAvailabilities = async () => {
         try {

@@ -1,4 +1,4 @@
-import { useParams,useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { FaStar, FaPhoneAlt, FaEnvelope, FaLinkedin, FaMapMarkerAlt, FaTimes } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { Carousel } from "@material-tailwind/react";
@@ -20,7 +20,7 @@ export default function PortfolioPage() {
     // Fetch provider data based on the provider ID
     const fetchProvider = async () => {
       try {
-        const response = await axios.get(`http://localhost:8083/api/provider/profile/${Id}?service=${service}`,{
+        const response = await axios.get(`http://localhost:8083/api/provider/profile/${Id}?service=${service}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,6 +52,8 @@ export default function PortfolioPage() {
   const closeCarousel = () => {
     setCarouselOpen(false);
   };
+
+  console.log(provider.price);
 
   return (
     <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
@@ -144,6 +146,7 @@ export default function PortfolioPage() {
         <div className="text-center">
           <Link
             to={`/booking/${provider.id}?service=${provider.service}`}
+            //state={{ price: provider.price }}
             className="inline-block py-3 px-8 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-md hover:bg-gradient-to-l transition-all"
           >
             Book {provider.firstName} {provider.lastName}
