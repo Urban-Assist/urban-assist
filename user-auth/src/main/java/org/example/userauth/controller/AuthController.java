@@ -90,7 +90,9 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
         User existingUser = userRepository.findByEmail(userDetails.getUsername());
-        
+        if(existingUser.getVerified() == false) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not verified");
+        }
         // Generate JWT token
         final String jwt = jwtUtil.generateToken(userDetails);
         

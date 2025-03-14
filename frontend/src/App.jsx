@@ -8,6 +8,8 @@ import { frontendRoutes } from "./utils/frontendRoutes";
 // import { loadStripe } from '@stripe/stripe-js';
 import LoadAnimation from "./components/LoadAnimation";
 import Header from "./components/Header";
+import AdminHeader from "./components/AdminHeader";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // const stripePromise = loadStripe('pk_test_51QpEzSBzR4uJF8SUuTzrlJFalbN5SvRzEGDPX7icdx5xVh0Kid8GzKMaRbfbv8hcKIDxkIuxecJpIKpfqZsbuqhF00NxiKnbXu');
 
@@ -54,6 +56,10 @@ function App() {
         <Route
           path={frontendRoutes.DASHBOARD}
           element={<IncludeNavbar Component={UserDashboard} />}
+        />
+        <Route
+          path={frontendRoutes.ADMIN}
+          element={<IncludeAdminNavbar Component={AdminDashboard} />}
         />
         <Route
           path={`${frontendRoutes.SERVICE}/:service`}
@@ -109,4 +115,14 @@ const IncludeNavbar = ({ Component }) => (
     </Suspense>
   </>
 );
+
+const IncludeAdminNavbar = ({ Component }) => (
+  <>
+    <AdminHeader />
+    <Suspense fallback={<LoadAnimation />}>
+      <Component />
+    </Suspense>
+  </>
+);
+
 export default App;

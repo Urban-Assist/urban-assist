@@ -52,4 +52,9 @@ public class ProviderManagementController {
         return ResponseEntity.ok(updatedProfile);
     }
 
+ 
+    // to do : end point to mark the provider as certified
+    
+    // to do : end point to delete the provider profile
+ 
 }
