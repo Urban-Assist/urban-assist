@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
+import axios from "axios";
 import { CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const Payment = () => {
@@ -9,20 +10,42 @@ const Payment = () => {
     const stripe = useStripe();
     const elements = useElements();
 
+    const [price, setPrice] = useState(0);
+
     const selectedSlot = location.state?.selectedSlot;
     const [loading, setLoading] = useState(false);
     const [cardName, setCardName] = useState("");
-    // const [cardNumberDisplay, setCardNumberDisplay] = useState("•••• •••• •••• ••••");
-    // const [expiryDisplay, setExpiryDisplay] = useState("MM/YY");
+    //const [cardNumberDisplay, setCardNumberDisplay] = useState("•••• •••• •••• ••••");
+    //const [expiryDisplay, setExpiryDisplay] = useState("MM/YY");
     const [message, setMessage] = useState("");
     const [paymentSuccess, setPaymentSuccess] = useState(false);
-    if (!selectedSlot) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <p className="text-xl font-bold">No booking information available.</p>
-            </div>
-        );
-    }
+    useEffect(() => {
+        if (!selectedSlot) {
+            console.error("No booking information available.");
+            navigate("/");
+            return;
+        }
+
+        console.log("Selected Slot Data:", selectedSlot); // ✅ Debugging log
+
+        const fetchProviderPrice = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:8083/api/provider/profile/${selectedSlot.providerId}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+                console.log("Provider API Response:", response.data); // ✅ Debugging API Response
+
+                setPrice(response.data.price); // ✅ Set dynamic price
+            } catch (error) {
+                console.error("Error fetching provider price:", error);
+            }
+        };
+
+        fetchProviderPrice();
+    }, [selectedSlot]);
 
     const handleNameChange = (e) => setCardName(e.target.value);
 
@@ -68,7 +91,7 @@ const Payment = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                amount: 150,
+                amount: price,
                 currency: "usd",
                 paymentMethodId: paymentMethod.id,
             }),
@@ -127,7 +150,7 @@ const Payment = () => {
                     </div>
 
                     <h1 className="text-2xl font-bold mb-4">Complete Your booking</h1>
-                    <p className="text-sm opacity-90">Total amount: $150</p>
+                    <p className="text-sm opacity-90">Total amount: ${price}</p>
                 </div>
                 {/* <div className="mb-8">
           <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-xl">
