@@ -1,59 +1,55 @@
-import React from 'react'
+import React from "react";
 
 function HeroSection() {
   return (
     <>
-              <section className="min-h-[80vh] w-full bg-gradient-to-br bg-gradient-to-br from-cyan-50 via-pink-100 to-yellow-100 flex items-center justify-center px-4 mt-10">
+      <section 
+        className="min-h-[80vh] w-full bg-gradient-to-br from-cyan-50 via-pink-100 to-yellow-100 flex items-center justify-center px-4 mt-10"
+        aria-labelledby="hero-section-title"
+      >
         <div className="max-w-3xl mx-auto text-center space-y-6">
-          <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 text-sm font-medium rounded-full">
+          <span
+            className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 text-sm font-medium rounded-full"
+            aria-label="Urban Assist"
+          >
             Urban Assist
           </span>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight">
+          <h1 
+            id="hero-section-title"
+            className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight"
+          >
             <span className="font-serif italic">Quility</span> home service
             <br className="hidden sm:block" /> on demand
           </h1>
 
-          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+          <p 
+            id="hero-description"
+            className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+            aria-describedby="hero-description"
+          >
             Experienced, hand-picked Professionals to serve you at your doorstep
-
-
           </p>
-
-          {/* <div className="pt-4 flex justify-center relative">
-            <div className="relative w-64">
-              <select
-                className="w-full appearance-none rounded-full bg-white px-4 py-3 text-gray-700 shadow-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Select your city
-                </option>
-                <option value="new-york">New York</option>
-                <option value="los-angeles">Los Angeles</option>
-                <option value="chicago">Chicago</option>
-                <option value="houston">Houston</option>
-                <option value="phoenix">Phoenix</option>
-              </select>
-
-
-            </div>
-          </div> */}
-
         </div>
       </section>
 
-      <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
+      <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto" aria-labelledby="why-choose-title">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Urban Assist</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 id="why-choose-title" className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Why Choose Urban Assist
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto" aria-describedby="why-choose-description">
             We're committed to connecting you with verified service providers you can trust
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" role="list">
           {/* Trust Feature 1 */}
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center">
+          <div 
+            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center" 
+            role="listitem" 
+            aria-labelledby="feature-1-title"
+          >
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -70,14 +66,24 @@ function HeroSection() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Verified Providers</h3>
+            <h3 
+              id="feature-1-title"
+              className="text-xl font-semibold text-gray-900 mb-2"
+            >
+              Verified Providers
+            </h3>
             <p className="text-gray-600">
-              All service providers undergo a thorough verification process before being listed.
+              All service providers undergo a thorough verification process
+              before being listed.
             </p>
           </div>
 
           {/* Trust Feature 2 */}
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center">
+          <div 
+            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center" 
+            role="listitem" 
+            aria-labelledby="feature-2-title"
+          >
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,12 +100,23 @@ function HeroSection() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Flexible Scheduling</h3>
-            <p className="text-gray-600">Book services at your convenience with our easy scheduling system.</p>
+            <h3 
+              id="feature-2-title"
+              className="text-xl font-semibold text-gray-900 mb-2"
+            >
+              Flexible Scheduling
+            </h3>
+            <p className="text-gray-600">
+              Book services at your convenience with our easy scheduling system.
+            </p>
           </div>
 
           {/* Trust Feature 3 */}
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center">
+          <div 
+            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center" 
+            role="listitem" 
+            aria-labelledby="feature-3-title"
+          >
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,12 +133,24 @@ function HeroSection() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure Payments</h3>
-            <p className="text-gray-600">All transactions are secure and only processed after service approval.</p>
+            <h3 
+              id="feature-3-title"
+              className="text-xl font-semibold text-gray-900 mb-2"
+            >
+              Secure Payments
+            </h3>
+            <p className="text-gray-600">
+              All transactions are secure and only processed after service
+              approval.
+            </p>
           </div>
 
           {/* Trust Feature 4 */}
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center">
+          <div 
+            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center" 
+            role="listitem" 
+            aria-labelledby="feature-4-title"
+          >
             <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,13 +167,21 @@ function HeroSection() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Ratings & Reviews</h3>
-            <p className="text-gray-600">Transparent feedback system to help you choose the best service providers.</p>
+            <h3 
+              id="feature-4-title"
+              className="text-xl font-semibold text-gray-900 mb-2"
+            >
+              Ratings & Reviews
+            </h3>
+            <p className="text-gray-600">
+              Transparent feedback system to help you choose the best service
+              providers.
+            </p>
           </div>
         </div>
       </section>
     </>
-  )
+  );
 }
 
-export default HeroSection
+export default HeroSection;
