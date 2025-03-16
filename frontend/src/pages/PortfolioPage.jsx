@@ -15,6 +15,7 @@ export default function PortfolioPage() {
   const [isCarouselOpen, setCarouselOpen] = useState(false); // State to manage carousel visibility
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // State to track current image
   const token = localStorage.getItem("token");
+  const server = import.meta.env.VITE_SERVER;
 
   useEffect(() => {
     // Fetch provider data based on the provider ID
@@ -35,6 +36,26 @@ export default function PortfolioPage() {
       }
     };
 
+    //fetch reviews for the provider
+
+    const fetchReviews = async () =>{
+
+      try {
+        console.log(server);
+        const response = await axios.get(server+`/reviews/getReviews/${Id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.status === 200) {
+          throw new Error("Provider not found");
+        }
+        const data = response.data;
+      } catch (error) {
+        console.error("Error fetching provider reviews:", error);
+      }
+    }
+  
     fetchProvider();
   }, [Id]);
 
