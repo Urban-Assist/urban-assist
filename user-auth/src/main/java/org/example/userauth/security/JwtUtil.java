@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 public class JwtUtil {
 
     // Using a consistent encoding approach with Node.js
-    // private final String SECRET_KEY = new String(Base64.getEncoder().encode("vaibhav".getBytes()));
-    private final String SECRET_KEY = "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c";
+    private final String SECRET_KEY = new String(Base64.getEncoder().encode("e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c".getBytes()));
+    //private final String SECRET_KEY = "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

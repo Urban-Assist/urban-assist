@@ -10,8 +10,8 @@ import  {authenticateJWT, authorizeRole} from "../middlewares/verify.js";
 router.route("/addReview").post(addReview);
 router.route("/providerDeleted").delete(deleteProvider);
 
-//to do : function to list all the reviews associated with a provider using the provider ID. 
-// use rabbitMQ
+//to do : function to list all the reviews associated with a provider using the provider ID.
+
 
 
 //End point to check authentication is working as expected or  not
