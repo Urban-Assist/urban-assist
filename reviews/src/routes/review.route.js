@@ -9,9 +9,7 @@ import  {authenticateJWT, authorizeRole} from "../middlewares/verify.js";
 //secured routes
 router.route("/addReview").post(authenticateJWT,authorizeRole(["user", "admin"]),addReview);
 router.route("/providerDeleted").delete(deleteProvider);
-
-//to do : function to list all the reviews associated with a provider using the provider ID.
-router.route("/getReviews/:providerID").get(authenticateJWT,authorizeRole(["provider","admin"]), getReviews);
+router.route("/getReviews/:providerID").get(authenticateJWT,authorizeRole(["provider","admin","user"]), getReviews);
 //to do : function to list all the reviews associated with a provider using the provider ID.
 
 

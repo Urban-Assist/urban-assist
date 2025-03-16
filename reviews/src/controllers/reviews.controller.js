@@ -7,7 +7,7 @@ const addReview = async (req, res) => {
     try {
          const {...value} = req.body;
         console.log("rest",value.review)
-        
+        //validate the required fields
         if (!value.providerID || !value.review || value.review === "") {
           console.log("providerID or the review is missing ❌")
           return res.status(400).json(
@@ -15,7 +15,8 @@ const addReview = async (req, res) => {
           );
              
         }
-        
+
+        //get the logged in user's ID
         const consumerID = req.user?.id;
         if (!consumerID) {
           return res.status(401).json(
@@ -23,8 +24,7 @@ const addReview = async (req, res) => {
           );
         }
             
-     
-
+     // If everythis goes well, create a new review in the database.(add the consumerID to the review )
         const newReview = await Review.create({
           ...value,
             consumerID ,
@@ -32,8 +32,9 @@ const addReview = async (req, res) => {
         });
         
         return res.status(201).json(
-            new ApiResponse(201, "Review created successfully", newReview)
+            new ApiResponse(201,newReview,"Review created successfully for the provider "+ value.providerID)
         );
+
     } catch (error) {
         throw new ApiError(500, "Failed to create review", error);
     }
