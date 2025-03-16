@@ -5,9 +5,10 @@ import amqp from 'amqplib';
 //Function to add a review
 const addReview = async (req, res) => {
     try {
-        const { providerID, review } = req.body;
+         const {...value} = req.body;
+        console.log("rest",value.review)
         
-        if (!providerID || !review || review === "") {
+        if (!value.providerID || !value.review || value.review === "") {
           console.log("providerID or the review is missing ❌")
           return res.status(400).json(
             new ApiResponse(400, null,"Provider ID and review content are required")
@@ -25,10 +26,9 @@ const addReview = async (req, res) => {
      
 
         const newReview = await Review.create({
-            providerID,
-            consumerID,
-            review,
-            rating: req.body.rating || null
+          ...value,
+            consumerID ,
+             
         });
         
         return res.status(201).json(
