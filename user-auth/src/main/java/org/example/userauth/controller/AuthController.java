@@ -1,4 +1,5 @@
 package org.example.userauth.controller;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -101,9 +102,9 @@ public class AuthController {
     }
 
     @GetMapping("/public/email-verification")
-    public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
+    public ResponseEntity<?> postMethodName(@RequestParam("token") String token , HttpServletRequest request) throws IOException {
           
-        userService.verifyEmail(token );
+        userService.verifyEmail(token,request );
         return ResponseEntity.ok("Email verified successfully");
     }
     
