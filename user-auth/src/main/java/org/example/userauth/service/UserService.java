@@ -63,16 +63,18 @@ public class UserService {
                     registeredUser.getFirstName(),
                     registeredUser.getLastName(),
                     registeredUser.getRole()
-            );
 
+            
+            );
+ //save email token
+ EmailConfirmation emailObject = new EmailConfirmation();
+ emailObject.setToken(token);
+ emailObject.setUser(user);
+ emailTokenRepository.save(emailObject);
             rabbitTemplate.convertAndSend(exchange, routingKey, profileDTO);
             System.out.println("Profile data sent to queue ✅");
 
-            //save email token
-            EmailConfirmation emailObject = new EmailConfirmation();
-            emailObject.setToken(token);
-            emailObject.setUser(user);
-            emailTokenRepository.save(emailObject);
+           
 
             System.out.println("Email token saved ✅");
 
@@ -103,6 +105,7 @@ public class UserService {
         // Add debug logging for database query
         System.out.println("Looking for token in database: " + token);
         EmailConfirmation emailToken = emailTokenRepository.findByToken(token);
+        System.out.println(emailToken);
         System.out.println("Database query result: " + (emailToken == null ? "No token found" : "Token found for user: " + emailToken.getUser().getEmail()));
         
         if (emailToken == null) {
@@ -133,7 +136,10 @@ public class UserService {
             return ResponseEntity.status(400).body(response);
         }
         // Delete token after successful verification
-        emailTokenRepository.delete(emailToken);
+        if(emailToken != null){
+            emailTokenRepository.delete(emailToken);
+
+        }
         
         System.out.println("Email verified successfully for user: " + user.getEmail());
         return ResponseEntity.ok().body("Email verified successfully ✅");
