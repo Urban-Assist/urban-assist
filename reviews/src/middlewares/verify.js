@@ -7,7 +7,7 @@ dotenv.config();
     const token = req.header('Authorization')?.split(' ')[1];
     // Convert secret to Buffer to match Java's byte encoding
 const JWT_SECRET= process.env.JWT_SECRET;
-    const jwt_secret = Buffer.from(JWT_SECRET, "utf-8");
+    const jwt_secret = Buffer.from(JWT_SECRET, "base64");
 
     if (!token) {
         throw new ApiError(401, 'Unauthorized');
