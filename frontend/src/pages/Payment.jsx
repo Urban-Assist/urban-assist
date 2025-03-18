@@ -11,16 +11,24 @@ const Payment = () => {
     const elements = useElements();
 
     const [price, setPrice] = useState(0);
+    console.log(location.state)
+    const selectedSlot = location.state?.obj;
+    console.log("16")
+    console.log(selectedSlot.id);
 
-    const selectedSlot = location.state?.selectedSlot;
+    // const providerId = location.state?.providerId;
+    console.log(selectedSlot.providerId);
     const [loading, setLoading] = useState(false);
     const [cardName, setCardName] = useState("");
-    //const [cardNumberDisplay, setCardNumberDisplay] = useState("•••• •••• •••• ••••");
-    //const [expiryDisplay, setExpiryDisplay] = useState("MM/YY");
+    const [cardNumberDisplay, setCardNumberDisplay] = useState("•••• •••• •••• ••••");
+    const [expiryDisplay, setExpiryDisplay] = useState("MM/YY");
     const [message, setMessage] = useState("");
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     useEffect(() => {
-        if (!selectedSlot) {
+
+        console.log("Provider ID:", selectedSlot.providerId);
+
+        if (!selectedSlot.selectedSlote) {
             console.error("No booking information available.");
             navigate("/");
             return;
@@ -30,8 +38,11 @@ const Payment = () => {
 
         const fetchProviderPrice = async () => {
             try {
+
+                const token = localStorage.getItem("token");
+
                 const response = await axios.get(
-                    `http://localhost:8083/api/provider/profile/${selectedSlot.providerId}`,
+                    `http://localhost:8083/api/provider/profile/${selectedSlot.selectedSlot.providerId}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
@@ -86,8 +97,9 @@ const Payment = () => {
             setLoading(false);
             return;
         }
+        console.log(`${import.meta.env.VITE_BASE_URL_BACKEND}/api/payments/card-pay}`);
 
-        const response = await fetch(`${BASE_URL_BACKEND}/api/payments/card-pay`, {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL_BACKEND}/api/payments/card-pay`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -96,6 +108,8 @@ const Payment = () => {
                 paymentMethodId: paymentMethod.id,
             }),
         });
+
+        console.log(price);
 
         const data = await response.json();
         setLoading(false);

@@ -18,7 +18,11 @@ const ClientBookingPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const service = queryParams.get('service');
-
+    console.log(Id);
+    const obj = {
+        selectedSlote: selectedSlot,
+        providerId: Id
+    }
     // Fetch availabilities from the API
     const fetchAvailabilities = async () => {
         try {
@@ -43,7 +47,7 @@ const ClientBookingPage = () => {
                 service: slot.service,
                 // Keep the original data too for reference
                 originalStartTime: slot.startTime,
-                originalEndTime: slot.endTime
+                originalEndTime: slot.endTime,
             }));
 
             console.log("Transformed data:", transformedData);
@@ -78,7 +82,7 @@ const ClientBookingPage = () => {
     // Handle booking confirmation
     const handleConfirmBooking = () => {
         if (!selectedSlot) return;
-        navigate("/payment", { state: { selectedSlot } });
+        navigate("/payment", { state: { obj } });
     };
 
     // Close the confirmation modal and reset the selected slot
