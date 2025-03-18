@@ -115,11 +115,11 @@ const deleteProvider = async (req, res) => {
 
       //if there is no reviews in the database for the given providerID 
       if(!reviews){
-        return res.status(404).json(new ApiResponse(404,null,"No reviews found for the provider"+req.providerID))
+        return res.status(404).json(new ApiResponse(404,null,"No reviews found for the provider: "+providerID))
       }
       //else send the response containing 
       else{
-        return res.status(200).json(new ApiResponse(200,reviews,"Reviews found for the provider"+req.providerID))
+        return res.status(200).json(new ApiResponse(200,reviews,"Reviews found for the provider: "+providerID))
       }
     
     } catch (error) {
