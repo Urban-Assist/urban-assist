@@ -1,4 +1,4 @@
-# Urban Assist - Project Documentation
+# Urban Assist
 
 ## 📌 Problem Statement
 Urban Assist addresses the challenge of fragmented service discovery and booking in urban environments. Our platform streamlines the process of finding, booking, and paying for various urban services through a unified, secure, and user-friendly interface. By connecting service providers with consumers, Urban Assist eliminates inefficiencies in service discovery, reduces booking friction, and creates a reliable marketplace for urban services.
