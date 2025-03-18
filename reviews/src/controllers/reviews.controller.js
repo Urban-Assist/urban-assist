@@ -1,8 +1,9 @@
 import { Review } from '../model/Review.js';
 import {ApiError} from '../utils/ApiError.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
- import axios from 'axios';
+import axios from 'axios';
 import amqp from 'amqplib';
+import { fetchUserProfile, fetchMultipleUserProfiles } from '../utils/fetchUserProfile.js';
 //Function to add a review
 const addReview = async (req, res) => {
     try {
@@ -97,58 +98,65 @@ const deleteProvider = async (req, res) => {
     }
   };
 
-  const getReviews = async(req,res)=> {
+const getReviews = async(req, res) => {
+  try {
+    const { providerID } = req.params;
+    console.log("providerID", providerID);
+    if (!providerID) {
+      return res.status(400).json(new ApiResponse(400, null, "Provider Id is missing"));
+    }
 
-    try {
-      //if there is no providerId in the request
-      const {providerID} = req.params;
-      console.log("providerID",providerID)
-      if(!providerID){
-        return res.status(400).json(new ApiResponse(400,null,"Provider Id is missing"))
-      }
+    const reviews = await Review.findAll({
+      where: { providerID: providerID },
+      order: [['rating', 'DESC']],
+      limit: 5
+    });
 
-      //fetch all the reviews associated with the ID  from the database 
-      const reviews = await Review.findAll({
-        where: {providerID: providerID},
-        order: [['rating', 'DESC']],
-        limit: 5
+    if (!reviews || reviews.length === 0) {
+      return res.status(404).json(new ApiResponse(404, null, "No reviews found for the provider: " + providerID));
+    } else {
+      const providerID = reviews.map(review => review.providerID);
+      const userProfiles = await fetchMultipleUserProfiles(providerID, req.headers.authorization);
+
+      const reviewsWithUserDetails = reviews.map(review => {
+        return {
+          ...review.toJSON(),
+          userDetails: userProfiles[review.providerID] || null
+        };
       });
 
-      //if there is no reviews in the database for the given providerID 
-      if(!reviews){
-        return res.status(404).json(new ApiResponse(404,null,"No reviews found for the provider: "+providerID))
-      }
-      //else send the response containing 
-      else{
-        const userDetails = await Promise.all(reviews.map(async(review) => {
-          try {
-            // Add authentication headers to your request
-             const userResponse = await axios.get(process.env.USER_MANAGEMENT_SERVICE+`/api/profile/details/${review.consumerID}`, {
-              headers: {
-                // If the profile service uses JWT, pass the token from the request
-                'Authorization': req.headers.authorization
-              }
-            });
-            
-            return {
-              ...review.toJSON(),
-              userDetails: userResponse.data
-            };
-          } catch (apiError) {
-            console.error(`Error fetching user details for ID ${review.consumerID}:`, apiError.message);
-            // Return the review without user details if the API call fails
-            return {
-              ...review.toJSON(),
-              userDetails: null // Or provide some default/placeholder data
-            };
-          }
-        }));
-        return res.status(200).json(new ApiResponse(200,userDetails,"Reviews found for the provider: "+providerID))
+      return res.status(200).json(
+        new ApiResponse(200, reviewsWithUserDetails, "Reviews found for the provider: " + providerID)
+      );
+    }
+  } catch (error) {
+    throw new ApiError(500, "Failed to get reviews, Something went wrong", error);
+  }
+};
 
-      }
-     
-    } catch (error) {
-      throw new ApiError(500,"Failed to get reviews, Something went wrong",error)
-    }
-    }
-export{addReview,deleteProvider, getReviews};
+ 
+
+const getRandomReviews = async(req, res) => {
+  try {
+    const reviews = await Review.findAll({
+      order: [['rating', 'DESC']],
+      limit: 5
+    });
+    console.log("reviews", reviews);
+
+    const consumerID = reviews.map(review => review.consumerID);
+    const userProfiles = await fetchMultipleUserProfiles(consumerID, req.headers.authorization);
+
+    const reviewsWithUserDetails = reviews.map(review => {
+      return {
+        ...review.toJSON(),
+        userDetails: userProfiles[review.consumerID] || null
+      };
+    });
+    return res.status(200).json(new ApiResponse(200, reviewsWithUserDetails, "Random reviews found"));
+  } catch (error) {
+    throw new ApiError(500, "Failed to get random reviews", error);
+  }
+};
+
+export { addReview, deleteProvider, getReviews, getRandomReviews };
