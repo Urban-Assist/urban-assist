@@ -148,7 +148,7 @@ export default function ServiceProviders() {
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 md:px-8 py-10 w-[60vw]">
+            <div className="container mx-auto px-4 md:px-8 py-10 md:w-full lg:w-[80vw] xl:w-[60vw]">
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[1, 2, 3, 4, 5, 6].map((item) => (

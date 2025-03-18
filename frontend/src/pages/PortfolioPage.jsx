@@ -57,7 +57,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="flex flex-col items-center p-4 sm:p-5 lg:p-12 min-h-screen mt-10">
-      <div className="w-full mx-auto px-10 py-12 bg-gray-50">
+      <div className="w-full mx-auto px-10 py-12 ">
         {/* Profile Header */}
         <div className="flex items-center space-x-6 mb-10">
           <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-md">
@@ -147,7 +147,7 @@ export default function PortfolioPage() {
           <Link
             to={`/booking/${provider.id}?service=${provider.service}`}
             //state={{ price: provider.price }}
-            className="inline-block py-3 px-8 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-md hover:bg-gradient-to-l transition-all"
+            className="inline-block py-3 px-8 text-white bg-indigo-500 rounded-lg shadow-md hover:bg-gradient-to-l transition-all"
           >
             Book {provider.firstName} {provider.lastName}
           </Link>

@@ -91,7 +91,8 @@ const RegistrationPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
+        <div className=" flex items-center h-[100vh] justify-center bg-[url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
+            
             <div className="bg-white p-8 rounded-3xl shadow-2xl w-110 transform transition-transform hover:scale-105 duration-500">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-extrabold text-gray-800 mb-2">Create account</h1>
@@ -111,6 +112,7 @@ const RegistrationPage = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                <div className='flex space-x-4'>
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             First Name
@@ -138,6 +140,7 @@ const RegistrationPage = () => {
                             required
                             onChange={handleChange}
                         />
+                    </div>
                     </div>
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -202,6 +205,7 @@ const RegistrationPage = () => {
                     </p>
                 </div>
             </div>
+            
         </div>
     );
 };
