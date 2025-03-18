@@ -23,6 +23,16 @@ const Review = db.define("Review", {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
 });
 
 export { Review };

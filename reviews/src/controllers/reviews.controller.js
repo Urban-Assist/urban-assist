@@ -4,17 +4,39 @@ import {ApiResponse} from '../utils/ApiResponse.js';
 import amqp from 'amqplib';
 //Function to add a review
 const addReview = async (req, res) => {
-    //get the data from request body.
-    const review = req.body;
-    
     try {
-        const newReview = await Review.create(review);
-        return res
-        .status(201)
-        .json(new ApiResponse(201,"Review created successfully",newReview));
-      } catch (error) {
-        console.error(error);
-        throw new ApiError(400,"Something went wrong while creating review.",error)  
+         const {...value} = req.body;
+        console.log("rest",value.review)
+        //validate the required fields
+        if (!value.providerID || !value.review || value.review === "") {
+          console.log("providerID or the review is missing ❌")
+          return res.status(400).json(
+            new ApiResponse(400, null,"Provider ID and review content are required")
+          );
+             
+        }
+
+        //get the logged in user's ID
+        const consumerID = req.user?.id;
+        if (!consumerID) {
+          return res.status(401).json(
+            new ApiResponse(401,null, "User authentication required")
+          );
+        }
+            
+     // If everythis goes well, create a new review in the database.(add the consumerID to the review )
+        const newReview = await Review.create({
+          ...value,
+            consumerID ,
+             
+        });
+        
+        return res.status(201).json(
+            new ApiResponse(201,newReview,"Review created successfully for the provider "+ value.providerID)
+        );
+
+    } catch (error) {
+        throw new ApiError(500, "Failed to create review", error);
     }
 }
 
@@ -23,7 +45,6 @@ const deleteProvider = async (req, res) => {
     const QUEUE_NAME= process.env.RABIT_MQ_NAME;
     const QUEUE_URL= process.env.RABIT_MQ_URL;
     try {
-
       // Connect to the RabbitMQ server
       const connection = await amqp.connect(QUEUE_URL);
       const channel = await connection.createChannel();
@@ -74,4 +95,35 @@ const deleteProvider = async (req, res) => {
       throw new ApiError(400,"Something went wrong while deleting provider.",error)
     }
   };
-export{addReview,deleteProvider};
+
+  const getReviews = async(req,res)=> {
+
+    try {
+      //if there is no providerId in the request
+      const {providerID} = req.params;
+      console.log("providerID",providerID)
+      if(!providerID){
+        return res.status(400).json(new ApiResponse(400,null,"Provider Id is missing"))
+      }
+
+      //fetch all the reviews associated with the ID  from the database 
+      const reviews = await Review.findAll({
+        where: {providerID: providerID},
+        order: [['rating', 'DESC']],
+        limit: 5
+      });
+
+      //if there is no reviews in the database for the given providerID 
+      if(!reviews){
+        return res.status(404).json(new ApiResponse(404,null,"No reviews found for the provider: "+providerID))
+      }
+      //else send the response containing 
+      else{
+        return res.status(200).json(new ApiResponse(200,reviews,"Reviews found for the provider: "+providerID))
+      }
+    
+    } catch (error) {
+      throw new ApiError(500,"Failed to get reviews, Something went wrong",error)
+    }
+    }
+export{addReview,deleteProvider, getReviews};
