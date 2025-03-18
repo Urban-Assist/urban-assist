@@ -97,8 +97,8 @@ const SkeletonCard = () => (
 
 export default function ServiceCards({ title }) {
   const token = localStorage.getItem("token");
-  const decoded = jwtDecode(token);
-  const role = decoded.roles[0];
+  const decoded = token ? jwtDecode(token) : null;
+  const role = decoded?.roles[0];
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -115,6 +115,9 @@ export default function ServiceCards({ title }) {
   useEffect(() => {
     const fetchServices = async () => {
       try {
+
+        if(token == null) navigate("/login");
+
         setLoading(true);
         const serviceURL = import.meta.env.VITE_ADMIN_SERVER;
         const config = { headers: { Authorization: `Bearer ${token}` } };

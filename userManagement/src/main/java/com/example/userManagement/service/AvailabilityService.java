@@ -67,10 +67,11 @@ public class AvailabilityService {
     public void deleteAvailability(Long id) {
         // Get the current user's email from the security context
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
         // Find the provider using their email
-        ProviderProfile provider = providerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Provider not found"));
+        boolean providerExists = providerRepository.existsByEmail(email);
+        if (!providerExists) {
+            throw new RuntimeException("Provider not found");
+        }
 
         // Retrieve the availability entity by ID
         Availability availability = availabilityRepository.findById(id)

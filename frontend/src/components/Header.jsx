@@ -9,14 +9,14 @@ const Header = () => {
     const isActive = location.pathname === path;
     return `${
       isActive
-        ? "border-blue-500 text-gray-900 font-semibold "
-        : "border-transparent text-gray-900 hover:text-gray-900 hover:border-blue-500 hover:font-bold "
+        ? "border-indigo-500 text-gray-900 font-semibold "
+        : "border-transparent text-gray-900 hover:text-gray-900 hover:border-indigo-500 hover:font-bold "
     } inline-flex items-center px-3 pt-1 border-b-2 text-lg font-medium transition-colors duration-200 `;
   };
 
   return (
-    <header className="h-16 sm:h-20 flex items-center bg-[rgb(252,250,250)] font-montserrat shadow-md fixed top-0 left-0 w-full z-50">
-      <div className="container mx-auto px-6 sm:px-12 flex items-center justify-between">
+    <header className="h-16 sm:h-20 flex items-center bg-[rgb(252,250,250)] font-montserrat shadow-sm fixed top-0 left-0 w-full z-50">
+      <div className="container mx-auto px-4 sm:px-12 flex items-center justify-between">
         {/* Logo */}
         <Link to={frontendRoutes.HOME} className="no-underline">
           <div className="font-black text-blue-900 text-2xl flex items-center">
