@@ -60,7 +60,7 @@ export default function Footer() {
           </div>
 
           {/* Contact Bar */}
-          <div className="bg-gray-100 py-6 border-t border-gray-200">
+          <div className=" py-6">
             <div className="max-w-7xl mx-auto px-4 md:px-8">
               <div className="flex flex-col md:flex-row justify-center items-center gap-4">
                 <div className="flex flex-col md:flex-row items-center gap-6">
@@ -76,7 +76,7 @@ export default function Footer() {
           </div>
 
           {/* Copyright */}
-          <div className="bg-gray-900 py-6">
+          <div className=" py-6">
             <p className="text-gray-400 text-sm text-center">© {new Date().getFullYear()} Urban Assist. All rights reserved.</p>
           </div>
         </div>
