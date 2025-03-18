@@ -184,12 +184,12 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="w-full mx-auto px-10 py-12 bg-gray-50 min-h-screen mt-10">
+    <div className="md:w-full lg:w-[60vw] mx-auto px-10 py-12 bg-gray-50 min-h-screen mt-10">
       {/* Edit Button */}
       <div className="flex justify-end mb-6">
         <button
           onClick={() => (isEditing ? saveChanges() : setIsEditing(true))}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="flex items-center space-x-2 px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600"
         >
           {isEditing ? <FaSave /> : <FaEdit />}
           <span>{isEditing ? "Save Changes" : "Edit Portfolio"}</span>
@@ -198,7 +198,7 @@ export default function PortfolioPage() {
 
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row items-center md:space-x-6 mb-10">
-        <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-md mb-4 md:mb-0">
+        <div className="relative w-28 h-26 rounded-full overflow-hidden shadow-sm mb-4 md:mb-0">
           <img
             src={formData.profilePic || "https://via.placeholder.com/150"}
             alt={formData.firstName || "Profile"}
@@ -383,18 +383,9 @@ export default function PortfolioPage() {
           </div>
           <div className="flex items-center space-x-4">
             <FaEnvelope className="text-green-500" />
-            {isEditing ? (
-              <input
-                type="email"
-                name="email"
-                value={formData.email || ""}
-                onChange={handleInputChange}
-                placeholder="Email address"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              />
-            ) : (
+            
               <span>{formData.email || "Email not provided"}</span>
-            )}
+            
           </div>
           <div className="flex items-center space-x-4">
             <FaLinkedin className="text-blue-600" />
