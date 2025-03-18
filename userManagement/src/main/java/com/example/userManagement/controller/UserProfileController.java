@@ -18,6 +18,12 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
+    @GetMapping("/details/{userID}")
+    public ResponseEntity<?> getUserDetails(@PathVariable String userID) {
+        UserProfileDTO userProfileDTO = userProfileService.getUserDetails(userID);
+        return ResponseEntity.ok(userProfileDTO);
+    }
+
     @GetMapping
     public ResponseEntity<UserProfileDTO> getCurrentUserProfile() {
         return ResponseEntity.ok(userProfileService.getCurrentUserProfile());
