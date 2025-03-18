@@ -59,6 +59,12 @@ public class UserProfileService {
         }
     }
 
+
+    public UserProfileDTO getUserDetails(String userID) {
+        UserProfile userProfile = userProfileRepository.findById(userID)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+        return convertToDTO(userProfile);
+    }
     private UserProfileDTO convertToDTO(UserProfile userProfile) {
         UserProfileDTO dto = new UserProfileDTO();
         BeanUtils.copyProperties(userProfile, dto);
