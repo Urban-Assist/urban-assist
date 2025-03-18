@@ -117,7 +117,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="bg-gray-100 min-h-screen py-12">
-      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="max-w-5xl mx-auto bg-white rounded-xl overflow-hidden">
         {/* Hero Section */}
         <div className="relative h-64 bg-gradient-to-r from-cyan-100 via-pink-100 to-yellow-100">
           <div className="absolute -bottom-16 left-12">
