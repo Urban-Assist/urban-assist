@@ -140,7 +140,7 @@ const getRandomReviews = async(req, res) => {
   try {
     const reviews = await Review.findAll({
       order: [['rating', 'DESC']],
-      limit: 5
+      limit: 3
     });
     console.log("reviews", reviews);
 
