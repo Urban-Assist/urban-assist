@@ -1,6 +1,7 @@
 import { Review } from '../model/Review.js';
 import {ApiError} from '../utils/ApiError.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
+ import axios from 'axios';
 import amqp from 'amqplib';
 //Function to add a review
 const addReview = async (req, res) => {
@@ -119,9 +120,33 @@ const deleteProvider = async (req, res) => {
       }
       //else send the response containing 
       else{
-        return res.status(200).json(new ApiResponse(200,reviews,"Reviews found for the provider: "+providerID))
+        const userDetails = await Promise.all(reviews.map(async(review) => {
+          try {
+            // Add authentication headers to your request
+             const userResponse = await axios.get(process.env.USER_MANAGEMENT_SERVICE+`/api/profile/details/${review.consumerID}`, {
+              headers: {
+                // If the profile service uses JWT, pass the token from the request
+                'Authorization': req.headers.authorization
+              }
+            });
+            
+            return {
+              ...review.toJSON(),
+              userDetails: userResponse.data
+            };
+          } catch (apiError) {
+            console.error(`Error fetching user details for ID ${review.consumerID}:`, apiError.message);
+            // Return the review without user details if the API call fails
+            return {
+              ...review.toJSON(),
+              userDetails: null // Or provide some default/placeholder data
+            };
+          }
+        }));
+        return res.status(200).json(new ApiResponse(200,userDetails,"Reviews found for the provider: "+providerID))
+
       }
-    
+     
     } catch (error) {
       throw new ApiError(500,"Failed to get reviews, Something went wrong",error)
     }

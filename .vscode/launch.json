@@ -14,7 +14,7 @@
                 "DB_PASSWORD": "admin@vaibhav",
                 "DB_USERNAME": "root",
                 "AUTH_SERVER_PORT": 9002,
-                "DB_URL": "jdbc:mysql://localhost:3306/management",
+                "DB_URL": "jdbc:mysql://localhost:3306/demo",
                 "EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
             }
         },
