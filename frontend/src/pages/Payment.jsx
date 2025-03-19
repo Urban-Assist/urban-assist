@@ -11,6 +11,7 @@ const Payment = () => {
     const elements = useElements();
 
     const [price, setPrice] = useState(0);
+    const [providerData, setProviderData] = useState(null);  // Add this state to store provider data
 
     const { selectedSlot, Id, service } = location.state;
 
@@ -41,6 +42,7 @@ const Payment = () => {
                 console.log("Provider API Response:", response.data); // ✅ Debugging API Response
 
                 setPrice(response.data.price); // ✅ Set dynamic price
+                setProviderData(response.data); // Store the complete provider data
             } catch (error) {
                 console.error("Error fetching provider price:", error);
             }
@@ -89,13 +91,33 @@ const Payment = () => {
             return;
         }
 
-        const response = await fetch(`${BASE_URL_BACKEND}/api/payments/card-pay`, {
+        const response = await fetch(`${import.meta.env.BASE_URL_BACKEND}/api/payments/card-pay`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify({
-                amount: price,
-                currency: "usd",
-                paymentMethodId: paymentMethod.id,
+                user: {
+                    id: localStorage.getItem('userId'),
+                    service: service,
+                    providerId: Id,
+                    provider: providerData,  // Include the complete provider data
+                    slot: {
+                        date: selectedSlot.date,
+                        startTime: selectedSlot.startTime,
+                        endTime: selectedSlot.endTime
+                    }
+                },
+                card: {
+                    cardNumberElement,
+                    cardExpiryElement,
+                    cardCvcElement,
+                    amount: price,
+                    currency: "usd",
+                    paymentMethodId: paymentMethod.id,
+                    cardholderName: cardName
+                }
             }),
         });
 
