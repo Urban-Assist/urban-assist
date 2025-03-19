@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -137,6 +138,26 @@ public class ProviderProfileService {
 
         System.out.println(providerProfile);
         return convertToDTO(providerProfile);
+    }
+
+    public List<ProviderProfileDTO> getPendingCertificationProviders() {
+        // Find all providers where certified = false
+        List<ProviderProfile> pendingProviders = providerProfileRepository.findByCertified(false);
+        
+        // Convert entities to DTOs
+        return pendingProviders.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+    }
+    
+    public List<ProviderProfileDTO> getVerifiedProviders() {
+        // Find all providers where certified = true
+        List<ProviderProfile> verifiedProviders = providerProfileRepository.findByCertified(true);
+        
+        // Convert entities to DTOs
+        return verifiedProviders.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
 
     private ProviderProfileDTO convertToDTO(ProviderProfile profile) {
