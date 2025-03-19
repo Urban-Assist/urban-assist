@@ -15,13 +15,13 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-const MyBookings = ({ userRole = 'customer' }) => {
+const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('upcoming');
   const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
+  const userRole = localStorage.getItem('role');
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -31,7 +31,7 @@ const MyBookings = ({ userRole = 'customer' }) => {
         // Adjust the API endpoint based on user role
 
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_JAVA_URL}/api/booking?role=${role}`,
+          `${import.meta.env.VITE_SERVER_JAVA_URL}/api/booking?role=${userRole}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
