@@ -12,13 +12,17 @@ const Payment = () => {
 
     const [price, setPrice] = useState(0);
 
-    const selectedSlot = location.state?.selectedSlot;
+    const { selectedSlot, Id, service } = location.state;
+
     const [loading, setLoading] = useState(false);
     const [cardName, setCardName] = useState("");
     //const [cardNumberDisplay, setCardNumberDisplay] = useState("•••• •••• •••• ••••");
     //const [expiryDisplay, setExpiryDisplay] = useState("MM/YY");
     const [message, setMessage] = useState("");
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
         if (!selectedSlot) {
             console.error("No booking information available.");
@@ -26,12 +30,10 @@ const Payment = () => {
             return;
         }
 
-        console.log("Selected Slot Data:", selectedSlot); // ✅ Debugging log
-
         const fetchProviderPrice = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8083/api/provider/profile/${selectedSlot.providerId}`,
+                    `http://localhost:8083/api/provider/profile/${Id}?service=${service}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
