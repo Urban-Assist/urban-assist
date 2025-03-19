@@ -43,4 +43,4 @@ const Transactions = db.define("Transactions", {
   },
 });
 
-module.exports = { CustomerMapping };
+module.exports = { Transactions };
