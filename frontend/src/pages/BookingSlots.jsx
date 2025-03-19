@@ -87,7 +87,7 @@ const ClientBookingPage = () => {
   // Handle booking confirmation
   const handleConfirmBooking = () => {
     if (!selectedSlot) return;
-    navigate("/payment", { state: { selectedSlot } });
+    navigate("/payment", { state: { selectedSlot,Id,service } });
   };
 
   // Custom Date Cell Wrapper to highlight dates with available slots

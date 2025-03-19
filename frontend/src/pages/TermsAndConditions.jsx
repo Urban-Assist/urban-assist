@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ProviderSidenav from "../components/ProviderSidenav";
-import bg from '../assets/terms-cond-bg.png';
+ import bg from '../assets/terms-cond-bg.png';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 

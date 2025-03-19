@@ -68,10 +68,13 @@ const Payment = () => {
     const handlePayment = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setMessage(""); // Clear any previous messages
+
+        console.log("Payment attempt started");
 
         if (!stripe || !elements) {
             setMessage("Stripe not loaded.");
-            setLoading(true);
+            setLoading(false);
             return;
         }
 
@@ -91,45 +94,51 @@ const Payment = () => {
             return;
         }
 
-        const response = await fetch(`${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/card-pay`, {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                user: {
-                    id: localStorage.getItem('userId'),
-                    service: service,
-                    providerId: Id,
-                    provider: providerData,  // Include the complete provider data
-                    slot: {
-                        date: selectedSlot.date,
-                        startTime: selectedSlot.startTime,
-                        endTime: selectedSlot.endTime
-                    }
+        try {
+            console.log("Sending payment request to:", `${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/card-pay`);
+            const response = await fetch(`${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/card-pay`, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
-                card: {
-                    cardNumberElement,
-                    cardExpiryElement,
-                    cardCvcElement,
-                    amount: price,
-                    currency: "usd",
-                    paymentMethodId: paymentMethod.id,
-                    cardholderName: cardName
-                }
-            }),
-        });
+                body: JSON.stringify({
+                    user: {
+                        id: localStorage.getItem('userId'),
+                        service: service,
+                        providerId: Id,
+                        provider: providerData,
+                        slot: {
+                            date: selectedSlot.date,
+                            startTime: selectedSlot.startTime,
+                            endTime: selectedSlot.endTime
+                        }
+                    },
+                    card: {
+                        amount: price,
+                        currency: "usd",
+                        paymentMethodId: paymentMethod.id,
+                        cardholderName: cardName
+                    }
+                }),
+            });
 
-        const data = await response.json();
-        setLoading(false);
-        if (data.success) {
-            setMessage("Payment successful!");
-            setPaymentSuccess(true); // Show confirmation modal
-        } else {
-            setMessage(`Payment failed: ${data.error}`);
+            console.log("Response received:", response);
+            const data = await response.json();
+            console.log("Response data:", data);
+            
+            setLoading(false);
+            if (data.success) {
+                setMessage("Payment successful!");
+                setPaymentSuccess(true);
+            } else {
+                setMessage(`Payment failed: ${data.error}`);
+            }
+        } catch (error) {
+            console.error("Payment request error:", error);
+            setMessage(`Payment request failed: ${error.message}`);
+            setLoading(false);
         }
-        // setMessage(data.success ? "Payment successful!" : `Payment failed: ${data.error}`);
     };
 
     return (
@@ -231,7 +240,7 @@ const Payment = () => {
                             className="w-full p-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
                             disabled={loading}
                         >
-                            {loading ? "Processing..." : "Pay $150"}
+                            {loading ? "Processing..." : `Pay $${price}`}
                         </button>
                         <div className="mt-6 flex items-center justify-center gap-4 text-xs text-gray-500">
                             <div className="flex items-center gap-1">
