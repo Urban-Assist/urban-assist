@@ -29,7 +29,7 @@ const ClientBookingPage = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `http://localhost:8083/api/availabilities/get`,
+        `${import.meta.env.VITE_SERVER_JAVA_URL}/api/availabilities/get`,
         { service: service, id: Id },
         {
           headers: {
@@ -37,7 +37,6 @@ const ClientBookingPage = () => {
           },
         }
       );
-
       // Transform the API response
       const transformedData = response.data.map(slot => ({
         _id: slot.id.toString(),
@@ -87,7 +86,7 @@ const ClientBookingPage = () => {
   // Handle booking confirmation
   const handleConfirmBooking = () => {
     if (!selectedSlot) return;
-    navigate("/payment", { state: { selectedSlot } });
+    navigate("/payment", { state: { selectedSlot,Id,service } });
   };
 
   // Custom Date Cell Wrapper to highlight dates with available slots

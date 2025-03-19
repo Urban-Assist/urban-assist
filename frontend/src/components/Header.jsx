@@ -34,7 +34,7 @@ const Header = () => {
             Book a Service
           </Link>
           <Link
-            to={frontendRoutes.HOME}
+            to={frontendRoutes.MYBOOKING}
             className={getNavLinkClass(frontendRoutes.EXAMPLE)}
           >
             My bookings

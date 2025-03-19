@@ -1,6 +1,7 @@
 // src/OAuthRedirectHandler.js
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 const OAuthRedirectHandler = () => {
   const location = useLocation();
@@ -14,7 +15,11 @@ const OAuthRedirectHandler = () => {
     if (token) {
       // Store the token in local storage
       localStorage.setItem('token', token);
-
+      
+      const decoded = token ? jwtDecode(token) : null;
+      const role = decoded?.roles[0];
+      console.log(role)
+      localStorage.setItem('role', role);
       // Redirect to the dashboard
       navigate('/dashboard');
     } else {

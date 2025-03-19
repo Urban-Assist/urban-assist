@@ -10,6 +10,7 @@ import LoadAnimation from "./components/LoadAnimation";
 import Header from "./components/Header";
 import AdminHeader from "./components/AdminHeader";
 import AdminDashboard from "./pages/AdminDashboard";
+import MyBookings from "./pages/MyBookings";
 
 const stripePromise = loadStripe('pk_test_51QnViyF1vLG8nlrHDfi0ryxde9fiAT2Mm3ND780vXmb3r7YbNZ2wPPrVMgAhUaT4h8UKbU8TTff6ed3woPYPYSrh007ojJgaVA');
 
@@ -61,6 +62,10 @@ function App() {
         <Route
           path={frontendRoutes.DASHBOARD}
           element={<IncludeNavbar Component={UserDashboard} />}
+        />
+        <Route
+          path={frontendRoutes.MYBOOKING}
+          element={<IncludeNavbar Component={MyBookings} />}
         />
         <Route
           path={frontendRoutes.ADMIN}

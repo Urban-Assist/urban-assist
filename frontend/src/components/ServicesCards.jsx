@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaTools, FaBroom, FaWrench, FaBolt, FaRecycle, FaHeart } from "react-icons/fa";
-import { jwtDecode } from "jwt-decode";
+
 
 // Define a consistent color and icon mapping
 const serviceStyles = {
@@ -97,8 +97,7 @@ const SkeletonCard = () => (
 
 export default function ServiceCards({ title }) {
   const token = localStorage.getItem("token");
-  const decoded = token ? jwtDecode(token) : null;
-  const role = decoded?.roles[0];
+  const role = localStorage.getItem("role");
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
