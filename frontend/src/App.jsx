@@ -25,6 +25,7 @@ const PortfolioMakerPage = React.lazy(() => import("./pages/PortfolioMaker"));
 const TermsAndConditions = React.lazy(() => import("./pages/TermsAndConditions"));
 const Payment = React.lazy(() => import("./pages/Payment"));
 const Setting = React.lazy(() => import("./pages/Setting"));
+const OAuthRedirectHandler = React.lazy(()=> import("./pages/OAuthRedirectHandler"));
 
 
 
@@ -35,6 +36,10 @@ function App() {
         <Route
           path={frontendRoutes.LOGIN}
           element={<ExcludeNavbar Component={Login} />}
+        />
+        <Route
+          path={frontendRoutes.REDIRECT}
+          element={<ExcludeNavbar Component={OAuthRedirectHandler} />}
         />
         <Route
           path={frontendRoutes.REGISTER}

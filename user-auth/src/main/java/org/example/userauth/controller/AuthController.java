@@ -1,4 +1,5 @@
 package org.example.userauth.controller;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,26 +22,22 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
- 
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
- 
- import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
- 
-
-
- 
 
 @RestController
 @RequestMapping("/auth-api")
-//for making end point which is accessible for the users = /auth-api/user
-//for making end point which is accessible for the admin = /auth-api/admin
-//for making end point which is accessible for the provider = /auth-api/provider
-//for making end point as open  use , just /auth-api/public/ENDPOINT_NAME
+// for making end point which is accessible for the users = /auth-api/user
+// for making end point which is accessible for the admin = /auth-api/admin
+// for making end point which is accessible for the provider =
+// /auth-api/provider
+// for making end point as open use , just /auth-api/public/ENDPOINT_NAME
 @Validated
 public class AuthController {
 
@@ -59,29 +56,30 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    
+    @Autowired(required = false)
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @PostMapping("public/register")
-    public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
-       try {
-        if(userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(409).body("User with email already exists, try logging in");
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, HttpServletRequest request) {
+        try {
+            if (userRepository.existsByEmail(user.getEmail())) {
+                return ResponseEntity.status(409).body("User with email already exists, try logging in");
+            }
+            ResponseEntity<?> response = userService.registerUser(user, request);
+            return ResponseEntity.status(200).body(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
         }
-        ResponseEntity<?> response = userService.registerUser(user, request);
-        return ResponseEntity.status(200).body(response);
-       } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
-       }
     }
 
     @PostMapping("/public/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request)
+            throws Exception {
         // Authenticate the user
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (BadCredentialsException e) {
             // Handle invalid email or password
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
@@ -90,27 +88,44 @@ public class AuthController {
         // Load user details
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
-        User existingUser = userRepository.findByEmail(userDetails.getUsername());
-        if(existingUser.getVerified() == false) {
+        Optional<User> optionalExistingUser = userRepository.findByEmail(userDetails.getUsername());
+
+        User existingUser = optionalExistingUser.get();
+        if (existingUser.getVerified() == false) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not verified");
         }
         // Generate JWT token
         final String jwt = jwtUtil.generateToken(userDetails);
-        
-        
-         return ResponseEntity.ok(jwt);
+
+        return ResponseEntity.ok(jwt);
     }
 
     @GetMapping("/public/email-verification")
-    public ResponseEntity<?> postMethodName(@RequestParam("token") String token , HttpServletRequest request) throws IOException {
-          
-        userService.verifyEmail(token,request );
+    public ResponseEntity<?> postMethodName(@RequestParam("token") String token, HttpServletRequest request)
+            throws IOException {
+
+        userService.verifyEmail(token, request);
         return ResponseEntity.ok("Email verified successfully");
     }
-    
-    
+
     @GetMapping("/provider/demo")
     public ResponseEntity<?> admin() {
         return ResponseEntity.ok("user access granted");
     }
+
+    @GetMapping("/public/oauth2-urls")
+    public ResponseEntity<?> getOAuth2Urls(HttpServletRequest request) {
+        Map<String, String> urls = new HashMap<>();
+
+        // Build the authorization URLs manually or use OAuth2 client registration
+        // repository
+        String googleAuthUrl = "http://localhost:8080/auth-api/oauth2/authorize/google";
+        String githubAuthUrl = "http://localhost:8080/auth-api/oauth2/authorize/github";
+
+        urls.put("google", googleAuthUrl);
+        urls.put("github", githubAuthUrl);
+
+        return ResponseEntity.ok(urls);
+    }
+
 }
