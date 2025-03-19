@@ -54,7 +54,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user;
 
         if (!userOptional.isPresent()) {
-            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+            String defaultRole = "user"; // or "PROVIDER"
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo, defaultRole);
         }
 
         // if(userOptional.isPresent()) {
@@ -68,14 +69,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return oAuth2User;
     }
 
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo,String role) {
         User user = new User();
 
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setFirstName(oAuth2UserInfo.getFirstName());
         user.setLastName(oAuth2UserInfo.getLastName());
         user.setVerified(true); // OAuth2 users are pre-verified
-
+        user.setRole(role);
         // Generate a random password for OAuth2 users
         user.setPassword(UUID.randomUUID().toString());
 
