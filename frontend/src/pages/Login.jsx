@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -26,8 +27,13 @@ function Login() {
       });
 
       if (response.status === 200) {
-        localStorage.setItem('token', response.data);
-        navigate('/dashboard');
+        const token = response.data;
+        localStorage.setItem('token', token);
+        const decoded = token ? jwtDecode(token) : null;
+        const role = decoded?.roles[0];
+        console.log(role)
+        localStorage.setItem('role', role);
+        navigate("/dashboard");
       }
     } catch (error) {
       console.error('Login error:', error);

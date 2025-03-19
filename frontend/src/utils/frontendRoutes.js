@@ -14,5 +14,6 @@ export const frontendRoutes = {
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
   PAYMENT: "/payment",
   SETTING: "/setting",
-  REDIRECT: "/oauth2/redirect"
+  REDIRECT: "/oauth2/redirect",
+  MYBOOKING: "/bookings"
 };
