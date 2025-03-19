@@ -23,6 +23,10 @@ const Review = db.define("Review", {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
+  serviceType: {
+    type: DataTypes.STRING,
+    allowNull : false,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

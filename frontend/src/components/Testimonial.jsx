@@ -34,7 +34,7 @@ function Testimonial() {
         // Format the data based on the actual structure
         const formattedTestimonials = reviewsData.map(review => ({
           name: review.userDetails ? `${review.userDetails.firstName} ${review.userDetails.lastName}` : 'Anonymous User',
-          service: 'Service Provider', // As you mentioned, we're removing specific service field
+          service: review.serviceType, // As you mentioned, we're removing specific service field
           rating: review.rating || 5,
           text: review.review || 'Great service!', // Note the API uses "review" not "reviewText"
           avatar: review.userDetails?.profilePicUrl || "/api/placeholder/48/48"
