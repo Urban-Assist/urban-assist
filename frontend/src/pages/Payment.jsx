@@ -103,10 +103,9 @@ const Payment = () => {
                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    user: {
-                        id: localStorage.getItem('userId'),
+                    providerDetails: {   
                         service: service,
-                        providerId: Id,
+                        
                         provider: providerData,
                         slot: {
                             date: selectedSlot.date,
