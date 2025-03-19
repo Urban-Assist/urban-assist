@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.example.userauth.security.CustomUserDetailService;
 import org.example.userauth.security.JwtRequestFilter;
+import org.example.userauth.security.oauth2.CustomOAuth2UserService;
+import org.example.userauth.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,25 +26,29 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
-
 @Configuration
 @EnableWebSecurity
 public class ServiceConfig {
-
         
     @Autowired
     private CustomUserDetailService userDetailsService;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+    
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Autowired
-        private JwtRequestFilter JwtRequestFilter;
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
  
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -56,27 +62,33 @@ public class ServiceConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http 
-        
-                 .cors().configurationSource(corsConfigurationSource)
-                 .and()
-                .csrf(csrf -> csrf.disable()) // Disable CSRF using the new lambda DSL
+        http
+                .cors().configurationSource(corsConfigurationSource)
+                .and()
+                .csrf(csrf -> csrf.disable())
                 .formLogin(formlogin -> formlogin.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth-api/public/**").permitAll() 
+                        .requestMatchers("/auth-api/public/**").permitAll()
+                        .requestMatchers("/auth-api/oauth2/**").permitAll()
                         .requestMatchers("/auth-api/user/**").hasAnyAuthority("user","admin")
                         .requestMatchers("/auth-api/provider/**").hasAnyAuthority("provider","admin")
                         .requestMatchers("/auth-api/admin/**").hasAnyAuthority("admin")
                         .anyRequest().authenticated()
                 )
-                  .addFilterBefore(JwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(auth -> auth.baseUri("/auth-api/oauth2/authorize"))
+                        .redirectionEndpoint(redirect -> redirect.baseUri("/auth-api/oauth2/callback/*"))
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless sessions
-                ).exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) // Return 401 for authentication failures
-                );;
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                );
 
         return http.build();
     }
-
 }

@@ -9,6 +9,7 @@ function Login() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const googleAuthUrl = `${import.meta.env.VITE_AUTH_SERVER}/auth-api/oauth2/authorize/google`;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,78 +36,104 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
-      <div className="bg-white p-8 rounded-3xl shadow-2xl w-96 transform transition-transform hover:scale-105 duration-500">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-gray-800 mb-2">Welcome Back!</h1>
-          <p className="text-gray-500">Sign in to access your account</p>
+    <div className="flex items-center h-screen justify-center bg-gradient-to-br from-purple-100 to-yellow-100">
+      <div className="bg-white p-8 rounded-3xl shadow-xl w-96 max-w-md transition-all duration-500 ease-in-out">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+          <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 animate-pulse">
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded mb-4 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Google OAuth Button */}
+        <div className="mb-6">
+          <a
+            href={googleAuthUrl}
+            className="w-full flex items-center justify-center py-2.5 bg-white border border-gray-300 text-gray-800 rounded-lg hover:bg-gray-50 transition-colors font-medium shadow-sm"
+          >
+            <img
+              src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/16px.svg"
+              alt="Google Logo"
+              className="w-5 h-5 mr-2"
+            />
+            Sign in with Google
+          </a>
+        </div>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">or with email</span>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-1">
               Email Address
             </label>
             <input
               type="email"
               name="email"
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
-              placeholder="Enter your email"
+              className="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors"
+              placeholder="you@example.com"
               required
               onChange={handleChange}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-1">
               Password
             </label>
             <input
               type="password"
               name="password"
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 transition-colors ease-out duration-300"
-              placeholder="Enter your password"
+              className="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors"
+              placeholder="••••••••"
               required
               onChange={handleChange}
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-1">
             <div className="flex items-center">
               <input
+                id="remember-me"
+                name="remember-me"
                 type="checkbox"
                 className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                 Remember me
               </label>
             </div>
             <a
               href="/forgot-password"
-              className="text-sm text-purple-600 hover:text-purple-800 transition-colors duration-300"
+              className="text-sm text-purple-600 hover:text-purple-800 font-medium transition-colors"
             >
-              Forgot Password?
+              Forgot password?
             </a>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity font-medium "
+            className="w-full py-2.5 mt-4 bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-lg hover:opacity-95 transition-opacity font-medium"
           >
             Sign In
           </button>
         </form>
 
         <div className="text-center mt-6">
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm">
             Don't have an account?{' '}
-            <a href="/register" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
+            <a href="/register" className="text-purple-600 hover:text-purple-800 font-medium transition-colors">
               Sign up
             </a>
           </p>

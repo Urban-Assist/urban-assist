@@ -13,5 +13,6 @@ export const frontendRoutes = {
   PROFILE: "/provider/profile",
   TERMS_AND_CONDITIONS: "/terms-and-conditions",
   PAYMENT: "/payment",
-  SETTING: "/setting"
+  SETTING: "/setting",
+  REDIRECT: "/oauth2/redirect"
 };

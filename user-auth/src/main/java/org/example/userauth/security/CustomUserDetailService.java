@@ -1,6 +1,7 @@
 package org.example.userauth.security;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.example.userauth.model.User;
 import org.example.userauth.repository.UserRepository;
@@ -20,7 +21,14 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        
+        // Check if the user exists
+        if (!userOptional.isPresent()) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        
+        User user = userOptional.get();
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }      

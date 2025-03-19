@@ -5,9 +5,18 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/demo
     username: root
- 
     password: root
- 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 135340867799-ptdfhgjke68ua13bkvdvb9gdbbcho5d1.apps.googleusercontent.com
+            client-secret: hZlFJ6Fic57XpBPg6SFo6l25
+            redirect-uri: "{baseUrl}/auth-api/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
   jpa:
     hibernate:
       ddl-auto: update
