@@ -15,8 +15,7 @@ export const fetchUserProfile = async (userId, authToken) => {
       headers: {
         'Authorization': authToken
       },
-  //    timeout: 5000 // 5 seconds timeout to prevent long waits
-    });
+     });
     
     return response.data;
   } catch (error) {
