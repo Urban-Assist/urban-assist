@@ -1,9 +1,9 @@
 const PaymentService = require('../services/paymentService');
 const CreateCustomerService = require('../services/CreateStripeCustomer.js');
-const { CustomerMapping } = require('../models/CustomerMapping.js');
-const { Transactions, StripePayment } = require('../models/paymentModel.js');
+ const {   StripePayment } = require('../models/paymentModel.js');
 const axios = require('axios');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { Op } = require('sequelize'); // Import Sequelize operators
 
 const PaymentController = {
     processCardPayment: async (req, res) => {
@@ -55,13 +55,12 @@ const PaymentController = {
                 price: req.body.user?.provider?.price || "0"          
             };
            
-            // Save transaction to database
-            const savedTransaction = await Transactions.create(instance);
+             
             
             // Save Stripe payment reference
             await StripePayment.create({
                 stripePaymentId: paymentIntent.id,
-                transactionId: savedTransaction.id,
+                
                 customerEmail: customerEmail,
                 providerEmail: providerEmail,
                 amount: amount / 100, // Convert back to dollars for storage
@@ -78,7 +77,7 @@ const PaymentController = {
                 "providerPhoneNumber": req.body.user.provider.phoneNumber,
                 "service": req.body.user.service,
                 "pricePaid": req.body.user.provider.price,
-                "transactionId": savedTransaction.id,
+                "transactionId": paymentIntent.id,
                 "slotData": {
                   "_id": "28",
                   "date": req.body.user.slot.date,
@@ -100,7 +99,7 @@ const PaymentController = {
 
             return res.status(200).json({
                 message: "Payment successful and slot booked",
-                transaction: savedTransaction.id,
+                transaction: paymentIntent.id,
                 payment: paymentIntent.id,
                 bookingResponse: bookingResponse.data
             });
@@ -161,7 +160,7 @@ const PaymentController = {
             // Find all stripe payment references associated with this email
             const payments = await StripePayment.findAll({
                 where: {
-                    $or: [
+                    [Op.or]: [
                         { customerEmail: email },
                         { providerEmail: email }
                     ]
