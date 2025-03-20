@@ -3,7 +3,7 @@ const CreateCustomerService = require('../services/CreateStripeCustomer.js');
 const { CustomerMapping } = require('../models/CustomerMapping.js');
 const { Transactions } = require('../models/paymentModel.js');
 const axios = require('axios');
-const PaymentController = {
+ const PaymentController = {
     processCardPayment: async (req, res) => {
         //to information
         console.log(req.body.user?.provider?.id);
@@ -70,14 +70,16 @@ const PaymentController = {
             }
           
     }
-    const bookingResponse = await axios.post(SERVER_URL+"/api/booking/success", bookingData,{
+    
+   
+    const bookingResponse = await axios.post(process.env.SERVER_URL+"/api/booking/success", bookingData,{
         headers: {
-            "Authorization": `Bearer ${req.headers.authorization}`,
+            "Authorization": req.headers.authorization,
             "Content-Type": "application/json"
         }
     });
 
-     return res.status(200).json({message:"Payment successful and slot booked "+ savedTransaction+ "Booking Response "+ bookingResponse.data});
+     return res.status(200).json({message:"Payment successful and slot booked "+ savedTransaction+"Booking Response "+ bookingResponse.data});
     },
         
     handleCardPayment: async (req, res) => {
