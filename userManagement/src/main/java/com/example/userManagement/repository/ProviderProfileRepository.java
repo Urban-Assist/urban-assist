@@ -16,5 +16,11 @@ public interface ProviderProfileRepository extends JpaRepository<ProviderProfile
     List<ProviderProfile> findByService(String service);
 
     Optional<ProviderProfile> findByIdAndService(Long id, String service);
+
+    List<ProviderProfile> findByCertifiedFalseOrCertifiedIsNull();
+
+    List<ProviderProfile> findByCertifiedTrue();
+
+    List<ProviderProfile> findByCertified(boolean certified);
 }
 
