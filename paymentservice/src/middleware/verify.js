@@ -21,7 +21,7 @@ function authenticateJWT(req, res, next) {
         console.log("Decoded Token:", decoded);
 
         // Attach user data to request
-        req.user = decoded;
+        req.consumer = decoded;
         console.log("Authentication ✅");
         next();
     } catch (err) {

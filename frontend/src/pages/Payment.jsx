@@ -128,7 +128,7 @@ const Payment = () => {
             console.log("Response data:", data);
             
             setLoading(false);
-            if (data.success) {
+            if (response.status >= 200 && response.status < 300) {
                 setMessage("Payment successful!");
                 setPaymentSuccess(true);
             } else {

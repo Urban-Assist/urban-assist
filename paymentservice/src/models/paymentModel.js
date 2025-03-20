@@ -11,18 +11,12 @@ const Transactions = db.define("Transactions", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+  
   from: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  userId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+  
   to: {
     type: DataTypes.STRING,
     allowNull: false,
