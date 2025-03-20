@@ -31,3 +31,13 @@ VITE_MEASUREMENT_ID =G-PQDMKPWEW8
 VITE_SERVER_JAVA_URL = http://localhost:8083
 VITE_AUTH_SERVER= http://localhost:8081
 VITE_ADMIN_SERVER= http://localhost:8009
+
+
+
+
+
+VITE_AUTH_SERVER = http://localhost:8080 
+VITE_ADMIN_SERVER = http://localhost:5051
+VITE_SERVER = http://localhost:8001
+VITE_PAYMENT_SERVER = http://localhost:5050
+VITE_SERVER_JAVA_URL = http://localhost:8083
