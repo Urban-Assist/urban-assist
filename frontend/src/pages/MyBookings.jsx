@@ -123,10 +123,10 @@ const MyBookings = () => {
       
       // Open popup first for better UX
       setShowReceiptPopup(true);
-      console.log("Token--------", token);
+      
       // Fetch the receipt
       const response = await axios.get(
-        `http://localhost:5050/api/payments/receipt/${paymentId}`,
+        `${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/receipt/${paymentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

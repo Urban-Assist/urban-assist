@@ -226,125 +226,202 @@ const PaymentController = {
             doc.pipe(res);
             
             try {
+                // Define colors for consistent branding
+                const primaryColor = '#0066cc';
+                const secondaryColor = '#004080';
+                const accentColor = '#66a3ff';
+                const textColor = '#333333';
+                const lightGray = '#f8f8f8';
+                
                 // Add content to the PDF
                 
-                // Header section with logo
-                doc
-                    .fontSize(24)
-                    .fillColor('#0066cc')
-                    .text('Urban Assist', { align: 'center' })
-                    .fontSize(16)
-                    .text('Payment Receipt', { align: 'center' })
-                    .moveDown(1);
+                // Modern header with logo text
+                doc.rect(0, 0, doc.page.width, 120)
+                   .fill(primaryColor);
                 
-                // Receipt information box
-                doc
-                    .roundedRect(50, doc.y, doc.page.width - 100, 70, 5)
-                    .fillAndStroke('#f0f0f0', '#cccccc');
+                // Center the header text
+                doc.fontSize(36)
+                   .fillColor('#ffffff')
+                   .text('Urban Assist', 0, 40, { align: 'center' })
+                   .fontSize(14)
+                   .text('Professional Service Solutions', 0, 85, { align: 'center' });
                 
-                const boxY = doc.y + 15;
-                doc
-                    .fillColor('#333333')
-                    .fontSize(12)
-                    .text(`Receipt ID: ${paymentId.substring(0, 12)}...`, 70, boxY)
-                    .text(`Date: ${new Date(paymentRecord.createdAt).toLocaleDateString()}`, 70, boxY + 20)
-                    .text(`Status: ${(paymentRecord.status || 'processed').toUpperCase()}`, 70, boxY + 40)
-                    .moveDown(4);
-                
-                // Customer and Provider section
-                doc
-                    .fontSize(14)
-                    .fillColor('#0066cc')
-                    .text('Payment Information', { underline: true })
-                    .moveDown(1);
-                
-                // From section (Customer)
-                doc
-                    .fillColor('#333333')
-                    .fontSize(12)
-                    .text('From (Customer):', { continued: true })
-                    .fillColor('#666666')
-                    .text(` ${paymentRecord.customerEmail || 'N/A'}`)
-                    .moveDown(0.5);
-                
-                // To section (Provider)
-                doc
-                    .fillColor('#333333')
-                    .fontSize(12)
-                    .text('To (Service Provider):', { continued: true })
-                    .fillColor('#666666')
-                    .text(` ${paymentRecord.providerEmail || 'N/A'}`)
-                    .moveDown(2);
-                
-                // Payment amount in a box
-                doc
-                    .roundedRect(doc.page.width / 2 - 75, doc.y, 150, 60, 5)
-                    .fillAndStroke('#e6f0ff', '#0066cc');
-                
-                const amountBoxY = doc.y + 10;
-                doc
-                    .fillColor('#0066cc')
-                    .fontSize(14)
-                    .text('Amount Paid:', doc.page.width / 2, amountBoxY, { align: 'center' })
-                    .fontSize(20)
-                    .text(`$${amount.toFixed(2)}`, doc.page.width / 2, amountBoxY + 25, { align: 'center' })
-                    .moveDown(3);
-                
-                // Payment details
-                doc
-                    .fontSize(14)
-                    .fillColor('#0066cc')
-                    .text('Transaction Details', { underline: true })
-                    .moveDown(1);
-                
-                doc.fillColor('#333333').fontSize(12);
-                
-                // Payment method
-                doc.text('Payment Method: ', { continued: true })
-                   .fillColor('#666666')
-                   .text(paymentRecord.paymentMethod ? `Stripe (${paymentRecord.paymentMethod})` : 'Credit Card')
-                   .fillColor('#333333')
+                // Receipt title with better spacing
+                doc.fontSize(24)
+                   .fillColor(secondaryColor)
+                   .text('PAYMENT RECEIPT', 0, 140, { align: 'center' })
                    .moveDown(0.5);
                 
-                // Transaction ID
-                doc.text('Transaction ID: ', { continued: true })
-                   .fillColor('#666666')
-                   .text(paymentRecord.stripePaymentId)
-                   .fillColor('#333333')
+                // Horizontal line with proper positioning
+                const lineY = doc.y + 5;
+                doc.moveTo(50, lineY)
+                   .lineTo(doc.page.width - 50, lineY)
+                   .stroke(accentColor)
+                   .moveDown(1.5);
+                
+                // Create two columns for the receipt information with better spacing
+                const colWidth = (doc.page.width - 120) / 2;
+                const startY = doc.y;
+                
+                // Left column - Transaction details
+                doc.fontSize(14)
+                   .fillColor(secondaryColor)
+                   .text('TRANSACTION DETAILS', 60, startY, { width: colWidth })
                    .moveDown(0.5);
                 
-                // Created date
-                doc.text('Transaction Date: ', { continued: true })
-                   .fillColor('#666666')
-                   .text(new Date(paymentRecord.createdAt).toLocaleString())
-                   .fillColor('#333333')
+                // Properly position the transaction details box
+                const detailsBoxY = doc.y;
+                doc.roundedRect(60, detailsBoxY, colWidth, 120, 5)
+                   .fillAndStroke(lightGray, accentColor);
+                
+                doc.fillColor(textColor)
+                   .fontSize(11)
+                   .text(`Receipt ID: ${paymentId.substring(0, 15)}...`, 70, detailsBoxY + 15)
+                   .text(`Transaction Date: ${new Date(paymentRecord.createdAt).toLocaleDateString()}`, 70, detailsBoxY + 40)
+                   .text(`Status: ${(paymentRecord.status || 'processed').toUpperCase()}`, 70, detailsBoxY + 65)
+                   .text(`Payment Method: Credit Card`, 70, detailsBoxY + 90);
+                
+                // Right column - Amount information (aligned with left column)
+                const rightColX = 60 + colWidth + 20; // Add spacing between columns
+                
+                doc.fontSize(14)
+                   .fillColor(secondaryColor)
+                   .text('PAYMENT AMOUNT', rightColX, startY, { width: colWidth })
                    .moveDown(0.5);
                 
-                // Updated date
-                doc.text('Last Updated: ', { continued: true })
+                // Properly position the payment amount box
+                doc.roundedRect(rightColX, detailsBoxY, colWidth, 120, 5)
+                   .fillAndStroke('#e6f0ff', accentColor);
+                
+                // Center the amount in the right box
+                doc.fillColor(secondaryColor)
+                   .fontSize(14)
+                   .text('Amount Paid:', rightColX, detailsBoxY + 30, { width: colWidth, align: 'center' })
+                   .fontSize(28)
+                   .fillColor(primaryColor)
+                   .text(`$${amount.toFixed(2)}`, rightColX, detailsBoxY + 60, { width: colWidth, align: 'center' });
+                
+                // Add space after the boxes
+                doc.moveDown(7);
+                
+                // Customer and Provider information with better spacing
+                const infoY = doc.y;
+                doc.fontSize(14)
+                   .fillColor(secondaryColor)
+                   .text('Payment Information', 0, infoY, { align: 'center' })
+                   .moveDown(1);
+                
+                // Create modern boxes for customer and provider with consistent height
+                const boxHeight = 80;
+                const partyBoxY = doc.y;
+                
+                // Customer box
+                doc.roundedRect(60, partyBoxY, colWidth, boxHeight, 5)
+                   .fillAndStroke(lightGray, '#cccccc');
+                
+                doc.fillColor(secondaryColor)
+                   .fontSize(12)
+                   .text('FROM (CUSTOMER)', 60, partyBoxY + 15, { width: colWidth, align: 'center' })
+                   .fillColor(textColor)
+                   .fontSize(11)
+                   .text(paymentRecord.customerEmail || 'N/A', 60, partyBoxY + 40, { width: colWidth, align: 'center' });
+                
+                // Provider box (aligned with customer box)
+                doc.roundedRect(rightColX, partyBoxY, colWidth, boxHeight, 5)
+                   .fillAndStroke(lightGray, '#cccccc');
+                
+                doc.fillColor(secondaryColor)
+                   .fontSize(12)
+                   .text('TO (SERVICE PROVIDER)', rightColX, partyBoxY + 15, { width: colWidth, align: 'center' })
+                   .fillColor(textColor)
+                   .fontSize(11)
+                   .text(paymentRecord.providerEmail || 'N/A', rightColX, partyBoxY + 40, { width: colWidth, align: 'center' });
+                
+                // Add more space before footer
+                doc.moveDown(6);
+                
+                // Footer information with better alignment
+                doc.fontSize(10)
                    .fillColor('#666666')
-                   .text(new Date(paymentRecord.updatedAt).toLocaleString())
-                   .moveDown(2);
+                   .text('This receipt serves as confirmation of your payment transaction.', {
+                       width: doc.page.width - 100,
+                       align: 'center'
+                   })
+                   .text('For any questions or concerns, please contact support@urbanassist.com', {
+                       width: doc.page.width - 100,
+                       align: 'center'
+                   });
                 
-                // Terms and additional information
-                doc
-                    .fontSize(10)
-                    .fillColor('#999999')
-                    .text('This receipt serves as confirmation of your payment transaction.', { align: 'center' })
-                    .text('For any questions or concerns, please contact support@urbanassist.com', { align: 'center' })
-                    .moveDown(1)
-                    .text('Thank you for using Urban Assist!', { align: 'center' });
+                // Add page number with better positioning
+                doc.fontSize(8)
+                   .text(`Generated on ${new Date().toLocaleString()} | Page 1 of 1`, 0, doc.page.height - 50, {
+                       align: 'center'
+                   });
                 
-                // Add page number at the bottom
-                const pageHeight = doc.page.height;
-                doc
-                    .fontSize(8)
-                    .text(
-                        `Generated on ${new Date().toLocaleString()} | Page 1 of 1`,
-                        50,
-                        pageHeight - 50,
-                        { align: 'center' }
-                    );
+                // Add an improved "Urban Assist" stamp in the bottom right
+                const stampX = doc.page.width - 130;
+                const stampY = doc.page.height - 130;
+                const stampRadius = 50;
+                
+                // Create more impressive stamp effect with shadow
+                doc.circle(stampX + 3, stampY + 3, stampRadius)
+                   .fillOpacity(0.3)
+                   .fill('#000000'); // Shadow effect
+                
+                // Main stamp circle
+                doc.circle(stampX, stampY, stampRadius)
+                   .fillOpacity(0.9)
+                   .fill(primaryColor);
+                
+                // Add inner circle for a more professional look
+                doc.circle(stampX, stampY, stampRadius - 5)
+                   .lineWidth(1)
+                   .fillOpacity(0)
+                   .strokeOpacity(0.8)
+                   .stroke('#ffffff');
+                
+                // Add outer decorative border
+                doc.circle(stampX, stampY, stampRadius - 2)
+                   .dash(3, { space: 4 })
+                   .strokeOpacity(0.9)
+                   .stroke('#ffffff');
+                
+                // Add text to stamp with better positioning
+                doc.fillOpacity(1)
+                   .strokeOpacity(1)
+                   .fillColor('#ffffff')
+                   .fontSize(16)
+                   .font('Helvetica-Bold')
+                   .text('URBAN', 0, stampY - 15, { width: doc.page.width - 60, align: 'right' })
+                   .fontSize(18)
+                   .text('ASSIST', 0, stampY + 5, { width: doc.page.width - 60, align: 'right' });
+                
+                // Add "Official Receipt" text to the stamp
+                doc.fontSize(8)
+                   .text('OFFICIAL RECEIPT', 0, stampY + 30, { width: doc.page.width - 60, align: 'right' });
+                
+                // Add star effect in the stamp for extra styling
+                const starPoints = 8;
+                const innerRadius = 15;
+                const outerRadius = 8;
+                
+                doc.save();
+                doc.translate(stampX, stampY);
+                
+                doc.moveTo(0, -outerRadius);
+                
+                for (let i = 1; i <= starPoints * 2; i++) {
+                    const angle = (Math.PI * i) / starPoints;
+                    const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                    const x = radius * Math.sin(angle);
+                    const y = -radius * Math.cos(angle);
+                    doc.lineTo(x, y);
+                }
+                
+                doc.closePath()
+                   .fillOpacity(0.7)
+                   .fill('#ffffff');
+                doc.restore();
                 
                 // Finalize PDF and send response
                 doc.end();
