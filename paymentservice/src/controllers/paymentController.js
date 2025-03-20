@@ -2,6 +2,7 @@ const PaymentService = require('../services/paymentService');
 const CreateCustomerService = require('../services/CreateStripeCustomer.js');
 const { CustomerMapping } = require('../models/CustomerMapping.js');
 const { Transactions } = require('../models/paymentModel.js');
+const axios = require('axios');
 const PaymentController = {
     processCardPayment: async (req, res) => {
         //to information
@@ -22,10 +23,61 @@ const PaymentController = {
                 from: req.consumer?.sub || null,          
                 price: req.body.user?.provider?.price || "0"          
         };
-        
+        /*
+        {
+  "userEmail": "example@gmail.com",
+  "userName": "John Doe",
+  "providerEmail": "vaibhavpatel162002@gmail.com",
+  "providerName": "Dr. Vaibhav Patel",
+  "providerPhoneNumber": "+1234567890",
+  "service": "restoration",
+  "pricePaid": 99.99,
+  "transactionId": "txn_12345678901234",
+  "slotData": {
+    "_id": "28",
+    "date": "2025-03-20",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "providerEmail": "vaibhavpatel162002@gmail.com",
+    "service": "restoration",
+    "originalStartTime": "2025-03-20T13:00:00Z",
+    "originalEndTime": "2025-03-20T14:00:00Z"
+  }
+}*/
+
         console.log(req.body.user)
       const savedTransaction = await Transactions.create(instance);
-         return res.status(200).json({message:"Payment successful", savedTransaction});
+        //now send the request to the booking.
+        const bookingData = {
+    
+            "userEmail": req.consumer?.sub,
+            "userName": "John Doe",
+            "providerEmail": req.body.user.provider.email,
+            "providerName": req.body.user.provider?.firstName + " " + req.body.user.provider?.lastName ,
+            "providerPhoneNumber": req.body.user.provider.phoneNumber,
+            "service": req.body.user.service,
+            "pricePaid": req.body.user.provider.price,
+            "transactionId": savedTransaction.id,
+            "slotData": {
+              "_id": "28",
+              "date": req.body.user.slot.date,
+              "startTime": req.body.user.slot.startTime,
+              "endTime": req.body.user.slot.endTime,
+              "providerEmail": req.body.user.provider.email,
+              "service": req.body.user.service,
+              "originalStartTime": "2025-03-20T13:00:00Z",
+              "originalEndTime": "2025-03-20T14:00:00Z"
+            }
+          
+    }
+    const bookingResponse = await axios.post(SERVER_URL+"/api/booking/success", bookingData,{
+        headers: {
+            "Authorization": `Bearer ${req.headers.authorization}`,
+            "Content-Type": "application/json"
+        }
+    });
+
+     return res.status(200).json({message:"Payment successful and slot booked "+ savedTransaction+ "Booking Response "+ bookingResponse.data});
     },
         
     handleCardPayment: async (req, res) => {

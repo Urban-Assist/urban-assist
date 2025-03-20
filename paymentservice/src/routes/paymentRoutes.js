@@ -4,7 +4,7 @@ const {authenticateJWT, authorizeRole} = require('../middleware/verify');
  const router = express.Router();
 
 // router.post('/card-pay', authenticateJWT,(req,res)=>{
-//     console.log(req.consumer);  
+//     console.log(req.body);  
     
 //     return res.status(200).json({message:"Payment successful"});
 // });
