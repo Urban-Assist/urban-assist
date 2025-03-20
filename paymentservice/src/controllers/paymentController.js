@@ -2,7 +2,7 @@ const PaymentService = require('../services/paymentService');
 const CreateCustomerService = require('../services/CreateStripeCustomer.js');
 const stripe = require('../config/stripe');
 const customerMapping = require('../models/CustomerMapping.js');
-
+const providerMapping = require('../models/ProviderMapping.js');
 const { ApiResponse } = require('../utils/ApiResponse.js');
 const { application } = require('express');
 const PaymentController = {
@@ -49,6 +49,7 @@ const PaymentController = {
         const consumerID = req.consumer.id;
     
         // Check the amount to be transferred
+        //console.log("--------------",req.body)
         const amount = req.body.card?.amount;
         console.log("Provider ID:", providerID);
         console.log("Consumer ID:", consumerID);
@@ -60,18 +61,18 @@ const PaymentController = {
         }
     
         // Fetch corresponding stripe account details of the provider and consumer
-        const provider = await customerMapping.CustomerMapping.findOne({ where: { customerID: providerID } });
+        const provider = await providerMapping.ProviderMapping.findOne({ where: { providerID: providerID } });
         const consumer = await customerMapping.CustomerMapping.findOne({ where: { customerID: consumerID } });
-    
-        if (!provider || !consumer) {
+         if (!provider || !consumer) {
             return res.status(404).json(new ApiResponse(404, null, "Provider or Consumer not found"));
         }
-    console.log("Provider:", provider.dataValues.customerStripeID);
+    console.log("Provider:", provider.dataValues.providerStripeID);
     console.log("Provider:", consumer.dataValues.customerStripeID);
-    const customer = await stripe.customers.retrieve('cus_RyNNYWAMYf9mwi');
-    console.log(customer);
+    const customer = await stripe.customers.retrieve(consumer.dataValues.customerStripeID);
     
-        console.log(customer);
+    const providerStripe = await stripe.accounts.retrieve(provider.dataValues.providerStripeID);
+
+        console.log("Provider:", providerStripe);
         try {
             const commissionPercentage = 15;
             const commission = Math.round((amount * commissionPercentage) / 100);
@@ -84,7 +85,7 @@ const PaymentController = {
                 confirm: true,
                 application_fee_amount: commission * 100,
                 transfer_data: {
-                    destination: "acct_1R4VYBP056JYKk2V" ,
+                    destination: provider.dataValues.providerStripeID, 
                 },
                 customer: consumer.dataValues.customerStripeID,
                 return_url: 'http://localhost:5173/dashboard',

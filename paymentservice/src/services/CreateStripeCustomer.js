@@ -34,19 +34,41 @@ const CreateStripeCustomer = {
                 console.log("Using existing connected account for provider:----" + email);
             } else {
                 // Create new connected account if none exists
-                connectedAccount = await stripe.accounts.create({
-                    type: "express",
-                    country: "US",
-                    capabilities: {
-                        card_payments: { requested: true },
-                        transfers: { requested: true },
-                    },
-                    business_type: "individual",
-                    individual: {
-                        email: email
+                try {
+                    connectedAccount = await stripe.accounts.create({
+                        type: "custom",
+                        country: "US",
+                        capabilities: {
+                            card_payments: { requested: true },
+                            transfers: { requested: true },
+                        },
+                        business_type: "individual",
+                        individual: {
+                            email: email,
+                            first_name: name ? name.split(' ')[0] : '',
+                            last_name: name ? name.split(' ').slice(1).join(' ') : ''
+                        },
+                        tos_acceptance: {
+                            date: Math.floor(Date.now() / 1000),
+                            ip: "192.168.1.1", // Replace with the user's actual IP
+                        },
+                        // Ensure transfers capability is explicitly enabled
+                        settings: {
+                            payouts: {
+                                schedule: {
+                                    interval: 'manual'
+                                }
+                            }
+                        }
+                    });
+                    console.log("New connected account created for provider:" + email);
+                } catch (stripeError) {
+                    console.error("Stripe account creation error:", stripeError.message);
+                    if (stripeError.type === 'StripeInvalidRequestError') {
+                        console.error("Invalid parameters:", stripeError.param);
                     }
-                });
-                console.log("New connected account created for provider:" + email);
+                    throw new Error(`Failed to create Stripe account: ${stripeError.message}`);
+                }
             }
 
             const providerData = {
