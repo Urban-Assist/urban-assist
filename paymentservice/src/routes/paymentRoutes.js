@@ -10,4 +10,7 @@ const {authenticateJWT, authorizeRole} = require('../middleware/verify');
 // });
 router.post('/card-pay', authenticateJWT, PaymentController.processCardPayment);
 router.post('/create-customer', PaymentController.createUserAccount);
+
+//route to list transactions of the particular user
+//transactions of the particular provider dashboard with total earnings
 module.exports = router;
