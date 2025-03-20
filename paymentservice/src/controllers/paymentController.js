@@ -1,9 +1,10 @@
 const PaymentService = require('../services/paymentService');
 const CreateCustomerService = require('../services/CreateStripeCustomer.js');
- const {   StripePayment } = require('../models/paymentModel.js');
+const { StripePayment } = require('../models/paymentModel.js');
 const axios = require('axios');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { Op } = require('sequelize'); // Import Sequelize operators
+const PDFDocument = require('pdfkit');
 
 const PaymentController = {
     processCardPayment: async (req, res) => {
@@ -188,6 +189,188 @@ const PaymentController = {
         } catch (error) {
             console.error("Error fetching payments:", error);
             res.status(500).json({ error: error.message });
+        }
+    },
+
+    getPaymentReceipt: async (req, res) => {
+        const { paymentId } = req.params;
+        
+        if (!paymentId) {
+            return res.status(400).json({ error: 'Payment ID is required' });
+        }
+        
+        try {
+            // Fetch payment details from database
+            const paymentRecord = await StripePayment.findOne({
+                where: { stripePaymentId: paymentId }
+            });
+            
+            if (!paymentRecord) {
+                return res.status(404).json({ error: 'Payment record not found' });
+            }
+            
+            // Sanitize the amount to ensure it's a number
+            const amount = parseFloat(paymentRecord.amount) || 0;
+            
+            // Set response headers first
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=payment_receipt_${paymentId}.pdf`);
+            
+            // Create the PDF document
+            const doc = new PDFDocument({ 
+                margin: 50,
+                size: 'A4'
+            });
+            
+            // Pipe the PDF to the response
+            doc.pipe(res);
+            
+            try {
+                // Add content to the PDF
+                
+                // Header section with logo
+                doc
+                    .fontSize(24)
+                    .fillColor('#0066cc')
+                    .text('Urban Assist', { align: 'center' })
+                    .fontSize(16)
+                    .text('Payment Receipt', { align: 'center' })
+                    .moveDown(1);
+                
+                // Receipt information box
+                doc
+                    .roundedRect(50, doc.y, doc.page.width - 100, 70, 5)
+                    .fillAndStroke('#f0f0f0', '#cccccc');
+                
+                const boxY = doc.y + 15;
+                doc
+                    .fillColor('#333333')
+                    .fontSize(12)
+                    .text(`Receipt ID: ${paymentId.substring(0, 12)}...`, 70, boxY)
+                    .text(`Date: ${new Date(paymentRecord.createdAt).toLocaleDateString()}`, 70, boxY + 20)
+                    .text(`Status: ${(paymentRecord.status || 'processed').toUpperCase()}`, 70, boxY + 40)
+                    .moveDown(4);
+                
+                // Customer and Provider section
+                doc
+                    .fontSize(14)
+                    .fillColor('#0066cc')
+                    .text('Payment Information', { underline: true })
+                    .moveDown(1);
+                
+                // From section (Customer)
+                doc
+                    .fillColor('#333333')
+                    .fontSize(12)
+                    .text('From (Customer):', { continued: true })
+                    .fillColor('#666666')
+                    .text(` ${paymentRecord.customerEmail || 'N/A'}`)
+                    .moveDown(0.5);
+                
+                // To section (Provider)
+                doc
+                    .fillColor('#333333')
+                    .fontSize(12)
+                    .text('To (Service Provider):', { continued: true })
+                    .fillColor('#666666')
+                    .text(` ${paymentRecord.providerEmail || 'N/A'}`)
+                    .moveDown(2);
+                
+                // Payment amount in a box
+                doc
+                    .roundedRect(doc.page.width / 2 - 75, doc.y, 150, 60, 5)
+                    .fillAndStroke('#e6f0ff', '#0066cc');
+                
+                const amountBoxY = doc.y + 10;
+                doc
+                    .fillColor('#0066cc')
+                    .fontSize(14)
+                    .text('Amount Paid:', doc.page.width / 2, amountBoxY, { align: 'center' })
+                    .fontSize(20)
+                    .text(`$${amount.toFixed(2)}`, doc.page.width / 2, amountBoxY + 25, { align: 'center' })
+                    .moveDown(3);
+                
+                // Payment details
+                doc
+                    .fontSize(14)
+                    .fillColor('#0066cc')
+                    .text('Transaction Details', { underline: true })
+                    .moveDown(1);
+                
+                doc.fillColor('#333333').fontSize(12);
+                
+                // Payment method
+                doc.text('Payment Method: ', { continued: true })
+                   .fillColor('#666666')
+                   .text(paymentRecord.paymentMethod ? `Stripe (${paymentRecord.paymentMethod})` : 'Credit Card')
+                   .fillColor('#333333')
+                   .moveDown(0.5);
+                
+                // Transaction ID
+                doc.text('Transaction ID: ', { continued: true })
+                   .fillColor('#666666')
+                   .text(paymentRecord.stripePaymentId)
+                   .fillColor('#333333')
+                   .moveDown(0.5);
+                
+                // Created date
+                doc.text('Transaction Date: ', { continued: true })
+                   .fillColor('#666666')
+                   .text(new Date(paymentRecord.createdAt).toLocaleString())
+                   .fillColor('#333333')
+                   .moveDown(0.5);
+                
+                // Updated date
+                doc.text('Last Updated: ', { continued: true })
+                   .fillColor('#666666')
+                   .text(new Date(paymentRecord.updatedAt).toLocaleString())
+                   .moveDown(2);
+                
+                // Terms and additional information
+                doc
+                    .fontSize(10)
+                    .fillColor('#999999')
+                    .text('This receipt serves as confirmation of your payment transaction.', { align: 'center' })
+                    .text('For any questions or concerns, please contact support@urbanassist.com', { align: 'center' })
+                    .moveDown(1)
+                    .text('Thank you for using Urban Assist!', { align: 'center' });
+                
+                // Add page number at the bottom
+                const pageHeight = doc.page.height;
+                doc
+                    .fontSize(8)
+                    .text(
+                        `Generated on ${new Date().toLocaleString()} | Page 1 of 1`,
+                        50,
+                        pageHeight - 50,
+                        { align: 'center' }
+                    );
+                
+                // Finalize PDF and send response
+                doc.end();
+            } catch (pdfError) {
+                // If we have an error during PDF generation
+                console.error("PDF generation error:", pdfError);
+                
+                // Attempt to end the document if it hasn't been ended yet
+                try {
+                    doc.end();
+                } catch (endError) {
+                    // Ignore any errors from ending the document
+                }
+                
+                // If headers haven't been sent yet, we can send an error response
+                if (!res.headersSent) {
+                    res.status(500).json({ error: "Error generating PDF receipt" });
+                }
+            }
+        } catch (error) {
+            console.error("Error retrieving payment data:", error);
+            
+            // Only send error response if headers haven't been sent
+            if (!res.headersSent) {
+                res.status(500).json({ error: "Error generating payment receipt" });
+            }
         }
     }
 };

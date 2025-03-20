@@ -11,7 +11,9 @@ import {
   AlertCircle,
   MapPin,
   RotateCcw,
-  XCircle
+  XCircle,
+  FileText,
+  X
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -22,6 +24,12 @@ const MyBookings = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('role');
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const [showEarnings, setShowEarnings] = useState(false);
+  const [showReceiptPopup, setShowReceiptPopup] = useState(false);
+  const [receiptUrl, setReceiptUrl] = useState('');
+  const [loadingReceipt, setLoadingReceipt] = useState(false);
+  const [receiptError, setReceiptError] = useState(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -45,6 +53,15 @@ const MyBookings = () => {
 
         const data = await response.data;
         setBookings(data);
+        
+        // Calculate total earnings for providers
+        if (userRole === 'provider') {
+          const total = data.reduce((sum, booking) => sum + booking.pricePaid, 0);
+          setTotalEarnings(total);
+          // Delay showing earnings for animation effect
+          setTimeout(() => setShowEarnings(true), 300);
+        }
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching bookings:', error);
@@ -99,6 +116,46 @@ const MyBookings = () => {
     }
   };
 
+  const handleViewReceipt = async (paymentId) => {
+    try {
+      setLoadingReceipt(true);
+      setReceiptError(null);
+      
+      // Open popup first for better UX
+      setShowReceiptPopup(true);
+      console.log("Token--------", token);
+      // Fetch the receipt
+      const response = await axios.get(
+        `http://localhost:5050/api/payments/receipt/${paymentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: 'blob', // Important for PDF handling
+        }
+      );
+
+      // Create a blob URL for the PDF
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      setReceiptUrl(url);
+      setLoadingReceipt(false);
+    } catch (error) {
+      console.error('Error fetching receipt:', error);
+      setReceiptError('Failed to load receipt. Please try again.');
+      setLoadingReceipt(false);
+    }
+  };
+
+  const closeReceiptPopup = () => {
+    setShowReceiptPopup(false);
+    // Revoke the object URL to free up memory
+    if (receiptUrl) {
+      URL.revokeObjectURL(receiptUrl);
+      setReceiptUrl('');
+    }
+  };
+
   // Render loading state
   if (loading) {
     return (
@@ -141,6 +198,26 @@ const MyBookings = () => {
         {userRole === 'provider' ? 'Client Bookings' : 'My Bookings'}
       </h1>
 
+      {/* Total Earnings Display for Providers */}
+      {userRole === 'provider' && (
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg shadow-md p-6 mb-6 overflow-hidden relative">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-medium text-emerald-700">Total Earnings</h3>
+              <p className={`text-2xl font-bold text-emerald-600 mt-2 transition-all duration-1000 ease-out ${showEarnings ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                ${totalEarnings.toFixed(2)}
+              </p>
+            </div>
+            <div className={`p-4 bg-emerald-100 rounded-full transition-all duration-700 ${showEarnings ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
+              <DollarSign className="h-8 w-8 text-emerald-500" />
+            </div>
+          </div>
+          <div className={`h-1 bg-emerald-200 mt-4 rounded-full overflow-hidden transition-all duration-1500 ease-out ${showEarnings ? 'w-full' : 'w-0'}`}>
+            <div className="h-full bg-emerald-500 animate-pulse" style={{width: '60%'}}></div>
+          </div>
+        </div>
+      )}
+
       {/* Tabs */}
       <div className="flex border-b border-gray-200 mb-6">
         <button
@@ -162,6 +239,58 @@ const MyBookings = () => {
           Past
         </button>
       </div>
+
+      {/* Receipt PDF Popup */}
+      {showReceiptPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
+          <div 
+            className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[80vh] relative overflow-hidden animate-scaleIn"
+            style={{
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+            }}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center space-x-2">
+                <FileText className="h-5 w-5 text-indigo-600" />
+                <h3 className="text-lg font-semibold text-gray-800">Payment Receipt</h3>
+              </div>
+              <button 
+                onClick={closeReceiptPopup}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                aria-label="Close"
+              >
+                <X className="h-6 w-6 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="h-full p-2">
+              {loadingReceipt ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500 mb-4"></div>
+                  <p className="text-gray-600">Loading receipt...</p>
+                </div>
+              ) : receiptError ? (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <AlertCircle className="h-16 w-16 text-red-500 mb-4" />
+                  <p className="text-red-600 mb-2 font-medium">{receiptError}</p>
+                  <button
+                    onClick={closeReceiptPopup}
+                    className="mt-4 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <iframe 
+                  src={receiptUrl} 
+                  className="w-full h-full rounded animate-fadeIn" 
+                  title="Payment Receipt" 
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {filteredBookings.length === 0 ? (
         <div className="bg-white rounded-lg shadow-md p-8 text-center">
@@ -185,88 +314,125 @@ const MyBookings = () => {
             const status = getStatus(booking.originalStartTime);
 
             return (
-              <div key={booking.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                {/* Booking Header */}
-                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <div className="flex justify-between items-center">
+              <div 
+                key={booking.id} 
+                className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              >
+                {/* Booking Header with Service Type and Status */}
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                  <div className="flex items-center space-x-2">
+                    <div className="p-2 bg-indigo-50 rounded-full">
+                      <Calendar className="h-5 w-5 text-indigo-600" />
+                    </div>
                     <h3 className="text-lg font-semibold text-gray-800">{booking.service}</h3>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${status.color}`}>
-                      {status.text}
-                    </span>
                   </div>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center ${status.color}`}>
+                    {status.text === 'Completed' && <CheckCircle className="w-3 h-3 mr-1" />}
+                    {status.text === 'Soon' && <Clock className="w-3 h-3 mr-1" />}
+                    {status.text === 'Upcoming' && <Calendar className="w-3 h-3 mr-1" />}
+                    {status.text}
+                  </span>
                 </div>
 
                 {/* Booking Details */}
                 <div className="p-6">
+                  {/* Horizontal divider with date info */}
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="h-px bg-gray-200 flex-grow"></div>
+                    <div className="px-4 py-1 bg-indigo-50 rounded-full text-sm font-medium text-indigo-700 flex items-center">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      {formatDate(booking.originalStartTime)}
+                    </div>
+                    <div className="h-px bg-gray-200 flex-grow"></div>
+                  </div>
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Left Column - Date & Time */}
-                    <div className="space-y-4">
+                    {/* Left Column - Time & Payment */}
+                    <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-start">
-                        <Calendar className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">Date</p>
-                          <p className="text-sm text-gray-600">{formatDate(booking.originalStartTime)}</p>
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <Clock className="h-5 w-5 text-indigo-500" />
                         </div>
-                      </div>
-
-                      <div className="flex items-start">
-                        <Clock className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                        <div>
+                        <div className="ml-3">
                           <p className="text-sm font-medium text-gray-900">Time</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-700 font-medium">
                             {formatTime(booking.originalStartTime)} - {formatTime(booking.originalEndTime)}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-start">
-                        <DollarSign className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                        <div>
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <DollarSign className="h-5 w-5 text-green-500" />
+                        </div>
+                        <div className="ml-3">
                           <p className="text-sm font-medium text-gray-900">Payment</p>
-                          <p className="text-sm text-gray-600">${booking.pricePaid.toFixed(2)}</p>
+                          <p className="text-sm text-green-700 font-medium">${booking.pricePaid.toFixed(2)}</p>
                         </div>
                       </div>
-                    </div>
-
-                    {/* Right Column - Provider/User Info */}
-                    <div className="space-y-4">
-                      {userRole === 'provider' ? (
-                        <div className="flex items-start">
-                          <User className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">Client</p>
-                            <p className="text-sm text-gray-600">{booking.userName}</p>
-                            <p className="text-sm text-gray-500">{booking.userEmail}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-start">
-                          <User className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">Provider</p>
-                            <p className="text-sm text-gray-600">{booking.providerName}</p>
-                          </div>
-                        </div>
-                      )}
-
+                      
                       <div className="flex items-start">
-                        <Phone className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">Contact</p>
-                          <p className="text-sm text-gray-600">{booking.providerPhoneNumber}</p>
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <CheckCircle className="h-5 w-5 text-blue-500" />
                         </div>
-                      </div>
-
-                      <div className="flex items-start">
-                        <CheckCircle className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                        <div>
+                        <div className="ml-3">
                           <p className="text-sm font-medium text-gray-900">Confirmation</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-blue-700 font-mono">
                             #{booking.transactionId.substring(0, 8)}
                           </p>
                         </div>
                       </div>
                     </div>
+
+                    {/* Right Column - Provider/User Info */}
+                    <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                      {userRole === 'provider' ? (
+                        <div className="flex items-start">
+                          <div className="bg-white p-2 rounded-full shadow-sm">
+                            <User className="h-5 w-5 text-purple-500" />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-sm font-medium text-gray-900">Client</p>
+                            <p className="text-sm text-gray-700 font-medium">{booking.userName}</p>
+                            <p className="text-sm text-gray-500">{booking.userEmail}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-start">
+                          <div className="bg-white p-2 rounded-full shadow-sm">
+                            <User className="h-5 w-5 text-purple-500" />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-sm font-medium text-gray-900">Provider</p>
+                            <p className="text-sm text-gray-700 font-medium">{booking.providerName}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-start">
+                        <div className="bg-white p-2 rounded-full shadow-sm">
+                          <Phone className="h-5 w-5 text-teal-500" />
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-gray-900">Contact</p>
+                          <p className="text-sm text-teal-700 font-medium">{booking.providerPhoneNumber}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Action buttons */}
+                  <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end space-x-3">
+                    <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium">
+                      Contact
+                    </button>
+                    <button 
+                      onClick={() => handleViewReceipt(booking.paymentIntentId || 'pi_3R4j4p09cpCtmNAq09P6RFzE')}
+                      className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md hover:bg-indigo-100 transition-colors text-sm font-medium flex items-center group"
+                    >
+                      <FileText className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
+                      Receipt
+                    </button>
                   </div>
                 </div>
               </div>
