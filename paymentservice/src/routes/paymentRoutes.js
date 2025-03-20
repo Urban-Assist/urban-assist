@@ -1,7 +1,7 @@
 const express = require('express');
 const PaymentController = require('../controllers/paymentController');
 const {authenticateJWT, authorizeRole} = require('../middleware/verify');
- const router = express.Router();
+const router = express.Router();
 
 // router.post('/card-pay', authenticateJWT,(req,res)=>{
 //     console.log(req.body);  
@@ -10,6 +10,9 @@ const {authenticateJWT, authorizeRole} = require('../middleware/verify');
 // });
 router.post('/card-pay', authenticateJWT, PaymentController.processCardPayment);
 router.post('/create-customer', PaymentController.createUserAccount);
+
+// Route to fetch payments by email
+router.get('/payments/:email', authenticateJWT, PaymentController.fetchPaymentsByEmail);
 
 //route to list transactions of the particular user
 //transactions of the particular provider dashboard with total earnings
