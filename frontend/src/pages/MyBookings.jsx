@@ -17,6 +17,32 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
+// New component for sprinkler animation
+const SprinklerAnimation = () => {
+  return (
+    <div className="mt-6 pt-4 border-t border-gray-100 overflow-hidden">
+      <div className="relative h-8">
+        <div className="absolute inset-0 flex justify-center">
+          {[...Array(12)].map((_, i) => (
+            <div 
+              key={i}
+              className="h-1 w-1 bg-indigo-400 rounded-full mx-1 animate-bounce"
+              style={{ 
+                animationDelay: `${i * 0.1}s`,
+                animationDuration: '1.5s',
+                opacity: 0.7
+              }}
+            ></div>
+          ))}
+        </div>
+        <div className="absolute inset-0 flex justify-center items-end">
+          <div className="h-3 w-12 bg-gradient-to-t from-indigo-500/30 to-transparent rounded-full blur-sm"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -421,19 +447,23 @@ const MyBookings = () => {
                     </div>
                   </div>
                   
-                  {/* Action buttons */}
-                  <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end space-x-3">
-                    <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium">
-                      Contact
-                    </button>
-                    <button 
-                      onClick={() => handleViewReceipt(booking.paymentIntentId || 'pi_3R4j4p09cpCtmNAq09P6RFzE')}
-                      className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md hover:bg-indigo-100 transition-colors text-sm font-medium flex items-center group"
-                    >
-                      <FileText className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
-                      Receipt
-                    </button>
-                  </div>
+                  {/* Action buttons or sprinkler animation based on role */}
+                  {userRole === 'provider' ? (
+                    <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end space-x-3">
+                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium">
+                        Contact
+                      </button>
+                      <button 
+                        onClick={() => handleViewReceipt(booking.paymentIntentId || 'pi_3R4j4p09cpCtmNAq09P6RFzE')}
+                        className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-md hover:bg-indigo-100 transition-colors text-sm font-medium flex items-center group"
+                      >
+                        <FileText className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
+                        Receipt
+                      </button>
+                    </div>
+                  ) : (
+                    <SprinklerAnimation />
+                  )}
                 </div>
               </div>
             );
