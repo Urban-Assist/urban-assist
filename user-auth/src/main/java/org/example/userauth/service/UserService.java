@@ -31,7 +31,7 @@ public class UserService {
 
     @Autowired
     private EmailTokenRepository emailTokenRepository;
-    
+
     @Autowired
     private EmailService emailService;
 
@@ -47,11 +47,11 @@ public class UserService {
     public ResponseEntity<?> registerUser(User user, HttpServletRequest request) throws IOException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //create token for email verification
+        // create token for email verification
         String token = UUID.randomUUID().toString();
         System.out.println("Token generated ✅");
 
-        //send email with token for verification
+        // send email with token for verification
         Boolean emailSent = emailService.sendEmail(token, user, request, "verify.html");
         if (emailSent) {
             User registeredUser = userRepository.save(user);
@@ -64,30 +64,27 @@ public class UserService {
                     registeredUser.getLastName(),
                     registeredUser.getRole()
 
-            
             );
- //save email token
- EmailConfirmation emailObject = new EmailConfirmation();
- emailObject.setToken(token);
- emailObject.setUser(user);
- emailTokenRepository.save(emailObject);
+            // save email token
+            EmailConfirmation emailObject = new EmailConfirmation();
+            emailObject.setToken(token);
+            emailObject.setUser(user);
+            emailTokenRepository.save(emailObject);
             rabbitTemplate.convertAndSend(exchange, routingKey, profileDTO);
             System.out.println("Profile data sent to queue ✅");
 
-           
-
             System.out.println("Email token saved ✅");
 
-            //create response JSON object
+            // create response JSON object
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
             response.put("message", "User registered successfully ✅");
-            response.put("Registered User", registeredUser.getEmail());   
+            response.put("Registered User", registeredUser.getEmail());
 
-            //send the response
+            // send the response
             return ResponseEntity.status(200).body(response);
         } else {
-            //create response JSON object
+            // create response JSON object
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
             response.put("message", "Unable to register user ❌");
@@ -101,13 +98,14 @@ public class UserService {
     @Transactional
     public ResponseEntity<?> verifyEmail(String token, HttpServletRequest request) throws IOException {
         System.out.println("Verifying token: " + token);
-        
+
         // Add debug logging for database query
         System.out.println("Looking for token in database: " + token);
         EmailConfirmation emailToken = emailTokenRepository.findByToken(token);
         System.out.println(emailToken);
-        System.out.println("Database query result: " + (emailToken == null ? "No token found" : "Token found for user: " + emailToken.getUser().getEmail()));
-        
+        System.out.println("Database query result: "
+                + (emailToken == null ? "No token found" : "Token found for user: " + emailToken.getUser().getEmail()));
+
         if (emailToken == null) {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
@@ -119,7 +117,7 @@ public class UserService {
 
         User tempUser = emailToken.getUser();
         User user = userRepository.findById(tempUser.getId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Set verified flag and save
         user.setVerified(true);
@@ -127,7 +125,7 @@ public class UserService {
 
         // send a welcome email
         Boolean emailSent = emailService.sendWelcomeEmail("welcome.html", request, tempUser);
-        if(!emailSent){
+        if (!emailSent) {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode response = objectMapper.createObjectNode();
             response.put("message", "Unable to verify email ❌");
@@ -136,11 +134,11 @@ public class UserService {
             return ResponseEntity.status(400).body(response);
         }
         // Delete token after successful verification
-        if(emailToken != null){
+        if (emailToken != null) {
             emailTokenRepository.delete(emailToken);
 
         }
-        
+
         System.out.println("Email verified successfully for user: " + user.getEmail());
         return ResponseEntity.ok().body("Email verified successfully ✅");
     }
