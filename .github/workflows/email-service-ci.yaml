@@ -1,0 +1,29 @@
+# .github/workflows/ci-cd.yaml
+name: Email Service CI/CD
+
+on:
+  push:
+    branches: [ "deployment-email" ]
+  pull_request:
+    branches: [ "deployment-email" ]
+
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  IMAGE_NAME: email-service
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      run: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+
+    - name: Build Docker image
+      run: docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:latest .
+
+    - name: Push Docker image
+      run: |
+        docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest

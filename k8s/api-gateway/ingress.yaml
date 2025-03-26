@@ -33,5 +33,11 @@ spec:
             name: user-auth
             port:
               number: 80
-
-      
+      # Email Service
+      - path: /send(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: email-service
+            port:
+              number: 8084
