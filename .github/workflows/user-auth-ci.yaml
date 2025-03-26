@@ -5,11 +5,11 @@ on:
   push:
     paths:
       - 'user-auth/**'
-    branches: [ development ]
+    branches: [ deployment-auth-microservice ]
   pull_request:
     paths:
       - 'user-auth/**'
-    branches: [ development ]
+    branches: [ deployment-auth-microservice ]
 
 env:
   IMAGE_NAME: user-auth
