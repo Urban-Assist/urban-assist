@@ -39,7 +39,10 @@ jobs:
     - name: Build and push Docker image
       working-directory: ./email
       run: |
-        
+      
+        docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA .
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA
+
         # Tag as latest for local development
         docker tag $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA $DOCKER_USERNAME/$IMAGE_NAME:latest
         docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
