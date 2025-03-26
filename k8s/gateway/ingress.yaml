@@ -1,0 +1,33 @@
+# k8s/api-gateway/ingress.yaml (consolidated)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /public/register
+        pathType: Exact
+        backend:
+          service:
+            name: user-auth
+            port:
+              number: 80
+      - path: /public/authenticate
+        pathType: Exact
+        backend:
+          service:
+            name: user-auth
+            port:
+              number: 80
+      - path: /public/email-verification
+        pathType: Exact
+        backend:
+          service:
+            name: user-auth
+            port:
+              number: 80
