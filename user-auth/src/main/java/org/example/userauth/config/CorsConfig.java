@@ -15,7 +15,7 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("*")); // Allow
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Allow
                                                                                                              // the
                                                                                                              // origin
                                                                                                              // of your

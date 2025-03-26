@@ -11,11 +11,27 @@
             "mainClass": "com.example.userManagement.UserManagementApplication",
             "projectName": "user-profile-service",
             "env": {
-                "DB_PASSWORD": "admin@vaibhav",
-                "DB_USERNAME": "root",
-                "AUTH_SERVER_PORT": 9002,
-                "DB_URL": "jdbc:mysql://localhost:3306/demo",
-                "EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
+                "MYSQL_ROOT_PASSWORD": "root",
+                "MYSQL_DATABASE": "demo",
+                "MYSQL_USER": "root",
+                "MYSQL_PASSWORD": "root",
+                "SERVER_PORT": "8081",
+                "SPRING_JPA_HIBERNATE_DDL_AUTO": "update",
+                "SPRING_JPA_SHOW_SQL": "true",
+                "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE_0": "email",
+                "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE_1": "profile",
+                "EMAIL_SERVER_URL": "http://mail-service:9001/mail/send",
+                "RABBITMQ_HOST": "rabbitmq",
+                "RABBITMQ_PORT": "5672",
+                "RABBITMQ_QUEUE": "user_profile_queue",
+                "RABBITMQ_EXCHANGE": "user_exchange",
+                "RABBITMQ_ROUTING_KEY": "user_routing_key",
+                "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/demo",
+                "SPRING_DATASOURCE_USERNAME": "root",
+                "SPRING_DATASOURCE_PASSWORD": "root",
+                "JWT_SECRET": "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c",
+                "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID": "135340867799-ptdfhgjke68ua13bkvdvb9gdbbcho5d1.apps.googleusercontent.com",
+                "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET": "hZlFJ6Fic57XpBPg6SFo6l25"
             }
         },
         {
@@ -30,13 +46,7 @@
             "request": "launch",
             "mainClass": "org.example.userauth.UserAuthApplication",
             "projectName": "user-auth",
-            "env": {
-                "DB_PASSWORD": "admin@vaibhav",
-                "DB_USERNAME": "root",
-                "AUTH_SERVER_PORT": 8080,
-                "DB_URL": "jdbc:mysql://localhost:3306/auth",
-                "EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
-            }
+            "env": {}
         }
     ]
 }

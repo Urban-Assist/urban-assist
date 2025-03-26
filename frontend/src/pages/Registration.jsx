@@ -89,6 +89,7 @@ const RegistrationPage = () => {
 
         try {
             const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
+            console.log(AUTH_API + '/auth-api/public/register')
             const response = await axios.post(AUTH_API + '/auth-api/public/register', formData);
             
             if (response.status === 200) {

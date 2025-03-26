@@ -6,7 +6,6 @@ spring:
     url: jdbc:mysql://localhost:3306/demo
     username: root
     password: root
-    EMAIL_SERVER_URL: http://localhost:9001/mail/send
   security:
     oauth2:
       client:
