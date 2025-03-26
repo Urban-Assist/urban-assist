@@ -1,0 +1,12 @@
+# k8s/user-auth/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-auth
+spec:
+  selector:
+    app: user-auth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
