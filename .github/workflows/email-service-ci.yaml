@@ -5,11 +5,11 @@ on:
   push:
     paths:
       - 'email/**'
-    branches: [ development ]
+    branches: [ deployment-email ]
   pull_request:
     paths:
       - 'email/**'
-    branches: [ development ]
+    branches: [ deployment-email ]
 
 env:
   IMAGE_NAME: email-service
