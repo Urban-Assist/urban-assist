@@ -1,29 +1,50 @@
-# .github/workflows/ci-cd.yaml
-name: Email Service CI/CD
+# .github/workflows/email-service-ci.yaml
+name: Email Service CI
 
 on:
   push:
-    branches: [ "deployment-email" ]
+    paths:
+      - 'email/**'
+    branches: [ development ]
   pull_request:
-    branches: [ "deployment-email" ]
+    paths:
+      - 'email/**'
+    branches: [ development ]
 
 env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   IMAGE_NAME: email-service
+  DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      working-directory: ./email-service
+      run: npm ci
+      
+    - name: Run tests
+      working-directory: ./email-service
+      run: npm test
+      
     - name: Login to Docker Hub
-      run: echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
-
-    - name: Build Docker image
-      run: docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:latest .
-
-    - name: Push Docker image
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      
+    - name: Build and push Docker image
+      working-directory: ./email-service
       run: |
-        docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+        # Tag as latest for local development
+        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA $DOCKER_USERNAME/$IMAGE_NAME:latest
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+        
+        
