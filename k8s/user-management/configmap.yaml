@@ -11,6 +11,6 @@ data:
   SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.mysql.cj.jdbc.Driver"
   JWT_EXPIRATION: "86400000"
   SPRING_RABBITMQ_PORT: "5672"
-  SPRING_DATASOURCE_URL: "jdbc:mysql://user-management-mysql-service:3306/urbanassist"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-service:5151/user_management"
   SPRING_RABBITMQ_HOST: "rabbitmq"
   RABBITMQ_QUEUE_NAME: "user_profile_queue"

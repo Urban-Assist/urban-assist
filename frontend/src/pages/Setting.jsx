@@ -32,7 +32,7 @@ const Setting = () => {
       setLoading(true);
       try {
         
-        const API_URL = "http://localhost:8083/api/profile";
+        const API_URL = `${import.meta.env.VITE_SERVER_JAVA_URL}/api/profile`;
         const response = await fetch(API_URL, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -132,7 +132,7 @@ const Setting = () => {
       };
 
       // Update this with your actual API endpoint
-      await fetch("http://localhost:8083/api/profile", {
+      await fetch(`${import.meta.env.VITE_SERVER_JAVA_URL}/api/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

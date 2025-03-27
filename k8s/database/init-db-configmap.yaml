@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-db
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS auth;
+    CREATE DATABASE IF NOT EXISTS user_management;
+    CREATE DATABASE IF NOT EXISTS reviews;
+    CREATE DATABASE IF NOT EXISTS admin;
+    CREATE DATABASE IF NOT EXISTS payments;
+
+    CREATE USER IF NOT EXISTS 'admin'@'%' IDENTIFIED BY 'jarvis007';
+    GRANT ALL PRIVILEGES ON urbanassist.* TO 'admin'@'%';
+    GRANT ALL PRIVILEGES ON user_auth_db.* TO 'admin'@'%';
+    GRANT ALL PRIVILEGES ON test_db.* TO 'admin'@'%';
+    FLUSH PRIVILEGES;

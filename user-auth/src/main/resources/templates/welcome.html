@@ -3,10 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Welcome to Urban Assist</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .banner {
+            text-align: center;
+            background: #86a789;
+            color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+        }
+        .banner h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .banner h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+        .banner p {
+            font-size: 16px;
+            margin: 15px 0;
+            color: #f0f0f0;
+        }
+        .login-button {
+            display: inline-block;
+            background: #4a6741;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+        .login-button:hover {
+            background: #3a5331;
+        }
+        .features {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .features p {
+            margin: 8px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #ddd;
+        }
+    </style>
 </head>
 <body>
-    // to do make the html file with good ui
-    welcome
+    <div class="banner">
+        <h1>Welcome to Urban Assist!</h1>
+        <h2>Your Account is Now Active</h2>
+        <p>Thank you for verifying your email address. Your Urban Assist account has been successfully activated.</p>
+        <p>We're excited to have you join our community of urban problem solvers!</p>
+        
+        <a href="{{signinLink}}" class="login-button">Login to Your Account</a>
+        
+        <div class="features">
+            <p>With Urban Assist, you can:</p>
+            <p>• Report urban issues in your neighborhood</p>
+            <p>• Track the status of your reported problems</p>
+            <p>• Connect with local authorities and community members</p>
+            <p>• Contribute to making your city better</p>
+        </div>
+        
+        <div class="footer">
+            <p>If you have any questions or need assistance, please contact our support team.</p>
+            <p>The Urban Assist Team</p>
+        </div>
+    </div>
 </body>
 </html>
