@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-management-mysql
+spec:
+  selector:
+    matchLabels:
+      app: user-management-mysql
+  template:
+    metadata:
+      labels:
+        app: user-management-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        envFrom:
+        - secretRef:
+            name: user-management-mysql-secrets
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: user-management-mysql-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: user-management-mysql-data
+        persistentVolumeClaim:
+          claimName: user-management-mysql-pvc
