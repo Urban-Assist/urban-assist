@@ -6,3 +6,15 @@ metadata:
 provisioner: k8s.io/minikube-hostpath
 volumeBindingMode: Immediate
 reclaimPolicy: Delete
+
+
+
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: mysql-storage-class
+# provisioner: pd.csi.storage.gke.io
+# volumeBindingMode: Immediate
+# reclaimPolicy: Retain 
+# parameters:
+#   type: pd-standard  
