@@ -46,6 +46,7 @@ public class EmailService {
         emailRequest.setSubject("Email Verification");
         String url = emailServiceUrl;
 
+        // Send the email using the Email microservice
         try {
             MailResponse response = restTemplate.postForObject(url, emailRequest, MailResponse.class);
 
