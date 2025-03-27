@@ -20,13 +20,9 @@ spec:
         ports:
         - containerPort: 3306
         volumeMounts:
-        - name: mysql-data
+        - name: user-management-mysql-data
           mountPath: /var/lib/mysql
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
       volumes:
-      - name: mysql-data
+      - name: user-management-mysql-data
         persistentVolumeClaim:
           claimName: user-management-mysql-pvc

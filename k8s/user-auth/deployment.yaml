@@ -26,7 +26,3 @@ spec:
             name: user-auth-config
         - secretRef:
             name: user-auth-secrets
-        resources:
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
