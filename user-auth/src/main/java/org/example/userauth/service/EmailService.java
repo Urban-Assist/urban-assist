@@ -74,12 +74,12 @@ public class EmailService {
        
 
         // Replace the placeholder with the signin link 
-        //String emailContent = htmlTemplate.replace("{{signinLink}}", loginLink);
+        String emailContent = htmlTemplate.replace("{{signinLink}}", loginLink);
 
         // Send email with the verification link
         MailRequest emailRequest = new MailRequest();
         emailRequest.setTo(user.getEmail());
-        emailRequest.setText(htmlTemplate); // Use the modified HTML content
+        emailRequest.setText(emailContent); // Use the modified HTML content instead of htmlTemplate
         emailRequest.setSubject("Welcome to the Urban Assist.");
         String url = emailServiceUrl;
 
