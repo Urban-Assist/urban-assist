@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: user-auth
-        image: parthpatil01/user-auth:latest
+        image: handyshare/user-auth:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
