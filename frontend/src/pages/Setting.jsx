@@ -32,7 +32,7 @@ const Setting = () => {
       setLoading(true);
       try {
         
-        const API_URL = "http://localhost:8083/api/profile";
+        const API_URL = `${import.meta.env.VITE_SERVER_JAVA_URL}/api/profile`;
         const response = await fetch(API_URL, {
           headers: {
             Authorization: `Bearer ${token}`,
