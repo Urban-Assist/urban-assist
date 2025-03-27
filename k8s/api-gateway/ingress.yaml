@@ -34,7 +34,7 @@ spec:
             port:
               number: 80
       # Email Service
-      - path: /send(/|$)(.*)
+      - path: /mail(/|$)(.*)
         pathType: Prefix
         backend:
           service:
