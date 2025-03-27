@@ -118,7 +118,7 @@ export default function ServiceCards({ title }) {
         if(token == null) navigate("/login");
 
         setLoading(true);
-        const serviceURL = import.meta.env.VITE_ADMIN_SERVER;
+        const serviceURL = import.meta.env.VITE_SERVER_URL;
         const config = { headers: { Authorization: `Bearer ${token}` } };
         const response = await axios.get(`${serviceURL}/admin/getServices`, config);
         const servicesData = response.data.message || [];

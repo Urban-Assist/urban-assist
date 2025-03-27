@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const RegistrationPage = () => {
     const navigate = useNavigate();
     // Hardcoded Google OAuth2 URL
-    const googleAuthUrl = `${import.meta.env.VITE_AUTH_SERVER}/auth-api/oauth2/authorize/google`;
+    const googleAuthUrl = `${import.meta.env.VITE_SERVER_URL}/auth-api/oauth2/authorize/google`;
     
     // State for form data
     const [formData, setFormData] = useState({
@@ -88,7 +88,7 @@ const RegistrationPage = () => {
         }
 
         try {
-            const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
+            const AUTH_API = import.meta.env.VITE_SERVER_URL;
             console.log(AUTH_API + '/auth-api/public/register')
             const response = await axios.post(AUTH_API + '/auth-api/public/register', formData);
             

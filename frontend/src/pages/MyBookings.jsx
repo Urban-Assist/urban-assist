@@ -65,7 +65,7 @@ const MyBookings = () => {
         // Adjust the API endpoint based on user role
 
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_JAVA_URL}/api/booking?role=${userRole}`,
+          `${import.meta.env.VITE_SERVER_URL}/api/booking?role=${userRole}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -152,7 +152,7 @@ const MyBookings = () => {
       
       // Fetch the receipt
       const response = await axios.get(
-        `${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/receipt/${paymentId}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/payments/receipt/${paymentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -15,7 +15,7 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
-  const server = import.meta.env.VITE_SERVER;
+  const server = import.meta.env.VITE_SERVER_URL;
 
   useEffect(() => {
     const fetchProvider = async () => {

@@ -95,8 +95,8 @@ const Payment = () => {
         }
 
         try {
-            console.log("Sending payment request to:", `${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/card-pay`);
-            const response = await fetch(`${import.meta.env.VITE_PAYMENT_SERVER}/api/payments/card-pay`, {
+            console.log("Sending payment request to:", `${import.meta.env.VITE_SERVER_URL}/api/payments/card-pay`);
+            const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/payments/card-pay`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",

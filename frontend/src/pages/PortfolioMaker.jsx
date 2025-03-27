@@ -49,7 +49,7 @@ export default function PortfolioPage() {
       }
       
       try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_JAVA_URL}/api/provider?service=${name}`,
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/provider?service=${name}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -155,7 +155,7 @@ export default function PortfolioPage() {
   
     try {
       const response = await axios.put(
-        `${import.meta.env.VITE_SERVER_JAVA_URL}/api/provider`,
+        `${import.meta.env.VITE_SERVER_URL}/api/provider`,
         formData, // Include the request body
         {
           headers: {
