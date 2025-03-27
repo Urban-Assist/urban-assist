@@ -1,28 +1,28 @@
-# k8s/user-auth/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-auth
+  name: user-management
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: user-auth
+      app: user-management
   template:
     metadata:
       labels:
-        app: user-auth
+        app: user-management
     spec:
       containers:
-      - name: user-auth
-        image: parthpatil01/user-auth:latest
+      - name: user-management
+        image: parthpatil01/user-management:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8081
+        - containerPort: 8083
         envFrom:
         - configMapRef:
-            name: user-auth-config
+            name: user-management-config
         - secretRef:
-            name: user-auth-secrets
+            name: user-management-secrets
+        

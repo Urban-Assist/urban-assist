@@ -1,0 +1,52 @@
+# .github/workflows/user-management-ci.yaml
+name: User-Management Service CI
+
+on:
+  push:
+    paths:
+      - 'userManagement/**'
+    branches: [ user-management-deployment ]
+  pull_request:
+    paths:
+      - 'userManagement/**'
+    branches: [ user-management-deployment ]
+
+env:
+  IMAGE_NAME: user-management
+  DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+      
+    - name: Build with Maven
+      working-directory: ./userManagement
+      run: mvn clean package
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}  
+    
+    - name: Build and push Docker image
+      working-directory: ./userManagement
+      run: |
+        docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA .
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA
+        
+        # Tag as latest for local development
+        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA $DOCKER_USERNAME/$IMAGE_NAME:latest
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+        
+        # Tag as dev for tracking
+        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA $DOCKER_USERNAME/$IMAGE_NAME:dev
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:dev

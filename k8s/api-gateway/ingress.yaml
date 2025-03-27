@@ -41,3 +41,11 @@ spec:
             name: email-service
             port:
               number: 8084
+      # User Management Service
+      - path: /api(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: user-management
+            port:
+              number: 8083
