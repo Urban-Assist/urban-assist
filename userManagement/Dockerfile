@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file (change this to match your JAR name)
-COPY target/userManagement-*.jar app.jar
+COPY target/user-profile-service-*.jar app.jar
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
