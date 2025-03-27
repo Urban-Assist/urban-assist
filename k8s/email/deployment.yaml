@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-service
+  template:
+    metadata:
+      labels:
+        app: email-service
+    spec:
+      containers:
+      - name: email-service
+        image: parthpatil01/email:latest
+        imagePullPolicy: Always  # This ensures it pulls the latest image
+        ports:
+        - containerPort: 8084
+        envFrom:
+        - secretRef:
+            name: email-service-secrets
