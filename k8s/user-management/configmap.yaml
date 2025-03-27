@@ -10,6 +10,7 @@ data:
   SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
   SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.mysql.cj.jdbc.Driver"
   JWT_EXPIRATION: "86400000"
-  RABBITMQ_QUEUE_NAME: "user_profile_queue"
   SPRING_RABBITMQ_PORT: "5672"
   SPRING_DATASOURCE_URL: "jdbc:mysql://user-management-mysql-service:3306/urbanassist"
+  SPRING_RABBITMQ_HOST: "rabbitmq"
+  RABBITMQ_QUEUE_NAME: "user_profile_queue"

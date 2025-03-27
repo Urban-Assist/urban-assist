@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: user-management-mysql-pvc  
 spec:
+  storageClassName: "standard"
   accessModes:
     - ReadWriteOnce
   resources:
