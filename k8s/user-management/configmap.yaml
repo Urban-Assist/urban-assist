@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-management-config
+data:
+  SERVER_PORT: "8083"
+  SPRING_APPLICATION_NAME: "userManagement"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+  SPRING_JPA_SHOW_SQL: "true"
+  SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.mysql.cj.jdbc.Driver"
+  JWT_EXPIRATION: "86400000"
+  RABBITMQ_QUEUE_NAME: "user_profile_queue"
+  SPRING_RABBITMQ_PORT: "5672"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://user-management-mysql-service:3306/urbanassist"
