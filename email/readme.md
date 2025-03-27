@@ -43,6 +43,41 @@ CORS_ORIGIN=*
 - **PORT**: The port on which the service will run.
 - **EMAIL_ADDRESS**: The email address used to send emails.
 - **MAIL_ACCESS_TOKEN**: The app password for the email account (especially for Gmail).
+  
+  ### How to Obtain an App Password for Gmail
+  
+  1. **Sign in to your Google Account**:
+     - Go to [myaccount.google.com](https://myaccount.google.com/)
+     - Sign in with your Google account credentials
+  
+  2. **Enable 2-Step Verification**:
+     - Navigate to the "Security" tab
+     - Under "Signing in to Google," find "2-Step Verification"
+     - If not already enabled, follow the prompts to set it up
+     - Complete the verification process
+  
+  3. **Generate an App Password**:
+     - After enabling 2-Step Verification, go back to the "Security" tab
+     - Look for "App passwords" (under "Signing in to Google")
+     - Click on "App passwords" and enter your password again if prompted
+  
+  4. **Create a New App Password**:
+     - From the "Select app" dropdown, choose "Mail" or "Other (Custom name)"
+     - If choosing "Other," enter a name like "Urban Assist Email Service"
+     - From the "Select device" dropdown, choose your device type or "Other"
+     - Click "Generate"
+  
+  5. **Copy and Save the App Password**:
+     - Google will display a 16-character generated password
+     - Copy this password (it will only be shown once)
+     - Use this password as your MAIL_ACCESS_TOKEN in the .env file
+     - Click "Done"
+  
+  6. **Security Note**:
+     - Keep this password secure
+     - Do not share it or commit it to your version control system
+     - Consider using environment variables in production environments
+
 - **CORS_ORIGIN**: The origin allowed to access the service.
 
 ## Running the Service
