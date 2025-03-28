@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: handyshare/frontend:latest 
+        image: parthpatil01/urbanassist-frontend:latest
         ports:
         - containerPort: 80
         envFrom:

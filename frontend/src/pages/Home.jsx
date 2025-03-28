@@ -3,7 +3,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import HeroSection from "../components/HeroSection";
 import MiddleSection from "../components/Testimonial";
-import Faq from "../components/faq";
+import Faq from "../components/FAQ";
 
 function Home() {
 
