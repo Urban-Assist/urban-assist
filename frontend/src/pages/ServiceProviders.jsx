@@ -31,7 +31,7 @@ export default function ServiceProviders() {
     useEffect(() => {
         const fetchProviders = async () => {
             try {
-                const response = await axios.get(`http://localhost:8083/api/provider/service?service=${service}`, {
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/provider/service?service=${service}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
