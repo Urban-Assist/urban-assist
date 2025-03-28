@@ -29,13 +29,7 @@ spec:
   - http:
       paths:
       # Frontend Service
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
+     
       # User Authentication Service
       - path: /auth-api
         pathType: Prefix
@@ -74,4 +68,11 @@ spec:
             name: admin-service
             port:
               number: 8086
-      
+
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
