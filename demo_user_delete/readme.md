@@ -1,1 +1,0 @@
-this is temporary project to emulate provider delete event for development of the reviews module
