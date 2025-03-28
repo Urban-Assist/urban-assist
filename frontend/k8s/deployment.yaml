@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +6,9 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 3
+  replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: frontend
@@ -17,6 +20,7 @@ spec:
       containers:
       - name: frontend
         image: parthpatil01/urbanassist-frontend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         envFrom:
