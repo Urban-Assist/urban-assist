@@ -14,7 +14,7 @@
                 // "MYSQL_ROOT_PASSWORD": "root",
                 "MYSQL_DATABASE": "management",
                 "MYSQL_USER": "admin",
-                "MYSQL_PASSWORD": "Enter%$+99",
+                "MYSQL_PASSWORD": "admin@vaibhav",
                 "SERVER_PORT": "8081",
                 "SPRING_JPA_HIBERNATE_DDL_AUTO": "update",
                 "SPRING_JPA_SHOW_SQL": "true",
@@ -49,7 +49,7 @@
             "env": {
                 "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/auth",
                 "SPRING_DATASOURCE_USERNAME": "root",
-                "SPRING_DATASOURCE_PASSWORD": "Enter%$+99",
+                "SPRING_DATASOURCE_PASSWORD": "admin@vaibhav",
                 "JWT_SECRET": "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c",
                 "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID": "135340867799-ptdfhgjke68ua13bkvdvb9gdbbcho5d1.apps.googleusercontent.com",
                 "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET": "hZlFJ6Fic57XpBPg6SFo6l25",
