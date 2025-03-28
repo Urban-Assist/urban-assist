@@ -7,7 +7,7 @@ router.post('/card-pay', authenticateJWT, PaymentController.processCardPayment);
 router.post('/create-customer', PaymentController.createUserAccount);
 
 // Route to fetch payments by email
-router.get('/payments/:email', authenticateJWT, PaymentController.fetchPaymentsByEmail);
+router.get('/:email', authenticateJWT, PaymentController.fetchPaymentsByEmail);
 
 // Add this new route
 router.get('/receipt/:paymentId', authenticateJWT, PaymentController.getPaymentReceipt);

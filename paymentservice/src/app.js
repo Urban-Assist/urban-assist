@@ -12,6 +12,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-app.use('/api/payments', paymentRoutes);
- 
+app.use('/payments', paymentRoutes);
+
 module.exports = app;

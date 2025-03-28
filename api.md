@@ -1,7 +1,7 @@
 # API Endpoints Documentation
 
 ## Payment Microservice
-### Endpoint: `POST /api/payments/card-pay`
+### Endpoint: `POST /payments/card-pay`
 - **Base URL:** `http://localhost:5001`
 - **Security:** ✅ Secure
 - **Request Format (JSON):**
