@@ -28,6 +28,14 @@ spec:
   rules:
   - http:
       paths:
+      # Frontend Service
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
       # User Authentication Service
       - path: /auth-api
         pathType: Prefix
@@ -35,7 +43,7 @@ spec:
           service:
             name: user-auth
             port:
-              number: 80
+              number: 8081
       # Email Service
       - path: /mail
         pathType: Prefix
