@@ -21,14 +21,14 @@
                 "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE_0": "email",
                 "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE_1": "profile",
                 "EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
-                "RABBITMQ_HOST": "rabbitmq",
-                "RABBITMQ_PORT": "5672",
+                "SPRING_RABBITMQ_HOST": "rabbitmq",
+                "SPRING_RABBITMQ_PORT": "5672",
                 "RABBITMQ_QUEUE": "user_profile_queue",
                 "RABBITMQ_EXCHANGE": "user_exchange",
                 "RABBITMQ_ROUTING_KEY": "user_routing_key",
                 "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/management",
                 "SPRING_DATASOURCE_USERNAME": "root",
-                "SPRING_DATASOURCE_PASSWORD": "admin@vaibhav",
+                "SPRING_DATASOURCE_PASSWORD": "Enter%$+99",
                 "JWT_SECRET": "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c",
                 "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID": "135340867799-ptdfhgjke68ua13bkvdvb9gdbbcho5d1.apps.googleusercontent.com",
                 "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET": "hZlFJ6Fic57XpBPg6SFo6l25"
@@ -48,13 +48,12 @@
             "projectName": "user-auth",
             "env": {
                 "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/auth",
-                "SPRING_DATASOURCE_USERNAME": "root",   
-                "SPRING_DATASOURCE_PASSWORD":"admin@vaibhav",
-
-              "JWT_SECRET":  "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c",
-"SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID":"135340867799-ptdfhgjke68ua13bkvdvb9gdbbcho5d1.apps.googleusercontent.com",
-"SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET":"hZlFJ6Fic57XpBPg6SFo6l25",
-"EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
+                "SPRING_DATASOURCE_USERNAME": "root",
+                "SPRING_DATASOURCE_PASSWORD": "admin@vaibhav",
+                "JWT_SECRET": "e7b03c0c0329ed5a8bbac042d38c6d93f7344516ac51203552476cf58f07b62c",
+                "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID": "135340867799-ptdfhgjke68ua13bkvdvb9gdbbcho5d1.apps.googleusercontent.com",
+                "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET": "hZlFJ6Fic57XpBPg6SFo6l25",
+                "EMAIL_SERVER_URL": "http://localhost:9001/mail/send",
             }
         }
     ]
