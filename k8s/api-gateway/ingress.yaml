@@ -59,3 +59,11 @@ spec:
             name: payment-service
             port:
               number: 8085
+      - path: /admin
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-service
+            port:
+              number: 8086
+      
