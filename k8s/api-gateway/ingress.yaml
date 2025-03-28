@@ -7,11 +7,11 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, X-Requested-With, X-Api-Key"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "$http_origin"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-
+    
     # Path handling
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/use-regex: "false"
     
     # Performance tuning
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
@@ -21,12 +21,15 @@ metadata:
     # SSL and security
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 
+    # Additional annotations
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+
 spec:
   rules:
   - http:
       paths:
       # User Authentication Service
-      - path: /auth-api(/|$)(.*)
+      - path: /auth-api
         pathType: Prefix
         backend:
           service:
@@ -34,7 +37,7 @@ spec:
             port:
               number: 80
       # Email Service
-      - path: /mail(/|$)(.*)
+      - path: /mail
         pathType: Prefix
         backend:
           service:
@@ -42,7 +45,7 @@ spec:
             port:
               number: 8084
       # User Management Service
-      - path: /api(/|$)(.*)
+      - path: /api
         pathType: Prefix
         backend:
           service:

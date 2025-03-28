@@ -59,7 +59,7 @@ public class AuthController {
     @Autowired(required = false)
     private ClientRegistrationRepository clientRegistrationRepository;
 
-    @PostMapping("public/register")
+    @PostMapping("/public/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, HttpServletRequest request) {
         try {
             if (userRepository.existsByEmail(user.getEmail())) {
