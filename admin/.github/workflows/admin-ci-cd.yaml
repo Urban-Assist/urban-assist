@@ -1,0 +1,50 @@
+# .github/workflows/email-ci.yaml
+name: Email Service CI/CD
+
+on:
+  push:
+    paths:
+      - '/'
+    branches: [ main ]
+  pull_request:
+    paths:
+      - '/'
+    branches: [ main ]
+
+env:
+  IMAGE_NAME: handyshare/admin:latest
+  DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      working-directory: ./
+      run: npm ci
+      
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      
+    - name: Build and push Docker image
+      working-directory: ./email
+      run: |
+      
+        docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA .
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA
+
+        # Tag as latest for local development
+        docker tag $DOCKER_USERNAME/$IMAGE_NAME:$GITHUB_SHA $DOCKER_USERNAME/$IMAGE_NAME:latest
+        docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+        
+        
