@@ -69,10 +69,4 @@ spec:
             port:
               number: 8086
 
-      - path: /
-        pathType: Exact
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
+      
