@@ -52,3 +52,10 @@ spec:
             name: user-management
             port:
               number: 8083
+      - path: /payments
+      pathType: Prefix
+      backend:
+        service:
+          name: payment-service
+          port:
+            number: 8085
