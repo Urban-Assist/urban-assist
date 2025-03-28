@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-service
+  template:
+    metadata:
+      labels:
+        app: admin-service
+    spec:
+      containers:
+      - name: admin-service
+        image: handyshare/admin:latest
+        imagePullPolicy: Always  # This ensures it pulls the latest image
+        ports:
+        - containerPort: 8086
+        envFrom:
+        - secretRef:
+            name: admin-service-secrets
