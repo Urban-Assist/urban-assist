@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews-service
+spec:
+  selector:
+    app: reviews-service
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084
