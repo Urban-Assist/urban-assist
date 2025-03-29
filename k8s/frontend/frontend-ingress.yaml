@@ -6,10 +6,19 @@ metadata:
     # Support for SPA with client-side routing
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    
+    # Global CORS configuration
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, X-Requested-With, X-Api-Key"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    
+    # Combined configuration snippet for SPA routing and caching
     nginx.ingress.kubernetes.io/configuration-snippet: |
+      # Try files for SPA routing
       try_files $uri $uri/ /index.html;
-
-      # Cache control for static assets
+      
+      # Cache settings for static assets
       location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
         expires 30d;
         add_header Cache-Control "public, no-transform";
@@ -19,12 +28,6 @@ metadata:
       location / {
         try_files $uri $uri/ /index.html;
       }
-    
-    # Global CORS configuration
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
-    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, X-Requested-With, X-Api-Key"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
     
     # SSL and security
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
