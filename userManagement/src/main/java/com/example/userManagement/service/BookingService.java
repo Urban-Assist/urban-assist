@@ -30,9 +30,7 @@ public class BookingService {
 
         String authenticatedEmail = SecurityContextHolder.getContext().getAuthentication().getName();
                                         
-        if (authenticatedEmail == null || authenticatedEmail.isEmpty() || !authenticatedEmail.equals(userEmail)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
-        }                                        
+                                              
         
         Booking booking = Booking.builder()
                 .userEmail(userEmail)
