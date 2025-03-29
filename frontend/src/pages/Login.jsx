@@ -17,10 +17,14 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     try {
-      const AUTH_API = import.meta.env.VITE_SERVER_URL;
-      const response = await axios.post(AUTH_API + '/auth-api/public/authenticate', formData, {
+      // Use the environment variable correctly for the API URL
+      const loginUrl = `${import.meta.env.VITE_SERVER_URL}/auth-api/public/authenticate`;
+      
+      console.log("Attempting login with URL:", loginUrl);
+      
+      const response = await axios.post(loginUrl, formData, {
         headers: {
           'Content-Type': 'application/json',
         },

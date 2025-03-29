@@ -34,7 +34,7 @@ const Payment = () => {
         const fetchProviderPrice = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8083/api/provider/profile/${Id}?service=${service}`,
+                    `${import.meta.env.VITE_SERVER_URL}/api/provider/profile/${Id}?service=${service}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }

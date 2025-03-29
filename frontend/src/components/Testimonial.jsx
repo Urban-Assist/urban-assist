@@ -14,7 +14,7 @@ function Testimonial() {
         const token = localStorage.getItem('token');
         
         // Make the API request with the token in the Authorization header
-        const response = await axios.get('http://localhost:8001/reviews/randomReviews', {
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/reviews/randomReviews`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

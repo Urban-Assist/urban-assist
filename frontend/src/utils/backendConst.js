@@ -1,1 +1,1 @@
-const BASE_URL_BACKEND = "http://localhost:5002"
+const BASE_URL_BACKEND = "http://172.17.2.145"

@@ -17,7 +17,7 @@ const AdminDashboard = () => {
    const fetchPendingProviders = async () => {
      try {
        setLoading(true);
-       const response = await axios.get('http://localhost:8083/api/provider/pending-certifications', {
+       const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/provider/pending-certifications`, {
          headers: {
            Authorization: `Bearer ${token}`,
          },
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
 
    const fetchVerifiedProviders = async () => {
      try {
-       const response = await axios.get('http://localhost:8083/api/provider/verified-providers', {
+       const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/provider/verified-providers`, {
          headers: {
            Authorization: `Bearer ${token}`,
          },
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
  // Function to certify a provider
  const certifyProvider = async (id) => {
    try {
-     await axios.post(`http://localhost:8083/api/provider/certify/${id}`, {}, {
+     await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/provider/certify/${id}`, {}, {
        headers: {
          Authorization: `Bearer ${token}`,
        },
