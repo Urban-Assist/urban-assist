@@ -13,8 +13,9 @@ metadata:
     # Path handling
     nginx.ingress.kubernetes.io/use-regex: "true"
     
-    # Frontend SPA configuration
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    # SPA handling - try files approach
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      try_files $uri $uri/ /index.html;
     
     # Performance tuning
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
@@ -32,58 +33,56 @@ spec:
   - host: advancedweb-vm4.research.cs.dal.ca
     http:
       paths:
-      # Frontend Service - catch all frontend routes
-      - path: /()(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
-      # User Authentication Service
-      - path: /auth-api
+      # Backend services first (ordered by specificity)
+      - path: /auth-api(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: user-auth
             port:
               number: 8081
-      # Email Service
-      - path: /mail
+      - path: /mail(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: email-service
             port:
               number: 8084
-      # User Management Service
-      - path: /api
+      - path: /api(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: user-management
             port:
               number: 8083
-      - path: /payments
+      - path: /payments(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: payment-service
             port:
               number: 8085
-      - path: /admin
+      - path: /admin(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: admin-service
             port:
               number: 8086
-
-      - path: /reviews
+      - path: /reviews(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: reviews-service
             port:
               number: 8089
+            
+      # Frontend service last to catch all other routes
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
 
