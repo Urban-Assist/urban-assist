@@ -11,11 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     
     # Path handling
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    
-    # SPA handling - try files approach
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      try_files $uri $uri/ /index.html;
+    nginx.ingress.kubernetes.io/use-regex: "false"
     
     # Performance tuning
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
@@ -30,59 +26,55 @@ metadata:
 
 spec:
   rules:
-  - host: advancedweb-vm4.research.cs.dal.ca
-    http:
+  - http:
       paths:
-      # Backend services first (ordered by specificity)
-      - path: /auth-api(/|$)(.*)
+      # Frontend Service
+     
+      # User Authentication Service
+      - path: /auth-api
         pathType: Prefix
         backend:
           service:
             name: user-auth
             port:
               number: 8081
-      - path: /mail(/|$)(.*)
+      # Email Service
+      - path: /mail
         pathType: Prefix
         backend:
           service:
             name: email-service
             port:
               number: 8084
-      - path: /api(/|$)(.*)
+      # User Management Service
+      - path: /api
         pathType: Prefix
         backend:
           service:
             name: user-management
             port:
               number: 8083
-      - path: /payments(/|$)(.*)
+      - path: /payments
         pathType: Prefix
         backend:
           service:
             name: payment-service
             port:
               number: 8085
-      - path: /admin(/|$)(.*)
+      - path: /admin
         pathType: Prefix
         backend:
           service:
             name: admin-service
             port:
               number: 8086
-      - path: /reviews(/|$)(.*)
+
+      - path: /reviews
         pathType: Prefix
         backend:
           service:
             name: reviews-service
             port:
               number: 8089
-            
-      # Frontend service last to catch all other routes
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
 
+      
