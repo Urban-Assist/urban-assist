@@ -1,0 +1,17 @@
+# k8s/user-auth/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-auth-config
+data:
+  SERVER_PORT: "8081"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+  SPRING_JPA_SHOW_SQL: "true"
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE_0: "email"
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE_1: "profile"
+  EMAIL_SERVER_URL: http://email-service:8084/mail/send
+  RABBITMQ_HOST: "rabbitmq"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_QUEUE: "user_profile_queue"
+  RABBITMQ_EXCHANGE: "user_exchange"
+  RABBITMQ_ROUTING_KEY: "user_routing_key"

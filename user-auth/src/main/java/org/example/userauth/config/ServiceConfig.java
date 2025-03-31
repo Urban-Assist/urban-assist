@@ -77,7 +77,7 @@ public class ServiceConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(auth -> auth.baseUri("/auth-api/oauth2/authorize"))
-                        .redirectionEndpoint(redirect -> redirect.baseUri("/auth-api/oauth2/callback/*"))
+                        .redirectionEndpoint(redirect -> redirect.baseUri("/auth-api/oauth2/callback/google"))
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                 )
