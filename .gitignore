@@ -73,6 +73,17 @@ web_modules/
 .env
 .env.test
 .env.production
+.env.development
+
+# Private keys and certificates (SECURITY)
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+private_key*
+public_key*
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
