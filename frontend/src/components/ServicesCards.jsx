@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaTools, FaBroom, FaWrench, FaBolt, FaRecycle, FaHeart } from "react-icons/fa";
+import { FaTools, FaBroom, FaWrench, FaBolt, FaRecycle, FaPaintBrush } from "react-icons/fa";
 
 const services = [
   { name: "Restoration", slug: "restoration", icon: <FaRecycle className="text-blue-500" />, description: "Bringing life back to your spaces with expert restoration services." },
@@ -8,7 +8,7 @@ const services = [
   { name: "Plumbing", slug: "plumbing", icon: <FaWrench className="text-indigo-500" />, description: "Fixing leaks and ensuring smooth water flow in your home." },
   { name: "Electrician", slug: "electrician", icon: <FaBolt className="text-yellow-500" />, description: "Reliable electrical solutions for your safety and convenience." },
   { name: "Repairs", slug: "repairs", icon: <FaTools className="text-red-500" />, description: "Quick and efficient repair services to keep things running." },
-  { name: "Mental Well-being", slug: "mental-wellbeing", icon: <FaHeart className="text-pink-500" />, description: "Nurturing your mind and soul with care and support." },
+  { name: "Painting", slug: "painting", icon: <FaPaintBrush className="text-purple-500" />, description: "Transform your spaces with professional painting services." },
 ];
 
 export default function ServiceCards({ title }) {

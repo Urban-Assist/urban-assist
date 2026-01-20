@@ -148,8 +148,8 @@ const ProviderAvailibility = () => {
     return (
 
 
-        <div class="relative h-full min-h-screen font-[sans-serif]">
-            <div class="flex items-start">
+        <div className="relative h-full min-h-screen font-[sans-serif]">
+            <div className="flex items-start">
 
                 <ProviderSidenav />
 

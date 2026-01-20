@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 const RegistrationPage = () => {
     const navigate = useNavigate();
     // State for form data
@@ -64,25 +64,23 @@ const RegistrationPage = () => {
         }
 
         try {
-            const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
-            const response = await axios.post(AUTH_API+'/auth/register', formData);
+            const AUTH_API = import.meta.env.VITE_AUTH_URL;
+            console.log('Registering user:', formData.email);
+            const response = await axios.post(AUTH_API + '/auth-api/public/register', formData);
+            console.log('Registration response:', response);
             if (response.status === 200) {
-                setSuccess('Registration successful!');
+                setSuccess('Registration successful! Please check your email to verify your account.');
                 setError('');
-                // Optionally, you can redirect the user to the login page or clear the form
-                setFormData({
-                    firstName: '',
-                    lastName: '',
-                    role: '',
-                    email: '',
-                    password: ''
-                });
-                navigate('/login');
+                // Wait 2 seconds before redirecting to show the success message
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
             }
         } catch (err) {
-            const AUTH_API = import.meta.env.VITE_AUTH_SERVER;
-            console.log(AUTH_API);
-            setError(err.response?.data?.message || 'An error occurred during registration');
+            console.error('Registration error:', err);
+            const AUTH_API = import.meta.env.VITE_AUTH_URL;
+            console.log('AUTH_API:', AUTH_API);
+            setError(err.response?.data?.message || err.message || 'An error occurred during registration');
             setSuccess('');
         }
     };
@@ -192,9 +190,9 @@ const RegistrationPage = () => {
                 <div className="text-center mt-6">
                     <p className="text-gray-600">
                         Already have an account?{' '}
-                        <a href="/login" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
+                        <Link to="/login" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
                             Sign in
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </div>

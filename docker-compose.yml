@@ -1,0 +1,136 @@
+services:
+  # User Authentication Service
+  user-auth:
+    build:
+      context: ./user-auth
+      dockerfile: Dockerfile
+    container_name: urban-assist-user-auth
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/demo
+      - SPRING_DATASOURCE_USERNAME=urbanassist
+      - SPRING_DATASOURCE_PASSWORD=UrbanAssist@2024!
+      - JWT_SECRET=my-secret-key-1234567890
+      - EMAIL_SERVER_URL=http://email:8001/mail/send
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - urban-assist-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # User Management Service
+  user-management:
+    build:
+      context: ./userManagement
+      dockerfile: Dockerfile
+    container_name: urban-assist-user-management
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/demo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=urbanassist
+      - SPRING_DATASOURCE_PASSWORD=UrbanAssist@2024!
+      - JWT_SECRET=my-secret-key-1234567890
+      - JWT_PUBLIC_KEY_URL=http://user-auth:8081/auth/public-key
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - urban-assist-network
+    depends_on:
+      - user-auth
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8083/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Reviews Service
+  reviews:
+    build:
+      context: ./reviews
+      dockerfile: Dockerfile
+    container_name: urban-assist-reviews
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+      - CORS_ORIGIN=http://127.0.0.1:5173
+      - DATABASE_NAME=reviews
+      - DATABASE_USER=urbanassist
+      - DATABASE_PASSWORD=UrbanAssist@2024!
+      - DATABASE_HOST=host.docker.internal
+      - RABIT_MQ_NAME=deleteUser
+      - RABIT_MQ_URL=amqp://host.docker.internal
+      - AUTH_SERVICE_URL=http://user-auth:8081
+      - USER_MGMT_URL=http://user-management:8083
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - urban-assist-network
+    depends_on:
+      - user-auth
+      - user-management
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8002/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Email Service
+  email:
+    build:
+      context: ./email
+      dockerfile: Dockerfile
+    container_name: urban-assist-email
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - NODE_ENV=production
+      - EMAIL_ADDRESS=mahekkamani2001@gmail.com
+      - MAIL_ACCESS_TOKEN=ljxdgmmplpsoqqsv
+      - CORS_ORIGIN=http://127.0.0.1:5173
+    networks:
+      - urban-assist-network
+    restart: unless-stopped
+
+  # Payment Service
+  payment:
+    build:
+      context: ./paymentservice
+      dockerfile: Dockerfile
+    container_name: urban-assist-payment
+    ports:
+      - "5002:5002"
+    environment:
+      - PORT=5002
+      - DB_HOST=host.docker.internal
+      - DB_USER=urbanassist
+      - DB_PASSWORD=UrbanAssist@2024!
+      - DB_NAME=demo
+      - EMAIL_SERVICE_URL=http://email:8001/mail/send
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - urban-assist-network
+    depends_on:
+      - email
+    restart: unless-stopped
+
+networks:
+  urban-assist-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

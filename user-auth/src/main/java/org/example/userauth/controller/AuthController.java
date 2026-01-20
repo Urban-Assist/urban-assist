@@ -1,10 +1,13 @@
 package org.example.userauth.controller;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.example.userauth.DTO.ForgotPasswordRequest;
+import org.example.userauth.DTO.ResetPasswordRequest;
 import org.springframework.security.core.Authentication;
 import org.example.userauth.model.User;
 import org.example.userauth.repository.UserRepository;
@@ -22,27 +25,23 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
- 
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
- 
- import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
- 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-
- 
-
 @RestController
 @RequestMapping("/auth-api")
-//for making end point which is accessible for the users = /auth-api/user
-//for making end point which is accessible for the admin = /auth-api/admin
-//for making end point which is accessible for the provider = /auth-api/provider
-//for making end point as open  use , just /auth-api/public/ENDPOINT_NAME
+// for making end point which is accessible for the users = /auth-api/user
+// for making end point which is accessible for the admin = /auth-api/admin
+// for making end point which is accessible for the provider =
+// /auth-api/provider
+// for making end point as open use , just /auth-api/public/ENDPOINT_NAME
 @Validated
 public class AuthController {
 
@@ -61,33 +60,33 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @Value("${PUBLIC_KEY}")  
+    @Value("${PUBLIC_KEY}")
     private String publicKey;
 
     @PostMapping("public/register")
-    public ResponseEntity<?> registerUser( @Valid @RequestBody User user, HttpServletRequest request) {
-       try {
-        if(userRepository.existsByEmail(user.getEmail())) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            ObjectNode response = objectMapper.createObjectNode();
-            response.put("message", "User with email already exists, try logging in");
-            return ResponseEntity.status(409).body(response);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, HttpServletRequest request) {
+        try {
+            if (userRepository.existsByEmail(user.getEmail())) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                ObjectNode response = objectMapper.createObjectNode();
+                response.put("message", "User with email already exists, try logging in");
+                return ResponseEntity.status(409).body(response);
+            }
+            ResponseEntity<?> response = userService.registerUser(user, request);
+            return ResponseEntity.status(200).body(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
         }
-        ResponseEntity<?> response = userService.registerUser(user, request);
-        return ResponseEntity.status(200).body(response);
-       } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.badRequest().body("Error during registration: " + e.getMessage());
-       }
     }
 
     @PostMapping("/public/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest request)
+            throws Exception {
         // Authenticate the user
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (BadCredentialsException e) {
             // Handle invalid email or password
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
@@ -97,28 +96,90 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
         User existingUser = userRepository.findByEmail(userDetails.getUsername());
-        
+
         // Generate JWT token
         final String jwt = jwtUtil.generateToken(userDetails);
-        
-        
-         return ResponseEntity.ok(jwt);
+
+        return ResponseEntity.ok(jwt);
     }
 
     @GetMapping("/public/email-verification")
-    public ResponseEntity<?> postMethodName(@RequestParam("token") String token ) {
-        //TODO: process POST request
-         
-        userService.verifyEmail(token );
+    public ResponseEntity<?> postMethodName(@RequestParam("token") String token) {
+        // TODO: process POST request
+
+        userService.verifyEmail(token);
         return ResponseEntity.ok("Email verified successfully");
     }
-    
-     @GetMapping("/public-key")
+
+    @GetMapping("/public-key")
     public String getPublicKey() throws Exception {
         return new String(publicKey);
     }
+
     @GetMapping("/provider/demo")
     public ResponseEntity<?> admin() {
         return ResponseEntity.ok("user access granted");
+    }
+
+    @PostMapping("/public/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request,
+            HttpServletRequest httpRequest) {
+        return userService.forgotPassword(request.getEmail(), httpRequest);
+    }
+
+    @PostMapping("/public/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return userService.resetPassword(request.getToken(), request.getNewPassword());
+    }
+
+    @GetMapping("/user/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        try {
+            User user = userRepository.findByEmail(email);
+            if (user != null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("firstName", user.getFirstName());
+                response.put("lastName", user.getLastName());
+                response.put("email", user.getEmail());
+                return ResponseEntity.ok(response);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
+        }
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<?> updateUser(@RequestBody Map<String, String> updates) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+
+            if (updates.containsKey("firstName")) {
+                user.setFirstName(updates.get("firstName"));
+            }
+            if (updates.containsKey("lastName")) {
+                user.setLastName(updates.get("lastName"));
+            }
+
+            // Handle password update
+            if (updates.containsKey("newPassword") && updates.containsKey("currentPassword")) {
+                if (!userService.checkPassword(user, updates.get("currentPassword"))) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Current password is incorrect");
+                }
+                user.setPassword(userService.encodePassword(updates.get("newPassword")));
+            }
+
+            userRepository.save(user);
+            return ResponseEntity.ok("Profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating profile: " + e.getMessage());
+        }
     }
 }

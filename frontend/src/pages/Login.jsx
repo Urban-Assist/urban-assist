@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { decodeToken } from '../utils/auth';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -15,22 +16,38 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
-      const AUTH_URL = process.env.REACT_APP_AUTH_URL;
-      const response = await axios.post(AUTH_URL + '/auth/authenticate', formData, {
+      const AUTH_URL = import.meta.env.VITE_AUTH_URL;
+      console.log('Logging in user:', formData.email);
+      const response = await axios.post(AUTH_URL + '/auth-api/public/authenticate', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
+      console.log('Login response:', response);
       if (response.status === 200) {
-        localStorage.setItem('token', response.data);
-        navigate('/homepage');
+        const token = response.data;
+        localStorage.setItem('token', token);
+
+        // Decode token to get user role
+        const decoded = decodeToken(token);
+        const role = decoded?.role || decoded?.authorities?.[0]?.authority || decoded?.roles?.[0];
+
+        console.log('Login successful, user role:', role);
+        console.log('Decoded token:', decoded);
+
+        // Redirect based on role
+        if (role === 'ROLE_PROVIDER' || role === 'provider' || role === 'admin') {
+          navigate('/dashboard2');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (error) {
       console.error('Login error:', error);
-      setError(error.response?.data?.message || 'Login failed. Please try again.');
+      setError(error.response?.data || error.message || 'Login failed. Please try again.');
     }
   };
 
@@ -48,7 +65,7 @@ function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit()} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Email Add
@@ -87,12 +104,9 @@ function Login() {
                 Remember me
               </label>
             </div>
-            <a
-              href="/forgot-password"
-              className="text-sm text-purple-600 hover:text-purple-800 transition-colors duration-300"
-            >
-              Forgot Password?
-            </a>
+            <Link to="/forgot-password" className="text-sm text-purple-600 hover:text-purple-800 transition-colors duration-300">
+              Forgot password?
+            </Link>
           </div>
 
           <button
@@ -106,9 +120,9 @@ function Login() {
         <div className="text-center mt-6">
           <p className="text-gray-600">
             Don't have an account?{' '}
-            <a href="/register" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
+            <Link to="/register" className="text-purple-600 hover:text-purple-800 transition-colors duration-300">
               Sign up
-            </a>
+            </Link>
           </p>
         </div>
       </div>

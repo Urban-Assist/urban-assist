@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import UserSidenav from "../components/UserSidenav";
 import Header from "../components/Header";
 const localizer = momentLocalizer(moment);
 
 const ClientBookingPage = () => {
+    const location = useLocation();
+    const providerEmail = location.state?.providerEmail || "provider@example.com";
+    const providerName = location.state?.providerName || "Service Provider";
+    const serviceType = location.state?.serviceType || "General Service";
+
     const [availabilities, setAvailabilities] = useState([]);
     const [selectedDate, setSelectedDate] = useState(moment().toDate());
     const [selectedSlot, setSelectedSlot] = useState(null);
@@ -74,7 +79,14 @@ const ClientBookingPage = () => {
 
         // Show the confirmation modal
         //setShowConfirmationModal(true);
-        navigate("/payment", { state: { selectedSlot } });
+        navigate("/payment", {
+            state: {
+                selectedSlot,
+                providerEmail,
+                providerName,
+                serviceType
+            }
+        });
     };
 
     // Close the modal and reset the selected slot

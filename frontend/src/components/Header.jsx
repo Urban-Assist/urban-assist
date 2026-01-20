@@ -1,138 +1,235 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { frontendRoutes } from "../utils/frontendRoutes";
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { isAuthenticated, getUserRole, logout, getUserEmail } from '../utils/auth';
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false); // State for mobile menu toggle
+  const [isOpen, setIsOpen] = useState(false);
+  const [profileDropdown, setProfileDropdown] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
 
-  const getNavLinkClass = (path) => {
-    const isActive = location.pathname === path;
-    return `${
-      isActive
-        ? "border-blue-500 text-gray-900 font-semibold "
-        : "border-transparent text-gray-900 hover:text-gray-900 hover:border-blue-500 hover:font-bold "
-    } inline-flex items-center px-3 pt-1 border-b-2 text-lg font-medium transition-colors duration-200 `;
+  useEffect(() => {
+    setAuthenticated(isAuthenticated());
+    if (isAuthenticated()) {
+      setUserRole(getUserRole());
+      setUserEmail(getUserEmail() || '');
+    }
+  }, []);
+
+  const getInitials = () => {
+    if (!userEmail) return 'U';
+    const parts = userEmail.split('@')[0].split('.');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return userEmail.substring(0, 2).toUpperCase();
   };
 
+  const handleLogout = () => {
+    logout();
+    setAuthenticated(false);
+    setUserRole(null);
+    navigate('/login');
+  };
+
+  const isProvider = userRole === 'ROLE_PROVIDER' || userRole === 'provider' || userRole === 'admin';
+  const isUser = userRole === 'ROLE_USER' || userRole === 'user';
+
   return (
-    <header className="h-16 sm:h-20 flex items-center bg-[rgb(252,250,250)] font-montserrat shadow-md fixed top-0 left-0 w-full z-50 ">
-      <div className="container mx-auto px-6 sm:px-12 flex items-center justify-between">
-        {/* Logo */}
-        <Link to={frontendRoutes.HOME} className="no-underline">
-          <div className="font-black text-blue-900 text-2xl flex items-center">
-            Urban Assist
-            <span className="w-3 h-3 rounded-full bg-purple-600 ml-2"></span>
+    <nav className="bg-white shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              <Link to="/" className="text-2xl font-bold text-indigo-600">
+                UrbanAssist
+              </Link>
+            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              {authenticated && isUser && (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  >
+                    Book a Service
+                  </Link>
+                  <Link
+                    to="/my-bookings"
+                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  >
+                    My Bookings
+                  </Link>
+                </>
+              )}
+              {authenticated && isProvider && (
+                <>
+                  <Link
+                    to="/dashboard2"
+                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/add-availability"
+                    className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  >
+                    Availability
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-10">
-          <Link
-            to={frontendRoutes.DASHBOARD}
-            className={getNavLinkClass(frontendRoutes.DASHBOARD)}
-          >
-            Book a Service
-          </Link>
-          <Link
-            to={frontendRoutes.HOME}
-            className={getNavLinkClass(frontendRoutes.EXAMPLE)}
-          >
-            My bookings
-          </Link>
-          <Link
-            to={frontendRoutes.HOME}
-            className={getNavLinkClass(frontendRoutes.EXAMPLE)}
-          >
-            Favorites
-          </Link>
-          <Link
-            to={frontendRoutes.HOME}
-            className={getNavLinkClass(frontendRoutes.EXAMPLE)}
-          >
-            Contact us
-          </Link>
-
-          {/* Login Button */}
-          <Link to={frontendRoutes.LOGIN}>
-            <button className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-xl flex items-center gap-2">
-              {/* Heroicons - Login Solid */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+          <div className="hidden sm:ml-6 sm:flex sm:items-center relative">
+            {authenticated ? (
+              <div className="relative">
+                <button
+                  onClick={() => setProfileDropdown(!profileDropdown)}
+                  className="ml-3 flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  {getInitials()}
+                </button>
+                {profileDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                    <div className="py-1">
+                      <Link
+                        to="/profile"
+                        onClick={() => setProfileDropdown(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>Login</span>
-            </button>
-          </Link>
-        </nav>
-
-        <button
-          className="lg:hidden flex flex-col ml-4"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span className="w-6 h-1 rounded-full bg-purple-800 mb-1"></span>
-          <span className="w-6 h-1 rounded-full bg-purple-800 mb-1"></span>
-          <span className="w-6 h-1 rounded-full bg-purple-800 mb-1"></span>
-        </button>
-      </div>
-
-      {isOpen && (
-        <div className="lg:hidden w-full bg-white shadow-md absolute top-16 left-0 py-4">
-          <nav className="flex flex-col items-center space-y-4">
-            <Link
-              to={frontendRoutes.DASHBOARD}
-              className={getNavLinkClass(frontendRoutes.DASHBOARD)}
+                Login
+              </Link>
+            )}
+          </div>
+          <div className="-mr-2 flex items-center sm:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              className="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
             >
-              Book a Service
-            </Link>
-            <Link
-              to={frontendRoutes.HOME}
-              className={getNavLinkClass(frontendRoutes.HOME)}
-            >
-              My bookings
-            </Link>
-            <Link
-              to={frontendRoutes.HOME}
-              className={getNavLinkClass(frontendRoutes.HOME)}
-            >
-              Favorites
-            </Link>
-            <Link
-              to={frontendRoutes.HOME}
-              className={getNavLinkClass(frontendRoutes.HOME)}
-            >
-              Contact us
-            </Link>
-
-            {/* Mobile Login Button */}
-            <Link to={frontendRoutes.LOGIN}>
-              <button className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-gray-50 rounded-xl flex items-center gap-2">
+              <span className="sr-only">Open main menu</span>
+              {!isOpen ? (
                 <svg
+                  className="block h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path
-                    fillRule="evenodd"
-                    d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                    clipRule="evenodd"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
                   />
                 </svg>
-                <span>Login</span>
-              </button>
-            </Link>
-          </nav>
+              ) : (
+                <svg
+                  className="block h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="sm:hidden" id="mobile-menu">
+          <div className="pt-2 pb-3 space-y-1">
+            {authenticated && isUser && (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                >
+                  Book a Service
+                </Link>
+                <Link
+                  to="/my-bookings"
+                  className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                >
+                  My Bookings
+                </Link>
+              </>
+            )}
+            {authenticated && isProvider && (
+              <>
+                <Link
+                  to="/dashboard2"
+                  className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/add-availability"
+                  className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                >
+                  Availability
+                </Link>
+              </>
+            )}
+            {authenticated ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+              >
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       )}
-    </header>
+    </nav>
   );
 };
 

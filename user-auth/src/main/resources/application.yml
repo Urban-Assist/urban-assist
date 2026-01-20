@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: user-auth
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo
+    username: urbanassist
+    password: "UrbanAssist@2024!"
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8081
+
+EMAIL_SERVER_URL: http://localhost:9001/mail/send
+
+rabbitmq:
+  queue:
+    name: user_profile_queue
+  exchange:
+    name: user_exchange
+  routing:
+    key: user_routing_key
+
+PUBLIC_KEY: |
+  -----BEGIN PUBLIC KEY-----
+  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1I23lp6VyaSDQ7h3L9TK
+  744Y4HpkHrZGAInEZurj7ff/nQQVENDnsFfk7G9cuqDJQcaEULLGQq8SQQmkfmtk
+  RAu2W2M9vJYrlmFFnDfzL3Wd2WeI6I7FfG1tnto8VhtFdG5hu2N773scvMxzNmfd
+  jORVSavzlWtvsEJxgSEaYYnuRbdMtOBwNFUck+fQMxdtIri8fgFkg9O8F4PGJshN
+  GE2w6iKuZVkjUMdTrwVJfVQ7X5yR4Mr4oYPsE+/O2SCEUd6RZo6m8UMMvZYGQsEZ
+  UMJsZ2YkXmKyBgMzRJ9oCg8rpqxiLwQBiUfavtauYK/kevcGRksRUte1w9A7ZUK1
+  2QIDAQAB
+  -----END PUBLIC KEY-----

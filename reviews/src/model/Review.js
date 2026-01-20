@@ -12,7 +12,7 @@ const Review = db.define("Review", {
     allowNull: false,
   },
   consumerID: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   review: {

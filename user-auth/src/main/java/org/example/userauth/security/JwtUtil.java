@@ -36,43 +36,42 @@ public class JwtUtil {
     private static PrivateKey privateKey;
     private static PublicKey publicKey;
     static {
-    // to do : change the key loading from hardcoded path to the env.
-    try {
-        Security.addProvider(new BouncyCastleProvider());
-        
-        // Read private key (PKCS#1 format)
-        PEMParser pemParser = new PEMParser(new FileReader("/Users/vaibhav_patel/Documents/urban-assist/user-auth/private.pem"));
-        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
-        Object object = pemParser.readObject();
-        
-        if (object instanceof PEMKeyPair) {
-            KeyPair keyPair = converter.getKeyPair((PEMKeyPair) object);
-            privateKey = keyPair.getPrivate();
-        } else {
-            throw new IllegalArgumentException("Unexpected private key format");
+        // to do : change the key loading from hardcoded path to the env.
+        try {
+            Security.addProvider(new BouncyCastleProvider());
+
+            // Read private key (PKCS#1 format)
+            PEMParser pemParser = new PEMParser(
+                    new FileReader("private.pem"));
+            JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
+            Object object = pemParser.readObject();
+
+            if (object instanceof PEMKeyPair) {
+                KeyPair keyPair = converter.getKeyPair((PEMKeyPair) object);
+                privateKey = keyPair.getPrivate();
+            } else {
+                throw new IllegalArgumentException("Unexpected private key format");
+            }
+            pemParser.close();
+
+            // Read public key (X.509 format)
+            pemParser = new PEMParser(new FileReader("public.pem"));
+            object = pemParser.readObject();
+
+            if (object instanceof SubjectPublicKeyInfo) {
+                publicKey = converter.getPublicKey((SubjectPublicKeyInfo) object);
+            } else {
+                throw new IllegalArgumentException("Unexpected public key format");
+            }
+            pemParser.close();
+
+            System.out.println("Keys loaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load keys", e);
         }
-        pemParser.close();
-        
-        // Read public key (X.509 format)
-        //to do : change the hardcoded path to the env
-        pemParser = new PEMParser(new FileReader("/Users/vaibhav_patel/Documents/urban-assist/user-auth/public.pem"));
-        object = pemParser.readObject();
-        
-        if (object instanceof SubjectPublicKeyInfo) {
-            publicKey = converter.getPublicKey((SubjectPublicKeyInfo) object);
-        } else {
-            throw new IllegalArgumentException("Unexpected public key format");
-        }
-        pemParser.close();
-        
-        System.out.println("Keys loaded successfully");
-    } catch (Exception e) {
-        e.printStackTrace();
-        throw new RuntimeException("Failed to load keys", e);
     }
-}
-    
- 
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -94,14 +93,14 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-     public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        
+
         // Add roles to claims
         claims.put("roles", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
-        
+
         // Add userId to claims (if using CustomUserDetails)
         if (userDetails instanceof CustomUserDTO) {
             claims.put("id", ((CustomUserDTO) userDetails).getUserId());
@@ -115,7 +114,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() +5 * 60 * 1000)) // 10 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 10 hours
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }

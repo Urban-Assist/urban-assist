@@ -16,8 +16,8 @@ const TermsAndConditions = ({ onAgree }) => {
 
   return (
 
-    <div class="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
-      <div class="flex items-start">
+    <div className="relative bg-[#f7f6f9] h-full min-h-screen font-[sans-serif]">
+      <div className="flex items-start">
 
         <ProviderSidenav />
 

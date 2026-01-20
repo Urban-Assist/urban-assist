@@ -3,29 +3,30 @@ import express from 'express';
 import cors from 'cors';
 
 let publicKey = null;
-  // Fetch the public key once on startup
-  async function fetchPublicKey() {
+// Fetch the public key once on startup
+async function fetchPublicKey() {
     try {
 
-        // to do use env below
-        const response = await axios.get('http://localhost:8080/auth/public-key'); 
+        // Use port 8081 for auth service
+        const authServiceUrl = process.env.AUTH_SERVICE_URL || 'http://127.0.0.1:8081';
+        const response = await axios.get(`${authServiceUrl}/auth-api/public-key`);
         // Format the public key with proper PEM format
         const rawKey = response.data;
-        publicKey = `-----BEGIN PUBLIC KEY-----\n${
-            rawKey
-                .replace('-----BEGIN PUBLIC KEY-----', '')
-                .replace('-----END PUBLIC KEY-----', '')
-                .replace(/\s/g, '')
-                .match(/.{1,64}/g)
-                .join('\n')
-        }\n-----END PUBLIC KEY-----`;
-        
+        publicKey = `-----BEGIN PUBLIC KEY-----\n${rawKey
+            .replace('-----BEGIN PUBLIC KEY-----', '')
+            .replace('-----END PUBLIC KEY-----', '')
+            .replace(/\s/g, '')
+            .match(/.{1,64}/g)
+            .join('\n')
+            }\n-----END PUBLIC KEY-----`;
+
         console.log('Formatted Public Key:');
         console.log(publicKey);
         console.log('Public key fetched and formatted successfully');
     } catch (error) {
         console.error('Error fetching public key:', error);
-        throw error; // Propagate the error
+        // Don't throw error to prevent app crash
+        console.log('App will continue without public key - auth verification will be skipped');
     }
 }
 
